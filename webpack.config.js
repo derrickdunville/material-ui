@@ -9,31 +9,31 @@ export default {
   devtool: '#eval-source-map',
   entry: [
     'webpack-hot-middleware/client',
-    './client/app.js'
+    path.join(__dirname,'src','index.js')
   ],
   output: {
     path: __dirname,
     filename: 'bundle.js',
     publicPath: '/'
   },
+  resolve: {
+    modules: [path.resolve(__dirname,'src'),'node_modules']
+  },
+  devServer: {
+    contentBase: path.join(__dirname,'src')
+  },
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin()
   ],
-  resolve: {
-    extensions: ['.js'],
-    alias: {
-      request: 'browser-request'
-    }
-  },
   module: {
     rules: [
       // Javascript
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         loader: 'babel-loader',
-        include: path.join(__dirname, 'client'),
+        include: path.join(__dirname, 'src'),
         query: {
           "env": {
             "development": {
@@ -45,15 +45,19 @@ export default {
 
       // CSS
       {
-        test: /\.css$/,
-        include: path.join(__dirname, 'client'),
-        loader: 'style-loader!css-loader?' + qs.stringify({
-          modules: true,
-          importLoaders: 1,
-          localIdentName: '[path][name]-[local]'
-        })
-      }
+        test: /\.(css|scss)$/,
+        use: [
+          "style-loader",
+          "css-loader",
+          "sass-loader"
+        ]
+      },
 
+      // Files
+      {
+        test: /\.(jpg|jpeg|png|gif|mp3|svg)$/,
+        loaders: ["file-loader"]
+      }
     ]
   }
 };

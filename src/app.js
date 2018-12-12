@@ -1,5 +1,4 @@
 /* eslint-env browser */
-
 import App from './components/App';
 import configureStore from './store';
 import React from 'react';

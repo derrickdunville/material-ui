@@ -13,7 +13,7 @@ const app = express();
 
 // Serve hot-reloading bundle to client
 app.use(webpackDevMiddleware(compiler, {
-  noInfo: true, publicPath: config.output.publicPath
+  noInfo: true, publicPath: config.output.publicPath,
 }));
 app.use(webpackHotMiddleware(compiler));
 
@@ -38,7 +38,7 @@ watcher.on('ready', function() {
 
 // Anything else gets passed to the client app's server rendering
 app.get('*', function(req, res, next) {
-  require('./client/server-render')(req.path, function(err, page) {
+  require('./src/server-render')(req.path, function(err, page) {
     if (err) return next(err);
     res.send(page);
   });
@@ -47,9 +47,9 @@ app.get('*', function(req, res, next) {
 // Do "hot-reloading" of react stuff on the server
 // Throw away the cached client modules and let them be re-required next time
 compiler.plugin('done', function() {
-  console.log("Clearing /client/ module cache from server");
+  console.log("Clearing /src/ module cache from server");
   Object.keys(require.cache).forEach(function(id) {
-    if (/[\/\\]client[\/\\]/.test(id)) delete require.cache[id];
+    if (/[\/\\]src[\/\\]/.test(id)) delete require.cache[id];
   });
 });
 
@@ -60,4 +60,5 @@ server.listen(3000, 'localhost', function(err) {
   const addr = server.address();
 
   console.log('Listening at http://%s:%d', addr.address, addr.port);
+  console.log(__dirname)
 });
