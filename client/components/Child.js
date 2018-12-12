@@ -3,13 +3,13 @@ import React, { Component } from 'react';
 class Child extends Component {
   constructor(...args) {
     super(...args);
-    this.state = {local: "state"};
+    this.state = {local: "wtf"};
   }
   render() {
     const { local } = this.state;
     return (
       <p>
-        Child Component
+        Child cool cool
         {" "}
         <input
           type="text"

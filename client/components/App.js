@@ -5,6 +5,7 @@ import { hot } from 'react-hot-loader';
 import PropTypes from 'prop-types';
 
 import Child from './Child';
+import Button from '@material-ui/core/Button';
 
 class App extends Component {
   render() {
@@ -19,6 +20,7 @@ class App extends Component {
         >
           +1
         </button>
+        <Button>Mateial Button</Button>
         <Child />
         <p>
           <a href="/whoami">Server-only route</a>
