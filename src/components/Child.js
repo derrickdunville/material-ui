@@ -9,7 +9,7 @@ class Child extends Component {
     const { local } = this.state;
     return (
       <p>
-        Child cool cool
+        Child
         {" "}
         <input
           type="text"

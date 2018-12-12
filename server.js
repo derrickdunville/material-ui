@@ -1,11 +1,12 @@
 import chokidar from 'chokidar';
-import config from './webpack.config';
+import config from './webpack.config.babel';
 import cssModulesRequireHook from 'css-modules-require-hook';
 import express from 'express';
 import http from 'http';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
+import renderApp from './src/server-render';
 
 cssModulesRequireHook({generateScopedName: '[path][name]-[local]'});
 const compiler = webpack(config);
@@ -18,9 +19,9 @@ app.use(webpackDevMiddleware(compiler, {
 app.use(webpackHotMiddleware(compiler));
 
 // Include server routes as a middleware
-app.use(function(req, res, next) {
-  require('./server/app')(req, res, next);
-});
+// app.use(function(req, res, next) {
+//   require('./server/app')(req, res, next);
+// });
 
 // Do "hot-reloading" of express stuff on the server
 // Throw away cached modules and re-require next time
@@ -38,7 +39,7 @@ watcher.on('ready', function() {
 
 // Anything else gets passed to the client app's server rendering
 app.get('*', function(req, res, next) {
-  require('./src/server-render')(req.path, function(err, page) {
+  renderApp(req.path, function(err, page) {
     if (err) return next(err);
     res.send(page);
   });
@@ -60,5 +61,5 @@ server.listen(3000, 'localhost', function(err) {
   const addr = server.address();
 
   console.log('Listening at http://%s:%d', addr.address, addr.port);
-  console.log(__dirname)
+  console.log("__dirname:", __dirname)
 });
