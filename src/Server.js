@@ -7,9 +7,11 @@ import indexRoutes from "routes/index.jsx";
 import { StaticRouter, Router, Route, Switch } from "react-router-dom";
 
 class Server extends Component {
+
   render(){
+    console.log("Location: ", this.props.location)
     return (
-      <StaticRouter context={{}}>
+      <StaticRouter location={this.props.location} context={{}}>
         <Switch>
           {indexRoutes.map((prop, key) => {
             return <Route path={prop.path} component={prop.component} key={key} />;

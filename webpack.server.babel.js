@@ -51,18 +51,21 @@ export default {
       // CSS
       {
         test: /\.css$/,
-        use: [
-          'isomorphic-style-loader',
-          {
-            loader: 'css-loader',
-            options:{
-              modules: true,
-              importLoaders: 1,
-              localIdentName: '[path][name]-[local]'
-            }
-          }
-        ]
+        loader: 'css-loader'
       },
+      // {
+      //   test: /\.css$/,
+      //   use: [
+      //     'isomorphic-style-loader',
+      //     {
+      //       loader: 'css-loader?' + qs.stringify({
+      //         modules: true,
+      //         importLoaders: 1,
+      //         localIdentName: '[path][name]-[local]'
+      //       })
+      //     }
+      //   ]
+      // },
 
       // Files
       {
