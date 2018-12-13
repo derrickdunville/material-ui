@@ -8,6 +8,7 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import renderApp from './src/server-render';
 
+global.window = {}
 cssModulesRequireHook({generateScopedName: '[path][name]-[local]'});
 const compiler = webpack(config);
 const app = express();

@@ -8,6 +8,8 @@ import { renderToString } from 'react-dom/server';
 import { createHashHistory } from "history";
 // eslint-disable-next-line no-sync
 // const template = fs.readFileSync('index.html', 'utf8');
+import Server from './Server'
+import root from 'window-or-global'
 
 function renderApp(path, callback) {
   const store = configureStore();
@@ -15,7 +17,7 @@ function renderApp(path, callback) {
 
   const rendered = renderToString(
     <Provider store={store}>
-      <App />
+      <Server/>
     </Provider>
   );
 
@@ -39,7 +41,7 @@ function renderApp(path, callback) {
       <body>
         <div id="root">${rendered}</div>
         <script type="text/javascript">
-          window.initialStoreData = ${JSON.stringify(state)};
+          root.initialStoreData = ${JSON.stringify(state)};
         </script>
         <script src="bundle.js"></script>
       </body>

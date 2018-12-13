@@ -12,7 +12,8 @@ export default {
   output: {
     path: __dirname,
     filename: 'bundle.js',
-    publicPath: '/'
+    publicPath: '/',
+    globalObject: 'this'
   },
   resolve: {
     modules: ['src','node_modules']

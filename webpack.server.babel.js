@@ -21,7 +21,7 @@ export default {
   mode: process.env.NODE_ENV || "development",
   devtool: '#eval-source-map',
   resolve: {
-    modules: ['node_modules']
+    modules: ['src', 'node_modules']
   },
   devServer: {
     contentBase: path.join(__dirname,'src')
@@ -51,11 +51,17 @@ export default {
       // CSS
       {
         test: /\.css$/,
-        loader: 'css-loader?' + qs.stringify({
-          modules: true,
-          importLoaders: 1,
-          localIdentName: '[path][name]-[local]'
-        })
+        use: [
+          'isomorphic-style-loader',
+          {
+            loader: 'css-loader',
+            options:{
+              modules: true,
+              importLoaders: 1,
+              localIdentName: '[path][name]-[local]'
+            }
+          }
+        ]
       },
 
       // Files
