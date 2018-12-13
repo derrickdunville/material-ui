@@ -31,9 +31,7 @@ function renderApp(path, callback) {
   // Create a theme instance.
   const theme = createMuiTheme({
     palette: {
-      primary: green,
-      accent: red,
-      type: 'light',
+
     },
   });
 
@@ -52,18 +50,21 @@ function renderApp(path, callback) {
   // Grab the CSS from our sheetsRegistry.
   const css = sheetsRegistry.toString()
 
+  // console.log(css)
   // const page = template
   //   .replace('<!-- CONTENT -->', rendered)
   //   .replace('"-- STORES --"', JSON.stringify(state));
-  // const base_css = fs.readFileSync('./assets/css/material-dashboard-react.css', 'utf8');
+  // const template = fs.readFileSync('./src/index.html', 'utf8');
+  const base_css = fs.readFileSync('./src/assets/css/material-dashboard-react.css', 'utf8');
+  const combined_css = css + " " + base_css
 
-  // console.log(base_css)
   const page =`
     <!DOCTYPE html>
     <html>
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="theme-color" content="#000000">
         <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" />
         <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
@@ -72,8 +73,7 @@ function renderApp(path, callback) {
       </head>
       <body>
         <div id="root">${rendered}</div>
-        <style>body { margin: 0 }</stlye>
-        <style id="jss-server-side">${css}</style>
+        <style id="jss-server-side">${combined_css}</style>
         <script type="text/javascript">
           root.initialStoreData = ${JSON.stringify(state)};
         </script>

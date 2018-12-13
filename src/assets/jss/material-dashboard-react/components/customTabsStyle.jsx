@@ -13,7 +13,6 @@ const customTabsStyle = {
   },
   tabsRoot: {
     minHeight: "unset !important",
-    overflowX: "visible",
     "& $tabRootButton": {
       fontSize: "0.875rem"
     }

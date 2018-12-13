@@ -50,8 +50,11 @@ export default {
 
       // CSS
       {
-        test: /\.css$/,
-        loader: 'css-loader'
+        test: /\.(css|scss)$/,
+        use: [
+          "css-loader",
+          "sass-loader"
+        ]
       },
       // {
       //   test: /\.css$/,
