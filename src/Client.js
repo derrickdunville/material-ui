@@ -8,6 +8,17 @@ import indexRoutes from "routes/index.jsx";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 class Client extends Component {
+  componentDidMount() {
+    // Remove the server-side injected CSS.
+    const baseCss = document.getElementById('base-css');
+    if (baseCss && baseCss.parentNode) {
+      baseCss.parentNode.removeChild(baseCss);
+    }
+    const jssStyles = document.getElementById('jss-server-side');
+    if (jssStyles && jssStyles.parentNode) {
+      jssStyles.parentNode.removeChild(jssStyles);
+    }
+  }
   render(){
     return (
       <BrowserRouter>

@@ -11,7 +11,7 @@ class Server extends Component {
   render(){
     console.log("Location: ", this.props.location)
     return (
-      <StaticRouter location={this.props.location} context={{}}>
+      <StaticRouter location={this.props.location} context={this.props.context}>
         <Switch>
           {indexRoutes.map((prop, key) => {
             return <Route path={prop.path} component={prop.component} key={key} />;
