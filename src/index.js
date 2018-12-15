@@ -23,7 +23,7 @@ const generateClassName = createGenerateClassName();
 const composeEnhancers =
   typeof window === 'object' &&
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({}) :compose;
-const store = createStore(reducer, window.INITIAL_STATE, composeEnhancers(applyMiddleware(thunk)))
+const store = createStore(reducer, typeof window === 'object' ? window.INITIAL_STATE : {}, composeEnhancers(applyMiddleware(thunk)))
 
 
 // Hot Reload reducers during client side development - recompile server to test updated reducers during server-side rendering

@@ -46,8 +46,7 @@ function renderApp(req, store, context) {
   // Lastly we need to inject our header tags into our head - these allow social media site to create nice looking embeds
   const helmet = Helmet.renderStatic()
 
-  return `
-    <!DOCTYPE html>
+  return `<!DOCTYPE html>
     <html>
       <head>
         ${helmet.title.toString()}

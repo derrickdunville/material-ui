@@ -7,13 +7,13 @@ class Home extends Component {
     console.dir(this.props)
   }
   render() {
-    console.log(this.props.message)
-    return(<h1> Hello World chirp- {this.props.message} </h1>)
+    return(<h1> Hello world - {this.props.message} - {this.props.auth} </h1>)
   }
 }
 function mapStateToProps(state) {
   return {
-    message: state.app.message
+    message: state.app.message,
+    auth: state.app.auth
   }
 }
 
