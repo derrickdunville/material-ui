@@ -14,7 +14,7 @@
     "dev:server": "nodemon --watch build/ --exec \"node build/bundle.js\"",
     "dev:build-server": "babel-node ./node_modules/webpack/bin/webpack --config webpack.server.dev.js --watch",
     "dev:build-client": "babel-node ./node_modules/webpack/bin/webpack --config webpack.client.dev.js --watch",
-    "production": "babel-node ./node_modules/webpack/bin/webpack --config webpack.client.prod.js --production && babel-node ./node_modules/webpack/bin/webpack --config webpack.server.prod.js --production && node build/bundle.js",
+    "production": "NODE_ENV=production babel-node ./node_modules/webpack/bin/webpack --config webpack.client.prod.js --production && babel-node ./node_modules/webpack/bin/webpack --config webpack.server.prod.js --production && node build/bundle.js",
     "production:build-server": "babel-node ./node_modules/webpack/bin/webpack --config webpack.server.prod.js --preview --color",
     "production:build-client": "babel-node ./node_modules/webpack/bin/webpack --config webpack.client.prod.js --preview --color --production"
   },

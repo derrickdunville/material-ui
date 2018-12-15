@@ -3,7 +3,7 @@ import http from 'http';
 import renderApp from './src/server-render';
 import createStore from './src/createStore';
 
-global.window = {}
+global.window = {innerWidth: 1000, innerHeight: 1080}
 const app = express();
 app.use(express.static('public'))
 // Anything else gets passed to the client app's server rendering
