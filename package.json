@@ -6,17 +6,14 @@
   "author": "Glen Mailer <glen@stainlessed.co.uk>",
   "license": "MIT",
   "scripts": {
-    "hot": "babel-node ./node_modules/webpack/bin/webpack --config webpack.hot.js && babel-node ./node_modules/webpack-dev-server/bin/webpack-dev-server --config webpack.hot.js",
-    "hot:webpack": "babel-node ./node_modules/webpack/bin/webpack --config webpack.hot.js",
+    "hot": "babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.hot.js && babel-node ./node_modules/webpack-dev-server/bin/webpack-dev-server --config ./webpack/webpack.hot.js",
     "lint": "eslint .",
-    "webpack-server": "babel-node ./node_modules/webpack/bin/webpack --config webpack.server.babel.js",
+    "webpack-server": "babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.server.babel.js",
     "dev": "npm-run-all --parallel dev:*",
     "dev:server": "nodemon --watch build/ --exec \"node build/bundle.js\"",
-    "dev:build-server": "babel-node ./node_modules/webpack/bin/webpack --config webpack.server.dev.js --watch",
-    "dev:build-client": "babel-node ./node_modules/webpack/bin/webpack --config webpack.client.dev.js --watch",
-    "production": "NODE_ENV=production babel-node ./node_modules/webpack/bin/webpack --config webpack.client.prod.js --production && babel-node ./node_modules/webpack/bin/webpack --config webpack.server.prod.js --production && node build/bundle.js",
-    "production:build-server": "babel-node ./node_modules/webpack/bin/webpack --config webpack.server.prod.js --preview --color",
-    "production:build-client": "babel-node ./node_modules/webpack/bin/webpack --config webpack.client.prod.js --preview --color --production"
+    "dev:build-server": "babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.server.dev.js --watch",
+    "dev:build-client": "babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.client.dev.js --watch",
+    "production": "NODE_ENV=production babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.client.prod.js --production && babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.server.prod.js --production && node build/bundle.js"
   },
   "dependencies": {
     "@material-ui/core": "3.1.0",

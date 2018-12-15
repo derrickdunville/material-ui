@@ -10,9 +10,9 @@ module.exports = merge(common,
   {
     // the server will always be in the node environment
     target: 'node',
-    entry: path.join(__dirname, 'server.prod.js'),
+    entry: path.join(__dirname, '..', 'server.prod.js'),
     output: {
-      path: path.resolve(__dirname, 'build'),
+      path: path.resolve(__dirname, '..', 'build'),
       publicPath: '/',
       filename: "bundle.js"
     },

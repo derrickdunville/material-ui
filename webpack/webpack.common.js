@@ -3,7 +3,7 @@ import path from 'path'
 
 module.exports = {
   resolve: {
-    modules: [path.join(__dirname, 'src'), 'node_modules']
+    modules: [path.join(__dirname, '..', 'src'), 'node_modules']
   },
   module: {
     rules: [
@@ -12,7 +12,7 @@ module.exports = {
         test: /\.(js|jsx)$/,
         loader: 'babel-loader',
         exclude: [/node_modules/],
-        include: path.join(__dirname, 'src')
+        include: path.join(__dirname, '..', 'src')
       },
       {
         test: /\.html$/,
