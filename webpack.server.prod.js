@@ -3,7 +3,8 @@ import common from './webpack.server.common.js'
 
 module.exports = merge(common,
   {
-    mode: 'production'
+    mode: 'production',
+    devtool: 'source-map'
   }
 
   // other pligins for production here

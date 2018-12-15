@@ -13,12 +13,13 @@ module.exports = merge(common,
     entry: path.join(__dirname, 'server.prod.js'),
     output: {
       path: path.resolve(__dirname, 'build'),
+      publicPath: '/',
       filename: "bundle.js"
     },
-    // plugins: [
-    //   new CleanWebpackPlugin(['build'])
-    // ],
-    externals: [webpackNodeExternals()],
+    plugins: [
+      new CleanWebpackPlugin(['build'])
+    ],
+
     module: {
       rules: [
 
