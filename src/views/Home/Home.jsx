@@ -16,5 +16,6 @@ function mapStateToProps(state) {
     auth: state.app.auth
   }
 }
-
-export default connect(mapStateToProps)(Home)
+export default {
+  component: connect(mapStateToProps)(Home)
+}

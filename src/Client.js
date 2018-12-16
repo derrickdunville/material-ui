@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import "assets/css/material-dashboard-react.css?v=1.5.0";
 import indexRoutes from "routes/index.jsx";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Routes from './Routes'
+import { renderRoutes } from 'react-router-config'
 
 class Client extends Component {
   componentDidMount() {
@@ -22,11 +24,7 @@ class Client extends Component {
   render(){
     return (
       <BrowserRouter>
-        <Switch>
-          {indexRoutes.map((prop, key) => {
-            return <Route path={prop.path} component={prop.component} key={key} />;
-          })}
-        </Switch>
+        <div>{renderRoutes(Routes)}</div>
       </BrowserRouter>
     )
   }

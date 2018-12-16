@@ -11,7 +11,13 @@ import {
   createGenerateClassName,
 } from '@material-ui/core/styles';
 import { createHashHistory } from "history";
-import reducer from "./reducers"
+import reducers from "./reducers"
+import axios from 'axios'
+
+const axiosInstance = axios.create({
+  baseURL: '/api',
+  withCredentials: true
+})
 
 
 // Create a theme instance.
@@ -23,7 +29,7 @@ const generateClassName = createGenerateClassName();
 const composeEnhancers =
   typeof window === 'object' &&
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({}) :compose;
-const store = createStore(reducer, typeof window === 'object' ? window.INITIAL_STATE : {}, composeEnhancers(applyMiddleware(thunk)))
+const store = createStore(reducers, typeof window === 'object' ? window.INITIAL_STATE : {}, composeEnhancers(applyMiddleware(thunk.withExtraArgument(axiosInstance))))
 
 
 // Hot Reload reducers during client side development - recompile server to test updated reducers during server-side rendering

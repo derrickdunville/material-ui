@@ -14,7 +14,13 @@ module.exports = merge(common,
       // This will allow for react router to work in hot environment. If a route doesn't match webpack-dev-server will fallback onto index.html which end up pushing the browser route to react router.
       historyApiFallback: true,
       contentBase: path.join(__dirname, '..', 'public'),
-      hot: true
+      hot: true,
+      proxy: {
+        '/api': {
+          target: 'http://[::1]:3001',
+          secure: false
+        }
+      }
     },
     plugins: [
       new HtmlWebpackPlugin({

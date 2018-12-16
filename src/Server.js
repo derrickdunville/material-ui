@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import "assets/css/material-dashboard-react.css?v=1.5.0";
 import indexRoutes from "routes/index.jsx";
 import { StaticRouter, Router, Route, Switch } from "react-router-dom";
+import Routes from './Routes'
+import { renderRoutes } from 'react-router-config'
 
 class Server extends Component {
 
@@ -12,11 +14,7 @@ class Server extends Component {
     console.log("Location: ", this.props.location)
     return (
       <StaticRouter location={this.props.location} context={this.props.context}>
-        <Switch>
-          {indexRoutes.map((prop, key) => {
-            return <Route path={prop.path} component={prop.component} key={key} />;
-          })}
-        </Switch>
+        <div>{renderRoutes(Routes)}</div>
       </StaticRouter>
     )
   }
