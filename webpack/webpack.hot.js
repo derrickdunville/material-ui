@@ -16,8 +16,9 @@ module.exports = merge(common,
       contentBase: path.join(__dirname, '..', 'public'),
       hot: true,
       proxy: {
-        '/api': {
+        '/api/*': {
           target: 'http://[::1]:3001',
+          pathRewrite: { '^/api': '' },
           secure: false
         }
       }
