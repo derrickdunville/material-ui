@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 // import { loginUser } from '../actions'
 import { Helmet } from 'react-helmet'
+import GridItem from "components/Grid/GridItem.jsx";
+import GridContainer from "components/Grid/GridContainer.jsx";
 
 class LoginPage extends Component {
   constructor(props) {
@@ -41,7 +43,9 @@ class LoginPage extends Component {
     return(
       <div className="container">
         {this.head()}
-        Login
+        <GridContainer>
+          <GridItem>Login</GridItem>
+        </GridContainer>
       </div>
     )
   }

@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import { NavLink } from "react-router-dom";
+import { NavLink, IndexLink } from "react-router-dom";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import Drawer from "@material-ui/core/Drawer";
@@ -15,6 +15,8 @@ import Icon from "@material-ui/core/Icon";
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 
 import sidebarStyle from "assets/jss/material-dashboard-react/components/sidebarStyle.jsx";
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux'
 
 const Sidebar = ({ ...props }) => {
   // verifies if routeName is the one active (in browser input)
@@ -33,6 +35,8 @@ const Sidebar = ({ ...props }) => {
           listItemClasses = classNames({
             [" " + classes[color]]: true
           });
+        } else if(prop.path === '' || prop.path === '/' || prop.path === '/login') {
+          return(<div></div>)
         } else {
           listItemClasses = classNames({
             [" " + classes[color]]: activeRoute(prop.path)
@@ -44,6 +48,7 @@ const Sidebar = ({ ...props }) => {
         return (
           <NavLink
             to={prop.path}
+            exact={prop.exact}
             className={activePro + classes.item}
             activeClassName="active"
             key={key}
@@ -65,16 +70,46 @@ const Sidebar = ({ ...props }) => {
           </NavLink>
         );
       })}
+      {props.auth ? (
+        <a href="/api/logout"
+          className={classes.item}
+        >
+          <ListItem button className={classes.itemLink}>
+            <ListItemText
+              primary={"Logout"}
+              className={classes.itemText}
+              disableTypography={true}
+            />
+          </ListItem>
+        </a>
+      ):(
+        <NavLink
+          to={"/login"}
+          className={classes.item}
+          activeClassName="active"
+        >
+          <ListItem button className={classes.itemLink}>
+            <ListItemText
+              primary={"Login"}
+              className={classes.itemText}
+              disableTypography={true}
+            />
+          </ListItem>
+        </NavLink>
+      )}
     </List>
   );
   var brand = (
     <div className={classes.logo}>
-      <a href="https://www.creative-tim.com" className={classes.logoLink}>
+      <NavLink exact to={"/"}
+        exact
+        className={classes.logoLink}
+        activeClassName="active">
         <div className={classes.logoImage}>
           <img src={logo} alt="logo" className={classes.img} />
         </div>
         {logoText}
-      </a>
+      </NavLink>
     </div>
   );
   return (
@@ -131,5 +166,8 @@ const Sidebar = ({ ...props }) => {
 Sidebar.propTypes = {
   classes: PropTypes.object.isRequired
 };
+function mapStateToProps({ auth }){
+  return { auth }
+}
 
-export default withStyles(sidebarStyle)(Sidebar);
+export default connect(mapStateToProps)(withStyles(sidebarStyle)(Sidebar));

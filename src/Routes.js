@@ -5,6 +5,8 @@ import HomePage from './views/HomePage'
 import UsersListPage from './views/UsersListPage'
 import AdminsListPage from './views/AdminsListPage'
 import LoginPage from './views/LoginPage'
+// @material-ui/icons
+import Dashboard from "@material-ui/icons/Dashboard";
 
 export default [
   {
@@ -13,23 +15,41 @@ export default [
       {
         ...HomePage,
         path: '/',
-        exact: true
+        exact: true,
+        sidebarName: "Home",
+        navbarName: "",
+        icon: Dashboard,
       },
       {
         ...LoginPage,
-        path: '/login'
+        path: '/login',
+        exact: true,
+        sidebarName: "Login",
+        navbarName: "Login",
+        icon: Dashboard,
       },
       {
         ...AdminsListPage,
-        path: '/admins'
+        path: '/admins',
+        exact: true,
+        sidebarName: "Admins",
+        navbarName: "Admins List",
+        icon: Dashboard,
       },
       {
         ...UsersListPage,
-        path: '/users'
+        path: '/users',
+        exact: true,
+        sidebarName: "Users",
+        navbarName: "Users List",
+        icon: Dashboard,
       },
       {
         ...NotFoundPage,
-        path: ''
+        path: '',
+        sidebarName: "Page Not Found",
+        navbarName: "Page Not Found",
+        icon: Dashboard,
       }
     ]
   }
