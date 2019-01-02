@@ -18,8 +18,8 @@ app.get('*', function(req, res, next) {
     const store = createStore(req)
     // console.dir(store.getState())
     //Some logic to initialize and load data into the store
-    const promises = matchRoutes(Routes, req.path).map(({ route }) => {
-      return route.loadData ? route.loadData(store) : null
+    const promises = matchRoutes(Routes, req.path).map(({ route, match }) => {
+      return route.loadData ? route.loadData(store, match) : null
     }).map(promise => {
       // if its a promise then wrap it in a new promise that is gaurenteed to resolve.
       if(promise) {

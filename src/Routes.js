@@ -3,6 +3,7 @@ import App from './App'
 import NotFoundPage from './views/NotFoundPage'
 import HomePage from './views/HomePage'
 import UsersListPage from './views/UsersListPage'
+import UserPage from './views/User/UserPage'
 import AdminsListPage from './views/AdminsListPage'
 import LoginPage from './views/LoginPage'
 // @material-ui/icons
@@ -39,10 +40,15 @@ export default [
       {
         ...UsersListPage,
         path: '/users',
-        exact: true,
         sidebarName: "Users",
         navbarName: "Users List",
         icon: Dashboard,
+        routes: [
+          {
+            ...UserPage,
+            path: '/users/:id'
+          },
+        ]
       },
       {
         ...NotFoundPage,

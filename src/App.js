@@ -49,7 +49,6 @@ class App extends Component {
   }
   render(){
     const { classes, route, ...rest } = this.props;
-    console.dir(route.routes)
     return (
       <div className={classes.wrapper}>
         <Sidebar

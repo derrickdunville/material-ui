@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { fetchUsers } from '../actions'
 import { Helmet } from 'react-helmet'
 import requireAuth from '../components/hocs/requireAuth'
+import { renderRoutes } from 'react-router-config'
 
 class UsersListPage extends Component {
   componentDidMount(){
@@ -34,11 +35,13 @@ class UsersListPage extends Component {
     )
   }
   render(){
+    console.dir(this.props.route.routes)
     return(
       <div>
         {this.head()}
         Here is a big list of users:
         <ul>{this.renderUsers()}</ul>
+        <div>{renderRoutes(this.props.route.routes)}</div>
       </div>
     )
   }
