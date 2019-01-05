@@ -2,6 +2,7 @@ import React from 'react'
 import App from './App'
 import NotFoundPage from './views/NotFoundPage'
 import HomePage from './views/HomePage'
+import UsersContainer from './containers/UsersContainer.jsx'
 import UsersListPage from './views/UsersListPage'
 import UserPage from './views/User/UserPage'
 import AdminsListPage from './views/AdminsListPage'
@@ -18,7 +19,7 @@ export default [
         path: '/',
         exact: true,
         sidebarName: "Home",
-        navbarName: "",
+        navbarName: "Welcome",
         icon: Dashboard,
       },
       {
@@ -38,16 +39,22 @@ export default [
         icon: Dashboard,
       },
       {
-        ...UsersListPage,
+        ...UsersContainer,
         path: '/users',
         sidebarName: "Users",
         navbarName: "Users List",
         icon: Dashboard,
         routes: [
           {
-            ...UserPage,
-            path: '/users/:id'
+            ...UsersListPage,
+            path: '/users',
+            exact: true
           },
+          {
+            ...UserPage,
+            path: '/users/:id',
+            navbarName: "User",
+          }
         ]
       },
       {

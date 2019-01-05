@@ -4,6 +4,7 @@ import { fetchUsers } from '../actions'
 import { Helmet } from 'react-helmet'
 import requireAuth from '../components/hocs/requireAuth'
 import { renderRoutes } from 'react-router-config'
+import { NavLink } from 'react-router-dom'
 
 class UsersListPage extends Component {
   componentDidMount(){
@@ -14,9 +15,14 @@ class UsersListPage extends Component {
     if(this.props.users.docs){
       return this.props.users.docs.map(user => {
         return (
-          <li key={user._id}>
-          {user.username}
-          </li>
+          <NavLink
+            to={`/users/${user.username}`}
+            key={user._id}
+            >
+            <li>
+            {user.username}
+            </li>
+          </NavLink>
         )
       })
     } else {
@@ -53,7 +59,9 @@ function mapStateToProps(state) {
   }
 }
 
-function loadData(store){
+function loadData(store, match){
+  console.log("UserListPage.loadData")
+  console.dir(match.params)
   return store.dispatch(fetchUsers())
 }
 

@@ -27,6 +27,7 @@ const Sidebar = ({ ...props }) => {
   var links = (
     <List className={classes.list}>
       {routes.map((prop, key) => {
+        // console.log("Key: ", key)
         if (prop.redirect) return null;
         var activePro = " ";
         var listItemClasses;
@@ -73,6 +74,7 @@ const Sidebar = ({ ...props }) => {
       {props.auth ? (
         <a href="/api/logout"
           className={classes.item}
+          key={100}
         >
           <ListItem button className={classes.itemLink}>
             <ListItemText
@@ -87,6 +89,7 @@ const Sidebar = ({ ...props }) => {
           to={"/login"}
           className={classes.item}
           activeClassName="active"
+          key={101}
         >
           <ListItem button className={classes.itemLink}>
             <ListItemText
@@ -102,6 +105,7 @@ const Sidebar = ({ ...props }) => {
   var brand = (
     <div className={classes.logo}>
       <NavLink exact to={"/"}
+        key={102}
         exact
         className={classes.logoLink}
         activeClassName="active">
