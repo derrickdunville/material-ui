@@ -53,7 +53,8 @@ const defaultFont = {
   lineHeight: "1.5em"
 };
 
-const primaryColor = "#9c27b0";
+const textColor = "#d8d8d8"
+const primaryColor = "#2d9124";
 const warningColor = "#ff9800";
 const dangerColor = "#f44336";
 const successColor = "#4caf50";
@@ -180,6 +181,7 @@ export {
   boxShadow,
   card,
   defaultFont,
+  textColor,
   primaryColor,
   warningColor,
   dangerColor,

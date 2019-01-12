@@ -6,7 +6,7 @@ import {
   defaultFont
 } from "assets/jss/material-dashboard-react.jsx";
 
-const customInputStyle = {
+const customTextFieldStyle = {
   disabled: {
     "&:before": {
       backgroundColor: "transparent !important"
@@ -32,7 +32,32 @@ const customInputStyle = {
     }
   },
   input: {
-    color: textColor
+    color: textColor,
+    backgroundColor: '#202225',
+  },
+
+  focusedInput: {
+    color: "#ffffff !important",
+    border: "#0fed8a",
+  },
+  focusedLabel: {
+    color: "#ffffff !important",
+    zIndex: "1",
+  },
+  shrink: {
+    zIndex: "2",
+    backgroundColor: "transparent !important"
+  },
+  root: {
+    "&:hover:not($disabled):not($focused):not($error) $notchedOutline": {
+      borderColor: "#000000 !important",
+      zIndex: "1"
+    },
+    height: "100%"
+  },
+  rootLabel: {
+    color: "#ffffff !important",
+    zIndex: "1"
   },
   labelRoot: {
     ...defaultFont,
@@ -59,13 +84,37 @@ const customInputStyle = {
     pointerEvents: "none"
   },
   marginTop: {
-    marginTop: "16px"
+    marginTop: "5px"
   },
   formControl: {
     paddingBottom: "10px",
     margin: "0px 0 0 0",
     position: "relative"
-  }
+  },
+  cssLabel: {
+    '&$cssFocused': {
+      color: "#07C16E",
+    },
+    color: '#ffffff !important',
+    zIndex: "1"
+  },
+  cssFocused: {},
+  cssUnderline: {
+    '&:after': {
+      borderBottomColor: "#0fed8a",
+    },
+  },
+  cssOutlinedInput: {
+    '&$cssFocused $notchedOutline': {
+      borderColor: "#07C16E",
+      boxShadow: "inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6)"
+    },
+    borderRadius: "4px",
+    WebkitAutofill: {
+      backgroundColor: "#565656"
+    }
+  },
+  notchedOutline: {},
 };
 
-export default customInputStyle;
+export default customTextFieldStyle;

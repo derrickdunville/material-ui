@@ -4,19 +4,21 @@ import PropTypes from "prop-types";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
+import TextField from
+"@material-ui/core/TextField"
 // @material-ui/icons
 import Clear from "@material-ui/icons/Clear";
 import Check from "@material-ui/icons/Check";
 // core components
-import customInputStyle from "assets/jss/material-dashboard-react/components/customInputStyle.jsx";
+import customTextFieldStyle from "assets/jss/material-dashboard-react/components/customTextFieldStyle.jsx";
 
-function CustomInput({ ...props }) {
+function CustomTextField({ ...props }) {
   const {
     classes,
     formControlProps,
     labelText,
+    inputType,
+    inputRef,
     id,
     labelProps,
     inputProps,
@@ -36,48 +38,51 @@ function CustomInput({ ...props }) {
   const marginTop = classNames({
     [classes.marginTop]: labelText === undefined
   });
+
   return (
     <FormControl
       {...formControlProps}
       className={formControlProps.className + " " + classes.formControl}
     >
-      {labelText !== undefined ? (
-        <InputLabel
-          className={classes.labelRoot + labelClasses}
-          htmlFor={id}
-          {...labelProps}
-        >
-          {labelText}
-        </InputLabel>
-      ) : null}
-      <Input
-        classes={{
-          root: marginTop,
-          input: classes.input,
-          disabled: classes.disabled,
-          underline: underlineClasses
+      <TextField
+        InputProps={{
+          classes: {
+            root: classes.cssOutlinedInput,
+            notchedOutline: classes.notchedOutline,
+            focused: classes.cssFocused
+          },
+          className: classes.input,
+          ...inputProps,
+        }}
+        inputRef={inputRef}
+        InputLabelProps={{
+          classes: {
+            root: classes.cssLabel,
+            shrink: classes.shrink
+          },
+          className: classes.input
         }}
         id={id}
-        {...inputProps}
+        label={labelText}
+        type={inputType}
+        autoComplete="current-password"
+        margin="normal"
+        variant="outlined"
       />
-      {error ? (
-        <Clear className={classes.feedback + " " + classes.labelRootError} />
-      ) : success ? (
-        <Check className={classes.feedback + " " + classes.labelRootSuccess} />
-      ) : null}
     </FormControl>
   );
 }
 
-CustomInput.propTypes = {
+CustomTextField.propTypes = {
   classes: PropTypes.object.isRequired,
-  labelText: PropTypes.node,
+  labelText: PropTypes.node.isRequired,
   labelProps: PropTypes.object,
   id: PropTypes.string,
   inputProps: PropTypes.object,
+  inputType: PropTypes.string.isRequired,
   formControlProps: PropTypes.object,
   error: PropTypes.bool,
   success: PropTypes.bool
 };
 
-export default withStyles(customInputStyle)(CustomInput);
+export default withStyles(customTextFieldStyle)(CustomTextField);

@@ -12,24 +12,23 @@ const appStyle = theme => ({
   },
   mainPanel: {
     [theme.breakpoints.up("md")]: {
-      width: `calc(100% - ${drawerWidth}px)`
+      width: `calc(100% - ${0}px)`
     },
     overflow: "auto",
     position: "relative",
-    float: "right",
     ...transition,
     maxHeight: "100%",
     width: "100%",
     overflowScrolling: "touch"
   },
   content: {
-    marginTop: "70px",
+    marginTop: "0px",
     padding: "30px 15px",
-    minHeight: "calc(100vh - 123px)"
+    minHeight: "calc(100vh - 123px)",
+
   },
-  container,
-  map: {
-    marginTop: "70px"
+  container: {
+    marginTop: "0px"
   }
 });
 

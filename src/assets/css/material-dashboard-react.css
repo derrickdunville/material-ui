@@ -61,8 +61,6 @@ html * {
     -moz-osx-font-smoothing: grayscale;
 }
 body {
-    background-color: #565656;
-    color: #3C4858;
     margin: 0;
     font-family: Roboto, Helvetica, Arial, sans-serif;
     font-weight: 300;
@@ -110,8 +108,8 @@ h6 {
 }
 
 body {
-    background-color: #EEEEEE;
-    color: #3C4858;
+    background-color: #323232;
+    color: #FFFFFF;
 }
 
 blockquote p {
@@ -125,12 +123,12 @@ body, h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-    color: #9c27b0;
+    color: #FFFFFF;
     text-decoration: none;
 }
 
 a:hover, a:focus {
-    color: #89229b;
+    color: #0fed8a;
     text-decoration: none;
 }
 
@@ -157,9 +155,16 @@ select::-moz-focus-inner,
 input[type="file"] > input[type="button"]::-moz-focus-inner {
     outline: 0 !important;
 }
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #202225 inset;
+  -webkit-text-fill-color: #FFF;
+  border-radius: 4px;
+}
+input:-webkit-autofill:focus ~ label {
+  transform: translate(14px, -6px) scale(0.75);
+}
 
 legend {
-    margin-bottom: 20px;
     font-size: 21px;
 }
 
