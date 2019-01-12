@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 // import { loginUser } from '../actions'
 import { Helmet } from 'react-helmet'
 import { NavLink } from "react-router-dom";
-import { resetAuth } from '../actions/authActions'
+import { forgotPassword, resetAuth } from '../actions/authActions'
 import Button from "../components/CustomButtons/Button.jsx";
 import CustomTextField from '../components/CustomTextField/CustomTextField.jsx'
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -29,7 +29,7 @@ class ForgotPasswordPage extends Component {
   }
   handleSubmit(event){
     event.preventDefault()
-    // this.props.loginUser(this.props.history, this.state.username, this.state.password)
+    this.props.forgotPassword(this.state.email)
   }
   head(){
     return (
@@ -43,35 +43,55 @@ class ForgotPasswordPage extends Component {
     const { classes } = this.props;
     return(
       <div className={classes.authWrapper}>
+        {this.head()}
         <div className={classes.authContainer}>
           <div className={classes.authLeft}>
             <NavLink to="/">
               <img src={logo} className={classes.img} />
             </NavLink>
           </div>
-          <div className={classes.authRight}>
-            {this.head()}
-            <form onSubmit={this.handleSubmit}>
-              <CustomTextField
-                id="email-input"
-                labelText="Email"
-                inputType="text"
-                formControlProps={{fullWidth: true}}
-                inputProps={{
-                  name: 'email',
-                  value: this.state.email,
-                  onChange: this.handleChange
-                }}
-              />
-              <Button style={{width: '100%', height: '50px'}} color="primary" type="submit" onClick={this.handleSubmit}>Submit</Button>
-            </form>
-            <div>
-              {`Oops... I remember now. `}
-              <NavLink to={'/login'}>
-                Login
-              </NavLink>
+          {this.props.auth.message ? (
+            <div className={classes.authRight}>
+                {this.props.auth.message && (
+                  <div>{this.props.auth.message}</div>
+                )}
+                <div>
+                  {`Check your inbox `}
+                  <a href={`http://${this.state.email.replace(/.*@/, "")}`}>
+                    {this.state.email.replace(/.*@/, "")}
+                  </a>
+                </div>
             </div>
-          </div>
+          ):(
+            <div className={classes.authRight}>
+              <form onSubmit={this.handleSubmit}>
+                <CustomTextField
+                  id="email-input"
+                  labelText="Email"
+                  inputType="text"
+                  formControlProps={{fullWidth: true}}
+                  inputProps={{
+                    name: 'email',
+                    value: this.state.email,
+                    onChange: this.handleChange
+                  }}
+                />
+                {this.props.auth.error && (
+                  <div>{this.props.auth.error}</div>
+                )}
+                {this.props.auth.message && (
+                  <div>{this.props.auth.message}</div>
+                )}
+                <Button style={{width: '100%', height: '50px'}} color="primary" type="submit" onClick={this.handleSubmit}>Submit</Button>
+              </form>
+              <div>
+                {`Oops... I remember now. `}
+                <NavLink to={'/login'}>
+                  Login
+                </NavLink>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     )
@@ -84,5 +104,5 @@ function mapStateToProps(state) {
 }
 
 export default {
-  component: connect(mapStateToProps, { resetAuth })(withStyles(authStyle)(ForgotPasswordPage))
+  component: connect(mapStateToProps, { forgotPassword, resetAuth })(withStyles(authStyle)(ForgotPasswordPage))
 }

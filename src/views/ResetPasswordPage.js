@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 // import { loginUser } from '../actions'
 import { Helmet } from 'react-helmet'
 import { NavLink } from "react-router-dom";
-import { resetAuth } from '../actions/authActions'
+import { verifyPasswordResetToken, resetPassword, resetAuth } from '../actions/authActions'
 import Button from "../components/CustomButtons/Button.jsx";
 import CustomTextField from '../components/CustomTextField/CustomTextField.jsx'
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -29,10 +29,7 @@ class ResetPasswordPage extends Component {
   }
   handleSubmit(event){
     event.preventDefault()
-    // this.props.loginUser(this.props.history, this.state.username, this.state.password)
-  }
-  login(){
-
+    this.props.resetPassword(this.props.match.params.reset_token, this.state.new_password)
   }
   head(){
     return (
@@ -46,6 +43,7 @@ class ResetPasswordPage extends Component {
     const { classes } = this.props;
     return(
       <div className="container">
+        {this.head()}
         <div className={classes.authWrapper}>
           <div className={classes.authContainer}>
             <div className={classes.authLeft}>
@@ -53,26 +51,44 @@ class ResetPasswordPage extends Component {
                 <img src={logo} className={classes.img} />
               </NavLink>
             </div>
-            <div className={classes.authRight}>
-              {this.head()}
-              <form onSubmit={this.handleSubmit}>
-              <CustomTextField
-                id="new-password-input"
-                labelText="New Password"
-                inputType="password"
-                formControlProps={{fullWidth: true}}
-                inputProps={{
-                  name: 'new_password',
-                  value: this.state.new_password,
-                  onChange: this.handleChange
-                }}
-              />
-              <Button style={{width: '100%', height: '50px'}} color="primary" type="submit" onClick={this.handleSubmit}>Submit</Button>
-              </form>
-              <NavLink to={'/forgot-password'}>
-                Try again?
-              </NavLink>
-            </div>
+            {this.props.auth.validResetToken ? (
+              this.props.auth.message ? (
+                <div className={classes.authRight}>
+                  {this.props.auth.message && (
+                    <div>{this.props.auth.message}</div>
+                  )}
+                  <NavLink to={'/login'}>
+                    Login
+                  </NavLink>
+                </div>
+              ):(
+                <div className={classes.authRight}>
+                  <form onSubmit={this.handleSubmit}>
+                    <CustomTextField
+                      id="new-password-input"
+                      labelText="New Password"
+                      inputType="password"
+                      formControlProps={{fullWidth: true}}
+                      inputProps={{
+                        name: 'new_password',
+                        value: this.state.new_password,
+                        onChange: this.handleChange
+                      }}
+                    />
+                    <Button style={{width: '100%', height: '50px'}} color="primary" type="submit" onClick={this.handleSubmit}>Submit</Button>
+                  </form>
+                </div>
+              )
+            ):(
+              <div className={classes.authRight}>
+                {this.props.auth.error && (
+                  <div>Sorry, but your password reset token is invalid or expired.</div>
+                )}
+                <NavLink to={'/forgot-password'}>
+                  Please, try again
+                </NavLink>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -84,6 +100,13 @@ function mapStateToProps(state) {
     auth: state.auth
   }
 }
+function loadData(store, match){
+  console.log("ResetPasswordPage.loadData:")
+  console.dir(match.params.reset_token)
+  return store.dispatch(verifyPasswordResetToken(match.params.reset_token)) // how do i get the route param?
+}
+
 export default {
-  component: connect(mapStateToProps, { resetAuth })(withStyles(authStyle)(ResetPasswordPage))
+  loadData,
+  component: connect(mapStateToProps, { verifyPasswordResetToken, resetPassword, resetAuth })(withStyles(authStyle)(ResetPasswordPage))
 }

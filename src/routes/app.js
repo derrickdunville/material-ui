@@ -37,7 +37,7 @@ export default [
       },
       {
         ...ResetPasswordPage,
-        path: '/reset-password/:token',
+        path: '/reset-password/:reset_token',
       },
       {
         ...NotFoundPage,

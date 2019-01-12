@@ -14,7 +14,6 @@ class UserPage extends Component {
       this.props.fetchUser(this.props.match.params.id)
     }
   }
-
   renderUser() {
     if(this.props.user){
       return (
@@ -28,7 +27,6 @@ class UserPage extends Component {
       )
     }
   }
-
   head(){
     return (
       <Helmet>
