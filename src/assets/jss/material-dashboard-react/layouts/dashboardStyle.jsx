@@ -5,10 +5,26 @@ import {
 } from "assets/jss/material-dashboard-react.jsx";
 
 const appStyle = theme => ({
+  root: {
+    zIndex: "1 !important"
+  },
+  adminRoot: {
+    position: "relative",
+    zIndex: "2 !important",
+    top: "0",
+  },
+  adminSidebar: {
+    zIndex: "3 !important"
+  },
   wrapper: {
     position: "relative",
     top: "0",
     height: "100vh"
+  },
+  adminWrapper: {
+    position: "relative",
+    zIndex: "3 !important",
+    top: "0 !important",
   },
   mainPanel: {
     [theme.breakpoints.up("md")]: {
@@ -29,6 +45,12 @@ const appStyle = theme => ({
   },
   container: {
     marginTop: "0px"
+  },
+  list: {
+    width: 250
+  },
+  fullList: {
+    width: 'auto'
   }
 });
 

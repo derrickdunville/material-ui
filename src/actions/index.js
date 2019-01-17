@@ -24,3 +24,12 @@ export const fetchAdmins = () => async (dispatch, getState, api) => {
     payload: {}
   })
 }
+
+export const OPEN_NAV = "OPEN_NAV"
+export const CLOSE_NAV = "CLOSE_NAV"
+export const openNav = () => async (dispatch, getState, api) => {
+  dispatch({ type: OPEN_NAV })
+}
+export const closeNav = () => async (dispatch, getState, api) => {
+  dispatch({ type: CLOSE_NAV })
+}

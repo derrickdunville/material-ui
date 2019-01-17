@@ -10,9 +10,13 @@ import LoginPage from '../views/LoginPage'
 import SignUpPage from '../views/SignUpPage'
 import ForgotPasswordPage from '../views/ForgotPasswordPage'
 import ResetPasswordPage from '../views/ResetPasswordPage'
+import UserDashboard from '../layouts/UserDashboard.jsx'
+import AppPage from "../views/App/AppPage.jsx"
 
+import accountRoutes from '../routes/account'
+import adminRoutes from '../routes/admin'
 // @material-ui/icons
-import Dashboard from "@material-ui/icons/Dashboard";
+import Dashboard from "@material-ui/icons/Dashboard"
 
 export default [
   {
@@ -38,6 +42,35 @@ export default [
       {
         ...ResetPasswordPage,
         path: '/reset-password/:reset_token',
+      },
+      {
+        ...UserDashboard,
+        path: '/app',
+        routes: [
+          {
+            ...AppPage,
+            path: '/app',
+            exact: true,
+            title: "Page 0"
+          },
+          {
+            ...AppPage,
+            path: '/app/1',
+            title: "Page 1"
+          },
+          {
+            ...AppPage,
+            path: '/app/2',
+            title: "Page 2"
+          },
+          {
+            ...AppPage,
+            path: '/app/3',
+            title: "Page 3"
+          },
+          ...accountRoutes,
+          ...adminRoutes
+        ]
       },
       {
         ...NotFoundPage,

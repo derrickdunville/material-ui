@@ -14,7 +14,7 @@ export const loginUser = (history, username, password) => async (dispatch, getSt
   try {
     const res = await api.post('/login', {"username": username, "password": password})
     dispatch({ type: types.LOGIN_USER_SUCCESS, payload: res })
-    history.push('/')
+    history.push('/app')
   } catch (error) {
     dispatch({ type: types.LOGIN_USER_FAIL, payload: error.response })
   }
@@ -31,7 +31,7 @@ export const signUpUser = (history, email, username, password, confirm_password)
     })
     console.dir(res)
     dispatch({ type: types.SIGN_UP_USER_SUCCESS, payload: res })
-    history.push('/')
+    history.push('/app')
   } catch (error) {
     console.dir(error.response)
     dispatch({ type: types.SIGN_UP_USER_FAIL, payload: error.response })
