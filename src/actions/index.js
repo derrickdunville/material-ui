@@ -33,3 +33,11 @@ export const openNav = () => async (dispatch, getState, api) => {
 export const closeNav = () => async (dispatch, getState, api) => {
   dispatch({ type: CLOSE_NAV })
 }
+export const OPEN_ADMIN_NAV = "OPEN_ADMIN_NAV"
+export const CLOSE_ADMIN_NAV = "CLOSE_ADMIN_NAV"
+export const openAdminNav = () => async (dispatch, getState, api) => {
+  dispatch({ type: OPEN_ADMIN_NAV })
+}
+export const closeAdminNav = () => async (dispatch, getState, api) => {
+  dispatch({ type: CLOSE_ADMIN_NAV })
+}

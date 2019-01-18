@@ -9,25 +9,29 @@ export default [
     ...AccountContainer,
     path: '/app/account',
     title: "Account",
+    zIndex: 2,
     routes: [
       {
         ...Account,
         path:'/app/account',
         backPath: '/app',
         title: "Account",
-        exact: true
+        exact: true,
+        zIndex: 2
       },
       {
         ...Profile,
         path: '/app/account/profile',
         backPath: '/app/account',
-        title: "Profile"
+        title: "Profile",
+        zIndex: 2
       },
       {
         ...Billing,
         path: '/app/account/billing',
         backPath: '/app/account',
-        title: "Billing"
+        title: "Billing",
+        zIndex: 2
       }
     ]
   }

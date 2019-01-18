@@ -1,11 +1,14 @@
 import {
   OPEN_NAV,
-  CLOSE_NAV
+  CLOSE_NAV,
+  OPEN_ADMIN_NAV,
+  CLOSE_ADMIN_NAV
 } from '../actions'
 const initialState = {
   message: "this is our initial state, awesome reducer hot loading is working",
   auth: "no authorization yet",
   navOpen: false,
+  adminNavOpen: false
 }
 export default (state=initialState, action) => {
   switch(action.type){
@@ -18,6 +21,16 @@ export default (state=initialState, action) => {
       return {
         ...state,
         navOpen: false
+      }
+    case OPEN_ADMIN_NAV:
+      return {
+        ...state,
+        adminNavOpen: true
+      }
+    case CLOSE_ADMIN_NAV:
+      return {
+        ...state,
+        adminNavOpen: false
       }
     default:
       return state

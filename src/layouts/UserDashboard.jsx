@@ -44,6 +44,7 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 
 function getPathDepth (location) {
+  console.log("pathDepth: ", (location || {} ).pathname.split('/').length)
     return (location || {} ).pathname.split('/').length
 }
 
@@ -52,7 +53,8 @@ class UserDashboard extends React.Component {
     super(props);
     this.state = {
       left: false,
-      prevDepth: getPathDepth(props.location)
+      prevDepth: getPathDepth(props.location),
+      prevPath: props.location.pathname
     }
     this.handleCloseNav = this.handleCloseNav.bind(this);
     this.handleOpenNav = this.handleOpenNav.bind(this);
@@ -61,12 +63,8 @@ class UserDashboard extends React.Component {
   }
   componentWillReceiveProps () {
     this.setState({ prevDepth: getPathDepth(this.props.location) })
+    this.setState({ prevPath: this.props.location.pathname })
   }
-  toggleDrawer = (side, open) => () => {
-    console.log("toggle")
-    this.props.openNav()
-    this.setState({[side]: open});
-  };
   handleCloseNav(){
     this.props.closeNav()
   }
@@ -99,31 +97,70 @@ class UserDashboard extends React.Component {
   //   window.removeEventListener("resize", this.resizeFunction);
   // }
   getClassName(location){
-    if(location.pathname.includes("/app/admin")){
-      return ""
+    let slideDepth = 1
+    if(getPathDepth(location) >= 3){
+      slideDepth = 2
+    }
+    if(getPathDepth(location) == this.state.prevDepth){
+      if(location.pathname.includes("admin") || location.pathname.includes("account")){
+        console.log(getPathDepth(location) - this.state.prevDepth)
+        // if we are in admin and we move the same depth there is no slide
+        if(this.state.prevPath.includes("admin") && (getPathDepth(location) - this.state.prevDepth == 0)){
+          return ""
+        } else {
+          return `slideLeft${slideDepth}`
+        }
+      }
+      else {
+        return ""
+      }
     }
     if(getPathDepth(location) > this.state.prevDepth){
-      return "slideLeft"
-    } else if(getPathDepth(location) < this.state.prevDepth){
-      return "slideRight"
-    } else {
-      console.log("path depth ===")
-      console.dir(location)
-      if(location.pathname==="/app/account"){
-        return "slideLeft"
+      console.log("greater route: zIndex", this.props.route.zIndex)
+      if(location.pathname.includes("admin") || location.pathname.includes("account")){
+        // if we are going from /app/admin to /app/admin/1 there is no slide
+        console.log(getPathDepth(location) - this.state.prevDepth)
+        if(this.state.prevPath.includes("admin") && (getPathDepth(location) - this.state.prevDepth == 1)){
+          return ""
+        } else {
+          return `slideLeft${slideDepth}`
+        }
       } else {
-        return "fade"
+        return ""
+      }
+    } else {
+      console.log("prevPath: ", this.state.prevPath)
+      if(this.state.prevPath.includes("admin") || this.state.prevPath.includes("account")){
+        return `slideRight${slideDepth}`
+      } else {
+        return ""
       }
     }
   }
   getTransitionTimeout(location){
-    if(location.pathname.includes("/app/admin")){
-      console.log("location is admin route")
-      return 0
+    if(getPathDepth(location) == this.state.prevDepth){
+      if(location.pathname.includes("admin") || location.pathname.includes("account")){
+        return 200
+      }
+      else {
+        return 0
+      }
+    }
+    if(getPathDepth(location) > this.state.prevDepth){
+      if(location.pathname.includes("admin") || location.pathname.includes("account")){
+        return 200
+      } else {
+        return 0
+      }
     } else {
-      return 300
+      if(this.state.prevPath.includes("admin") || this.state.prevPath.includes("account")){
+        return 200
+      } else {
+        return 0
+      }
     }
   }
+
   render() {
     const { classes, route, ...rest } = this.props;
     const appBar = (
@@ -184,32 +221,76 @@ class UserDashboard extends React.Component {
         </List>
       </div>
     );
-
-    const sideBar = (
-      <SwipeableDrawer
-        open={this.props.app.navOpen}
-        onClose={this.handleCloseNav}
-        onOpen={this.handleOpenNav}
-        ModalProps={{
-          classes: {
-            root: classes.root
-          }
-        }}
-        PaperProps={{
-          classes: {
-            root: classes.root
-          }
-        }}
-        >
-        <div
-          tabIndex={0}
-          role="button"
-          onKeyDown={this.handleCloseNav}
-        >
-          {sideList}
-        </div>
-      </SwipeableDrawer>
-    )
+    if(true){
+      console.log('wtf?')
+    }
+    let sideBar = null
+    if(typeof document !== 'undefined'){
+      sideBar = (
+        <SwipeableDrawer
+          open={this.props.app.navOpen}
+          onClose={this.handleCloseNav}
+          onOpen={this.handleOpenNav}
+          ModalProps={{
+            container: document.getElementById('wrapper'),
+            style: {position: 'absolute'},
+            classes: {
+              root: classes.rootAppbar
+            }
+          }}
+          BackdropProps={{ style: { position: 'absolute' } }}
+          SlideProps={{ style: { position: 'absolute' } }}
+          PaperProps={{
+            style: {
+              position: "absolute"
+            },
+            classes: {
+              root: classes.rootAppbar
+            }
+          }}
+          >
+          <div
+            tabIndex={0}
+            role="button"
+            onKeyDown={this.handleCloseNav}
+          >
+            {sideList}
+          </div>
+        </SwipeableDrawer>
+      )
+    } else {
+      sideBar = (
+        <SwipeableDrawer
+          open={this.props.app.navOpen}
+          onClose={this.handleCloseNav}
+          onOpen={this.handleOpenNav}
+          ModalProps={{
+            style: {position: 'absolute'},
+            classes: {
+              root: classes.rootAppbar
+            }
+          }}
+          BackdropProps={{ style: { position: 'absolute' } }}
+          SlideProps={{ style: { position: 'absolute' } }}
+          PaperProps={{
+            style: {
+              position: "absolute"
+            },
+            classes: {
+              root: classes.rootAppbar
+            }
+          }}
+          >
+          <div
+            tabIndex={0}
+            role="button"
+            onKeyDown={this.handleCloseNav}
+          >
+            {sideList}
+          </div>
+        </SwipeableDrawer>
+      )
+    }
     //This returns a childFactory to provide to TransitionGroup
     const childFactoryCreator = (classNames) => (
       (child) => {
@@ -220,26 +301,45 @@ class UserDashboard extends React.Component {
       }
     );
 
+    let dashboard = null
+    if(getPathDepth(this.props.location) < 4 || (this.state.prevPath.includes("admin") && this.state.prevDepth == 5)){
+      console.log("path < 3, transition group here")
+      dashboard = (
+        <div id="wrapper" className={classes.wrapper}>
+          {sideBar}
+          {appBar}
+          <TransitionGroup childFactory={childFactoryCreator(this.getClassName(this.props.location))}>
+            <CSSTransition
+              key={this.props.location.key}
+              classNames={this.getClassName(this.props.location)}
+              timeout={this.getTransitionTimeout(this.props.location)}
+              mountOnEnter={true}
+              unmountOnExit={true}
+              >
+              {renderRoutes(
+                this.props.route.routes,
+                null,
+                {location: this.props.location}
+              )}
+            </CSSTransition>
+          </TransitionGroup>
+        </div>
+      )
+    } else {
+      dashboard = (
+        <div id="wrapper" className={classes.wrapper}>
+          {sideBar}
+          {appBar}
+          {renderRoutes(
+            this.props.route.routes,
+            null,
+            {location: this.props.location}
+          )}
+        </div>
+      )
+    }
     return (
-      <div className={classes.wrapper}>
-        {sideBar}
-        {appBar}
-        <TransitionGroup childFactory={childFactoryCreator(this.getClassName(this.props.location))}>
-          <CSSTransition
-            key={this.props.location.key}
-            classNames={this.getClassName(this.props.location)}
-            timeout={this.getTransitionTimeout(this.props.location)}
-            mountOnEnter={true}
-            unmountOnExit={true}
-            >
-            {renderRoutes(
-              this.props.route.routes,
-              null,
-              {location: this.props.location}
-            )}
-          </CSSTransition>
-        </TransitionGroup>
-      </div>
+      dashboard
     );
   }
 }

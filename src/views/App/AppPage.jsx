@@ -27,7 +27,7 @@ class AppPage extends Component {
   render(){
     const { classes, title, route, ...rest } = this.props;
     return (
-      <div className="slide2">
+      <div className={`slide${route.zIndex}`}>
         {this.props.route.title}
       </div>
     )

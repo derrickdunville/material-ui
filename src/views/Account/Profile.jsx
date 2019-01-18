@@ -49,7 +49,7 @@ class Profile extends Component {
   render(){
     const { classes, route, ...rest } = this.props;
     return (
-      <div className={'slide'}>
+      <div className={`slide${route.zIndex}`}>
         {this.head()}
         <div className={classes.mainPanel} ref="mainPanel">
           <div className={classes.content}>

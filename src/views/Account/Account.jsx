@@ -55,7 +55,7 @@ class Account extends Component {
   render(){
     const { classes, route, ...rest } = this.props;
     return (
-      <div className={'slide'} style={{zIndex: '2'}}>
+      <div className={`slide${route.zIndex}`}>
         {this.head()}
         <div className={classes.mainPanel} ref="mainPanel">
           <div className={classes.content}>

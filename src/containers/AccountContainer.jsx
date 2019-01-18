@@ -25,6 +25,8 @@ class AccountContainer extends Component {
     this.state = {
       prevDepth: getPathDepth(props.location)
     }
+    this.getClassName = this.getClassName.bind(this);
+    this.getTransitionTimeout = this.getTransitionTimeout.bind(this);
   }
   componentWillReceiveProps () {
     this.setState({ prevDepth: getPathDepth(this.props.location) })
@@ -38,20 +40,60 @@ class AccountContainer extends Component {
     )
   }
 
+  getClassName(location){
+    console.log("greater route: zIndex", this.props.route.zIndex)
+    if(getPathDepth(location) > this.state.prevDepth){
+      return "slideLeft2"
+    } else if(getPathDepth(location) < this.state.prevDepth){
+      return "slideRight2"
+    } else {
+      if(location.pathname.includes("admin") || location.pathname.includes("account")){
+        return "slideLeft2"
+      }
+      return ""
+    }
+  }
+  getTransitionTimeout(location){
+    if(getPathDepth(location) > this.state.prevDepth){
+      return 10000
+    } else if(getPathDepth(location) < this.state.prevDepth){
+      return 10000
+    } else {
+      if(location.pathname.includes("admin") || location.pathname.includes("account")){
+        return 1000
+      }
+      else {
+        return 0
+      }
+    }
+  }
+
+
+
   render(){
     const { classes, location, ...rest} = this.props
+    //This returns a childFactory to provide to TransitionGroup
+    const childFactoryCreator = (classNames) => (
+      (child) => {
+        console.log("childFactory classNames: " +classNames)
+        return React.cloneElement(child, {
+          classNames
+        })
+      }
+    );
     const switchRoutes = (
-      <TransitionGroup>
-        <CSSTransition key={location.key}
-          classNames={ getPathDepth(location) > this.state.prevDepth ? 'slideLeft' : 'slideRight' }
-          timeout={300}
+      <TransitionGroup childFactory={childFactoryCreator(this.getClassName(this.props.location))}>
+        <CSSTransition
+          key={this.props.location.key}
+          classNames={this.getClassName(this.props.location)}
+          timeout={this.getTransitionTimeout(this.props.location)}
           mountOnEnter={true}
           unmountOnExit={true}>
           <Switch location={this.props.location}>
             {this.props.route.routes.map((prop, key) => {
               return <Route exact={prop.exact} path={prop.path} key={key} render={routeProps => {
                 return(
-                  <AppBar position="static" color="default" className="app-bar-slide">
+                  <AppBar position="static" color="default" className="app-bar-slide2">
                     <Toolbar>
                       <NavLink to={prop.backPath} style={{color: "black"}}>
                         <IconButton color="inherit" aria-label="Menu">
@@ -71,35 +113,16 @@ class AccountContainer extends Component {
       </TransitionGroup>
     );
 
-    //This returns a childFactory to provide to TransitionGroup
-    const childFactoryCreator = (classNames) => (
-      (child) => {
-        console.log("childFactory classNames: " +classNames)
-        return React.cloneElement(child, {
-          classNames
-        })
-      }
-    );
-    console.log("prevDepth: ", this.state.prevDepth)
+
     return (
       <div>
         {this.head()}
         {switchRoutes}
-        <TransitionGroup childFactory={childFactoryCreator(getPathDepth(location) > this.state.prevDepth ? 'slideLeft' : 'slideRight')}>
-          <CSSTransition
-            key={location.key}
-            classNames={ getPathDepth(location) > this.state.prevDepth ? 'slideLeft' : 'slideRight' }
-            timeout={300}
-            mountOnEnter={true}
-            unmountOnExit={true}
-            >
-            {renderRoutes(
-              this.props.route.routes,
-              null,
-              {location: this.props.location}
-            )}
-          </CSSTransition>
-        </TransitionGroup>
+        {renderRoutes(
+          this.props.route.routes,
+          null,
+          {location: this.props.location}
+        )}
       </div>
     )
   }

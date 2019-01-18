@@ -46,27 +46,32 @@ export default [
       {
         ...UserDashboard,
         path: '/app',
+        zIndex: "",
         routes: [
           {
             ...AppPage,
             path: '/app',
             exact: true,
-            title: "Page 0"
+            title: "Page 0",
+            zIndex: "1"
           },
           {
             ...AppPage,
             path: '/app/1',
-            title: "Page 1"
+            title: "Page 1",
+            zIndex: "1"
           },
           {
             ...AppPage,
             path: '/app/2',
-            title: "Page 2"
+            title: "Page 2",
+            zIndex: "1"
           },
           {
             ...AppPage,
             path: '/app/3',
-            title: "Page 3"
+            title: "Page 3",
+            zIndex: "1"
           },
           ...accountRoutes,
           ...adminRoutes

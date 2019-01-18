@@ -6,23 +6,29 @@ import {
 
 const appStyle = theme => ({
   root: {
-    zIndex: "1 !important"
+    zIndex: "0 !important"
+  },
+  rootAppbar: {
+    zIndex: "2 !important"
   },
   adminRoot: {
     position: "relative",
-    zIndex: "2 !important",
+    zIndex: "3 !important",
     top: "0",
   },
   adminSidebar: {
-    zIndex: "3 !important"
+    zIndex: "5 !important",
+    height: "100vh"
   },
   wrapper: {
     position: "relative",
     top: "0",
-    height: "100vh"
+    height: "100vh",
+    paddingRight: "0px !important"
   },
   adminWrapper: {
     position: "relative",
+    paddingRight: "0px !important",
     zIndex: "3 !important",
     top: "0 !important",
   },
