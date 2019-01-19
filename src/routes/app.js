@@ -45,12 +45,12 @@ export default [
       },
       {
         ...UserDashboard,
-        path: '/app',
+        path: '/app/',
         zIndex: "",
         routes: [
           {
             ...AppPage,
-            path: '/app',
+            path: '/app/',
             exact: true,
             title: "Page 0",
             zIndex: "1"
@@ -73,14 +73,15 @@ export default [
             title: "Page 3",
             zIndex: "1"
           },
-          ...accountRoutes,
-          ...adminRoutes
+          ...accountRoutes
         ]
       },
+      ...adminRoutes,
       {
         ...NotFoundPage,
         path: '',
       }
+      
     ]
   }
 ]

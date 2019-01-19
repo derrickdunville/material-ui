@@ -73,111 +73,36 @@ class AdminDashboard extends React.Component {
   handleOpenNav(){
     this.props.openAdminNav()
   }
-  // handleDrawerToggle = () => {
-  //   this.setState({ mobileOpen: !this.state.mobileOpen });
-  // };
-  // resizeFunction() {
-  //   if (window.innerWidth >= 960) {
-  //     this.setState({ mobileOpen: false });
-  //   }
-  // }
-  // componentDidMount() {
-  //   // if (navigator.platform.indexOf("Win") > -1) {
-  //   //   const ps = new PerfectScrollbar(this.refs.mainPanel);
-  //   // }
-  //   window.addEventListener("resize", this.resizeFunction);
-  // }
-  // componentDidUpdate(e) {
-  //   if (e.history.location.pathname !== e.location.pathname) {
-  //     this.refs.mainPanel.scrollTop = 0;
-  //     if (this.state.mobileOpen) {
-  //       this.setState({ mobileOpen: false });
-  //     }
-  //   }
-  // }
   componentWillUnmount() {
     // window.removeEventListener("resize", this.resizeFunction);
     console.log("Admin Dashboard unmounted")
     this.props.closeAdminNav()
   }
-  // handleDrawerToggle = () => {
-  //   this.setState({ mobileOpen: !this.state.mobileOpen });
-  // };
-  // resizeFunction() {
-  //   if (window.innerWidth >= 960) {
-  //     this.setState({ mobileOpen: false });
-  //   }
-  // }
-  // componentDidMount() {
-  //   // if (navigator.platform.indexOf("Win") > -1) {
-  //   //   const ps = new PerfectScrollbar(this.refs.mainPanel);
-  //   // }
-  //   window.addEventListener("resize", this.resizeFunction);
-  // }
-  // componentDidUpdate(e) {
-  //   if (e.history.location.pathname !== e.location.pathname) {
-  //     this.refs.mainPanel.scrollTop = 0;
-  //     if (this.state.mobileOpen) {
-  //       this.setState({ mobileOpen: false });
-  //     }
-  //   }
-  // }
-  // componentWillUnmount() {
-  //   window.removeEventListener("resize", this.resizeFunction);
-  // }
+
   getClassName(location){
-    console.log("AdminDashboard: getClass")
+    // console.log("AdminDashboard: getClass")
     if(getPathDepth(location) == this.state.prevDepth){
-      if(location.pathname.includes("admin") || location.pathname.includes("account")){
-        return "slideLeft"
-      }
-      else {
-        return ""
-      }
+      return ""
     }
     if(getPathDepth(location) > this.state.prevDepth){
-      console.log("greater route: zIndex", this.props.route.zIndex)
-      if(location.pathname.includes("admin") || location.pathname.includes("account")){
-        return "slideLeft"
-      } else {
-        return ""
-      }
+      return "slideLeft"
     } else {
-      if(this.state.prevPath.includes("admin") || this.state.prevPath.includes("account")){
-        return "slideRight"
-      } else {
-        return ""
-      }
+      return "slideRight"
     }
   }
   getTransitionTimeout(location){
     if(getPathDepth(location) == this.state.prevDepth){
-      if(location.pathname.includes("admin") || location.pathname.includes("account")){
-        return 500
-      }
-      else {
-        return 0
-      }
-    }
-    if(getPathDepth(location) > this.state.prevDepth){
-      if(location.pathname.includes("admin") || location.pathname.includes("account")){
-        return 500
-      } else {
-        return 0
-      }
+      return 0
     } else {
-      if(this.state.prevPath.includes("admin") || this.state.prevPath.includes("account")){
-        return 500
-      } else {
-        return 0
-      }
+      return 500
     }
   }
   render() {
+    console.log("AdminDashboard render:")
     const { classes, route, ...rest } = this.props;
     const childFactoryCreator = (classNames) => (
       (child) => {
-        console.log("childFactory classNames: " +classNames)
+        console.log("AdminDashboard childFactory classNames: " +classNames)
         return React.cloneElement(child, {
           classNames
         })
@@ -207,7 +132,7 @@ class AdminDashboard extends React.Component {
             <h6>Admin Root</h6>
           </div>
         </NavLink>
-        <NavLink to={'/app'} style={{alignItems: "center", display: "flex", color: "black"}}>
+        <NavLink to={'/app/'} style={{alignItems: "center", display: "flex", color: "black"}}>
           <ArrowBack style={{float: 'right', zIndex: "2", padding: '10px'}} />
         </NavLink>
         <List>
@@ -224,7 +149,6 @@ class AdminDashboard extends React.Component {
     );
 
     let sideBar = null
-
     if(typeof document !== "undefined"){
       sideBar = (
         <SwipeableDrawer
@@ -292,16 +216,25 @@ class AdminDashboard extends React.Component {
       )
     }
 
-
     return (
       <div id="admin-wrapper" className={classes.adminWrapper}>
         {sideBar}
         {appBar}
-        {renderRoutes(
-          this.props.route.routes,
-          null,
-          {location: this.props.location}
-        )}
+        <TransitionGroup childFactory={childFactoryCreator(this.getClassName(this.props.location))}>
+          <CSSTransition
+            key={this.props.location.key}
+            classNames={this.getClassName(this.props.location)}
+            timeout={this.getTransitionTimeout(this.props.location)}
+            mountOnEnter={true}
+            unmountOnExit={true}
+            >
+            {renderRoutes(
+              this.props.route.routes,
+              null,
+              {location: this.props.location}
+            )}
+          </CSSTransition>
+        </TransitionGroup>
       </div>
     );
   }

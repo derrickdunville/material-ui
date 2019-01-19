@@ -41,30 +41,25 @@ class AccountContainer extends Component {
   }
 
   getClassName(location){
-    console.log("greater route: zIndex", this.props.route.zIndex)
-    if(getPathDepth(location) > this.state.prevDepth){
-      return "slideLeft2"
-    } else if(getPathDepth(location) < this.state.prevDepth){
-      return "slideRight2"
+    let slideDepth = getPathDepth(location) - 3
+    if (slideDepth > 1){
+      slideDepth = 2
     } else {
-      if(location.pathname.includes("admin") || location.pathname.includes("account")){
-        return "slideLeft2"
-      }
-      return ""
+      slideDepth = 1
+    }
+    if(getPathDepth(location) > this.state.prevDepth){
+      return `slideLeft${slideDepth}`
+    } else if (getPathDepth(location) < this.state.prevDepth ){
+      return `slideRight${slideDepth}`
+    } else {
+      return ''
     }
   }
   getTransitionTimeout(location){
-    if(getPathDepth(location) > this.state.prevDepth){
-      return 10000
-    } else if(getPathDepth(location) < this.state.prevDepth){
-      return 10000
+    if(getPathDepth(location) == this.state.prevDepth){
+      return 0
     } else {
-      if(location.pathname.includes("admin") || location.pathname.includes("account")){
-        return 1000
-      }
-      else {
-        return 0
-      }
+      return 250
     }
   }
 
@@ -123,6 +118,7 @@ class AccountContainer extends Component {
           null,
           {location: this.props.location}
         )}
+
       </div>
     )
   }

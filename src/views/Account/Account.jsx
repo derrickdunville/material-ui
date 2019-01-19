@@ -61,12 +61,12 @@ class Account extends Component {
           <div className={classes.content}>
             Account Details Stuff
             <div style={{width: '100%'}}>
-              <NavLink style={{width: '100%'}} to={"/app/account/profile"}>
+              <NavLink style={{width: '100%'}} to={"/app/account/profile/"}>
                 Profile
               </NavLink>
             </div>
             <div style={{width: '100%'}}>
-              <NavLink to={"/app/account/billing"} style={{width: '100%'}}>
+              <NavLink to={"/app/account/billing/"} style={{width: '100%'}}>
                 Billing
               </NavLink>
             </div>

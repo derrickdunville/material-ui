@@ -7,31 +7,31 @@ import Billing from '../views/Account/Billing.jsx'
 export default [
   {
     ...AccountContainer,
-    path: '/app/account',
+    path: '/app/account/',
     title: "Account",
     zIndex: 2,
     routes: [
       {
         ...Account,
-        path:'/app/account',
-        backPath: '/app',
+        path:'/app/account/',
+        backPath: '/app/',
         title: "Account",
         exact: true,
         zIndex: 2
       },
       {
         ...Profile,
-        path: '/app/account/profile',
-        backPath: '/app/account',
+        path: '/app/account/profile/',
+        backPath: '/app/account/',
         title: "Profile",
-        zIndex: 2
+        zIndex: 3
       },
       {
         ...Billing,
-        path: '/app/account/billing',
-        backPath: '/app/account',
+        path: '/app/account/billing/',
+        backPath: '/app/account/',
         title: "Billing",
-        zIndex: 2
+        zIndex: 3
       }
     ]
   }

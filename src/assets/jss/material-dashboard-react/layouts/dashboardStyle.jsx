@@ -6,10 +6,10 @@ import {
 
 const appStyle = theme => ({
   root: {
-    zIndex: "0 !important"
+    zIndex: "1 !important"
   },
   rootAppbar: {
-    zIndex: "2 !important"
+    zIndex: "1 !important"
   },
   adminRoot: {
     position: "relative",
