@@ -54,12 +54,14 @@ class UserDashboard extends React.Component {
     this.state = {
       left: false,
       prevDepth: getPathDepth(props.location),
-      prevPath: props.location.pathname
+      prevPath: props.location.pathname,
+      mobile: true,
     }
     this.handleCloseNav = this.handleCloseNav.bind(this);
     this.handleOpenNav = this.handleOpenNav.bind(this);
     this.handleSidebar = this.handleSidebar.bind(this);
     this.getClassName = this.getClassName.bind(this);
+    this.resizeFunction = this.resizeFunction.bind(this);
     this.getTransitionTimeout = this.getTransitionTimeout.bind(this);
     this.sidebar = React.createRef();
   }
@@ -68,10 +70,27 @@ class UserDashboard extends React.Component {
       console.log("doesn't end with /")
       this.props.history.push(`${this.props.location.pathname}/`)
     }
+    // this causes a render immediatly which helps the sidebar get into its correct parent component
+    if(window.innerWidth >= 960){
+      this.setState({ mobile: false})
+    } else {
+      this.setState({ mobile: true})
+    }
+     window.addEventListener("resize", this.resizeFunction);
+  }
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.resizeFunction);
   }
   componentWillReceiveProps () {
     this.setState({ prevDepth: getPathDepth(this.props.location) })
     this.setState({ prevPath: this.props.location.pathname })
+  }
+  resizeFunction() {
+    if (window.innerWidth >= 960 && this.state.mobile) {
+      this.setState({ mobile: false })
+    } else if(window.innerWidth < 960 && !this.state.mobile) {
+      this.setState({ mobile: true})
+    }
   }
   handleSidebar(){
     console.log("sidebar toggle")
@@ -82,31 +101,7 @@ class UserDashboard extends React.Component {
   handleOpenNav(){
     this.props.openNav()
   }
-  // handleDrawerToggle = () => {
-  //   this.setState({ mobileOpen: !this.state.mobileOpen });
-  // };
-  // resizeFunction() {
-  //   if (window.innerWidth >= 960) {
-  //     this.setState({ mobileOpen: false });
-  //   }
-  // }
-  // componentDidMount() {
-  //   // if (navigator.platform.indexOf("Win") > -1) {
-  //   //   const ps = new PerfectScrollbar(this.refs.mainPanel);
-  //   // }
-  //   window.addEventListener("resize", this.resizeFunction);
-  // }
-  // componentDidUpdate(e) {
-  //   if (e.history.location.pathname !== e.location.pathname) {
-  //     this.refs.mainPanel.scrollTop = 0;
-  //     if (this.state.mobileOpen) {
-  //       this.setState({ mobileOpen: false });
-  //     }
-  //   }
-  // }
-  // componentWillUnmount() {
-  //   window.removeEventListener("resize", this.resizeFunction);
-  // }
+
   getClassName(location){
     let slideDepth = getPathDepth(location) - 3
     if (slideDepth > 1){
@@ -126,18 +121,21 @@ class UserDashboard extends React.Component {
     if(getPathDepth(location) == this.state.prevDepth){
       return 0
     } else {
-      return 250
+      return 200
     }
   }
 
   render() {
+    console.dir(this.sidebar)
     const { classes, route, ...rest } = this.props;
     const appBar = (
       <AppBar position="static" color="default" className="app-bar-slide" classes={{ root: classes.root }}>
         <Toolbar>
-          <IconButton color="inherit" aria-label="Menu" onClick={this.handleOpenNav}>
-            <MenuIcon />
-          </IconButton>
+          {this.state.mobile && (
+            <IconButton color="inherit" aria-label="Menu" onClick={this.handleOpenNav}>
+              <MenuIcon />
+            </IconButton>
+          )}
           <Typography variant="title" color="inherit" style={{width: '100%'}}>
             App Root
           </Typography>
@@ -255,7 +253,7 @@ class UserDashboard extends React.Component {
       }
     );
 
-    console.dir(this.sidebar)
+
     return (
       <div id="wrapper" className={classes.mainPanel}>
         <div id="sidebar" ref={this.sidebar} className={classes.sidebar}>
@@ -264,7 +262,7 @@ class UserDashboard extends React.Component {
             onClose={this.handleSidebar}
             onOpen={this.handleSidebar}
             ModalProps={{
-              container: this.sidebar.current,
+            container: this.sidebar.current,
               style: {position: 'absolute'},
               classes: {
                 root: classes.rootAppbar
@@ -277,7 +275,7 @@ class UserDashboard extends React.Component {
                 position: "absolute"
               },
               classes: {
-                root: classes.rootAppbar
+                root: classes.rootSidebarPaper
               }
             }}
             >

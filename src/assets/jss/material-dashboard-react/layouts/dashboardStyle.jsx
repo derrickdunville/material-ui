@@ -9,7 +9,11 @@ const appStyle = theme => ({
     zIndex: "1 !important"
   },
   rootAppbar: {
-    zIndex: "1 !important"
+    zIndex: "3 !important"
+  },
+  rootSidebarPaper: {
+    transitionDelay: "0",
+    transition: "transform 0ms !important"
   },
   rootMobileSidebar: {
     [theme.breakpoints.up("md")]: {
@@ -60,7 +64,10 @@ const appStyle = theme => ({
       width: `100%`,
     },
     width: '100%',
+    height: "100%",
     marginLeft: "0px",
+    overflow: "auto",
+
   },
   mainPanel: {
     [theme.breakpoints.up("md")]: {
@@ -79,7 +86,8 @@ const appStyle = theme => ({
     marginTop: "0px",
     padding: "30px 15px",
     minHeight: "calc(100vh - 123px)",
-    backgroundColor: "black",
+    backgroundColor: "#323232",
+    boxShadow: "0px 3px 0px 3px rgba(0,0,0,0.75)"
   },
   container: {
     marginTop: "0px"
@@ -89,6 +97,10 @@ const appStyle = theme => ({
   },
   fullList: {
     width: 'auto'
+  },
+  home: {
+    width: "100%",
+    height: `calc(100% - ${64}px)`
   }
 });
 

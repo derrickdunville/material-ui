@@ -65,8 +65,8 @@ class Home extends Component {
           color="blue"
           {...rest}
         />
-        <div className={classes.mainPanel} ref="mainPanel">
-          <div className={classes.content}>
+        <div className={classes.home} ref="mainPanel">
+          <div className={classes.home}>
             Welcome
           </div>
         </div>

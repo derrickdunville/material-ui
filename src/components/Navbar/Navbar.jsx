@@ -39,7 +39,7 @@ const Navbar = ({ ...props }) => {
     <div className={classes.navbarRight}>
       {props.auth.user ? (
         <NavLink
-          to={"/app"}
+          to={"/app/"}
           className={classes.item + " " + classes.navbarRight}
           activeClassName="active"
           key={101}
