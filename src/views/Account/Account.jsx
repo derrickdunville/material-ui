@@ -57,7 +57,7 @@ class Account extends Component {
     return (
       <div className={`slide${route.zIndex}`}>
         {this.head()}
-        <div className={classes.mainPanel} ref="mainPanel">
+        <div className={classes.route} ref="mainPanel">
           <div className={classes.content}>
             Account Details Stuff
             <div style={{width: '100%'}}>

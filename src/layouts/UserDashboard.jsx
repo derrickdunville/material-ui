@@ -58,8 +58,10 @@ class UserDashboard extends React.Component {
     }
     this.handleCloseNav = this.handleCloseNav.bind(this);
     this.handleOpenNav = this.handleOpenNav.bind(this);
+    this.handleSidebar = this.handleSidebar.bind(this);
     this.getClassName = this.getClassName.bind(this);
     this.getTransitionTimeout = this.getTransitionTimeout.bind(this);
+    this.sidebar = React.createRef();
   }
   componentDidMount(){
     if(!this.props.location.pathname.endsWith('/')){
@@ -70,6 +72,9 @@ class UserDashboard extends React.Component {
   componentWillReceiveProps () {
     this.setState({ prevDepth: getPathDepth(this.props.location) })
     this.setState({ prevPath: this.props.location.pathname })
+  }
+  handleSidebar(){
+    console.log("sidebar toggle")
   }
   handleCloseNav(){
     this.props.closeNav()
@@ -187,38 +192,46 @@ class UserDashboard extends React.Component {
     );
 
 
-    let modalProps = {}
-    if(typeof document !== "undefined"){
-      modalProps = {
-        container: document.getElementById('wrapper'),
-        style: {position: 'absolute'},
-        classes: {
-          root: classes.rootAppbar
-        }
-      }
-    } else {
-      modalProps = {
-        style: {position: 'absolute'},
-        classes: {
-          root: classes.rootAppbar
-        }
-      }
-    }
+    // let modalProps = {}
+    // if(typeof document !== "undefined"){
+    //   modalProps = {
+    //     container: {document.getElementById("sidebar")}
+    //     style: {position: 'absolute'},
+    //     classes: {
+    //       root: classes.rootAppbar
+    //     }
+    //   }
+    // } else {
+    //   modalProps = {
+    //     style: {position: 'absolute'},
+    //     classes: {
+    //       root: classes.rootAppbar
+    //     }
+    //   }
+    // }
 
-    const sideBar = (
+    const mobileSideBar = (
       <SwipeableDrawer
         open={this.props.app.navOpen}
         onClose={this.handleCloseNav}
         onOpen={this.handleOpenNav}
-        ModalProps={modalProps}
-        BackdropProps={{ style: { position: 'absolute' } }}
+        ModalProps={{
+          style: {position: 'absolute'},
+          classes: {
+            root: classes.rootMobileSidebar
+          }
+        }}
+        BackdropProps={{
+          style: { position: 'absolute' },
+          classes: { root: classes.rootMobileSidebarBackdrop}
+        }}
         SlideProps={{ style: { position: 'absolute' } }}
         PaperProps={{
           style: {
             position: "absolute"
           },
           classes: {
-            root: classes.rootAppbar
+            root: classes.rootMobileSidebar
           }
         }}
         >
@@ -242,10 +255,43 @@ class UserDashboard extends React.Component {
       }
     );
 
-    let dashboard = null
-    dashboard = (
-        <div id="wrapper" className={classes.wrapper}>
-          {sideBar}
+    console.dir(this.sidebar)
+    return (
+      <div id="wrapper" className={classes.mainPanel}>
+        <div id="sidebar" ref={this.sidebar} className={classes.sidebar}>
+          <SwipeableDrawer
+            open={true}
+            onClose={this.handleSidebar}
+            onOpen={this.handleSidebar}
+            ModalProps={{
+              container: this.sidebar.current,
+              style: {position: 'absolute'},
+              classes: {
+                root: classes.rootAppbar
+              }
+            }}
+            BackdropProps={{ style: { position: 'absolute' } }}
+            SlideProps={{ style: { position: 'absolute' } }}
+            PaperProps={{
+              style: {
+                position: "absolute"
+              },
+              classes: {
+                root: classes.rootAppbar
+              }
+            }}
+            >
+            <div
+              tabIndex={0}
+              role="button"
+              onKeyDown={this.handleCloseNav}
+            >
+              {sideList}
+            </div>
+          </SwipeableDrawer>
+        </div>
+        <div id="mainPanel" className={classes.routes}>
+          {mobileSideBar}
           {appBar}
           <TransitionGroup childFactory={childFactoryCreator(this.getClassName(this.props.location))}>
             <CSSTransition
@@ -263,10 +309,7 @@ class UserDashboard extends React.Component {
             </CSSTransition>
           </TransitionGroup>
         </div>
-      )
-
-    return (
-      dashboard
+      </div>
     );
   }
 }
