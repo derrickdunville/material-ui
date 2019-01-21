@@ -85,6 +85,7 @@ class UserDashboard extends React.Component {
     window.removeEventListener("resize", this.resizeFunction);
   }
   componentWillReceiveProps () {
+    window.previousLocation = this.props.location
     this.setState({ prevDepth: getPathDepth(this.props.location) })
     this.setState({ prevPath: this.props.location.pathname })
   }
@@ -184,10 +185,10 @@ class UserDashboard extends React.Component {
           </NavLink>
           <NavLink to={'/app/account/'}
             className={classes.logoLink}
-            style={{alignItems: "center", display: "flex", color: "black"}}>
+            style={{alignItems: "center", display: "flex", color: "#FFFFFF"}}>
             <SettingsIcon style={{float: 'right', zIndex: "2", padding: '10px'}}/>
           </NavLink>
-          <NavLink to={'/admin/'} style={{alignItems: "center", display: "flex", color: "black"}}>
+          <NavLink to={'/admin/'} style={{alignItems: "center", display: "flex", color: "#FFFFFF"}}>
             <GavelIcon style={{float: 'right', zIndex: "2", padding: '10px'}} />
           </NavLink>
         </div>
@@ -202,7 +203,7 @@ class UserDashboard extends React.Component {
                   exact={route.exact} to={route.path} className="navlink" key={index + 2} onClick={this.handleCloseNav}
                   style={{paddingLeft: "15px", marginLeft: "5px", marginRight: "5px", marginBottom: "5px", borderRadius: "3px"}}>
                   <div style={{display: "flex", width: "225px", height: "50px", paggingLeft: "15px", alignItems: "center"}}>
-                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                    <ListItemIcon style={{color: "#FFF"}}>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                     {route.title}
                   </div>
                 </NavLink>

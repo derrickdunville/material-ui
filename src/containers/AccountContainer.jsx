@@ -23,13 +23,21 @@ class AccountContainer extends Component {
   constructor (props, context) {
     super(props, context)
     this.state = {
-      prevDepth: getPathDepth(props.location)
+      prevDepth: getPathDepth(props.location),
+      prevPath: window.previousLocation
     }
+    if(window.accountFrom === undefined){
+      window.accountFrom = window.previousLocation
+    }
+    console.log("accontFrom: ", window.accountFrom.pathname)
     this.getClassName = this.getClassName.bind(this);
     this.getTransitionTimeout = this.getTransitionTimeout.bind(this);
+    this.clearAccountFrom = this.clearAccountFrom.bind(this)
   }
   componentWillReceiveProps () {
-    this.setState({ prevDepth: getPathDepth(this.props.location) })
+    this.setState({
+      prevDepth: getPathDepth(this.props.location)
+     })
   }
   head(){
     return (
@@ -39,7 +47,12 @@ class AccountContainer extends Component {
       </Helmet>
     )
   }
-
+  clearAccountFrom(){
+    console.log("location", this.props.location.pathname)
+    if(this.props.location.pathname == '/app/account/'){
+      window.accountFrom = undefined
+    }
+  }
   getClassName(location){
     let slideDepth = getPathDepth(location) - 3
     if (slideDepth > 1){
@@ -70,7 +83,7 @@ class AccountContainer extends Component {
     //This returns a childFactory to provide to TransitionGroup
     const childFactoryCreator = (classNames) => (
       (child) => {
-        console.log("childFactory classNames: " +classNames)
+        // console.log("childFactory classNames: " +classNames)
         return React.cloneElement(child, {
           classNames
         })
@@ -87,11 +100,21 @@ class AccountContainer extends Component {
           <Switch location={this.props.location}>
             {this.props.route.routes.map((prop, key) => {
               return <Route exact={prop.exact} path={prop.path} key={key} render={routeProps => {
-                console.log
+                let backPath = prop.backPath
+                if(this.props.location.pathname === '/app/account/'){
+                  if(window.accountFrom !== undefined){
+                    backPath = window.accountFrom.pathname
+                  } else {
+                    backPath = prop.backPath
+                  }
+                }
+
+
+
                 return(
                   <AppBar position="static" color="default" style={{backgroundColor: "#454545", color: "#FFFFFF"}} className="app-bar-slide2">
                     <Toolbar>
-                      <NavLink exact to={prop.backPath} style={{color: "black"}}>
+                      <NavLink exact to={backPath} style={{color: "#FFF"}} onClick={this.clearAccountFrom}>
                         <IconButton color="inherit" aria-label="Menu">
                           <ArrowBack />
                         </IconButton>

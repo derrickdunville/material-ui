@@ -21,6 +21,7 @@ class Client extends Component {
       jssStyles.parentNode.removeChild(jssStyles);
     }
   }
+
   render(){
     return (
       <BrowserRouter>
