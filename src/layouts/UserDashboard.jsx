@@ -66,9 +66,12 @@ class UserDashboard extends React.Component {
     this.sidebar = React.createRef();
   }
   componentDidMount(){
-    if(!this.props.location.pathname.endsWith('/')){
+    console.dir(this.props.location.pathname)
+    if(this.props.location.pathname === "/app"){
       console.log("doesn't end with /")
       this.props.history.replace(`${this.props.location.pathname}/`)
+    } else {
+      this.props.history.replace(`${this.props.location.pathname}`)
     }
     // this causes a render immediatly which helps the sidebar get into its correct parent component
     if(window.innerWidth >= 960){
@@ -114,22 +117,33 @@ class UserDashboard extends React.Component {
     } else if (getPathDepth(location) < this.state.prevDepth ){
       return `slideRight${slideDepth}`
     } else {
-      return ''
+      return `slideLeft${slideDepth}`
     }
   }
   getTransitionTimeout(location){
+    let timeout = 0
     if(getPathDepth(location) == this.state.prevDepth){
-      return 0
+      timeout = 0
     } else {
-      return 200
+      timeout = 200
     }
+    console.log("timeout: ", timeout)
+    return timeout
   }
 
   render() {
     console.dir(this.sidebar)
     const { classes, route, ...rest } = this.props;
     const appBar = (
-      <AppBar position="static" color="default" className="app-bar-slide" classes={{ root: classes.root }}>
+      <AppBar
+        position="static"
+        color="default"
+        className="app-bar-slide"
+        style={{backgroundColor: "#454545", color: "#FFFFFF"}}
+        classes={{
+          root: classes.rootAppBar,
+          colorDefault: classes.rootAppBar
+        }}>
         <Toolbar>
           {this.state.mobile && (
             <IconButton color="inherit" aria-label="Menu" onClick={this.handleOpenNav}>
@@ -149,7 +163,7 @@ class UserDashboard extends React.Component {
           exact
           className={classes.logoLink}
           activeClassName="active">
-          <div className={classes.logoImage} style={{color: "#000000", display: 'flex', alignItems: "center", justifyContent: "center", paddingTop:"10px", height: "56px" }}>
+          <div className={classes.logoImage} style={{display: 'flex', alignItems: "center", justifyContent: "center", paddingTop:"10px", height: "56px" }}>
             <img src={logo} className={classes.img} style={{width: '80px'}}/>
             <h6>App Title</h6>
           </div>
@@ -163,12 +177,14 @@ class UserDashboard extends React.Component {
             className={classes.logoLink}
             activeClassName="active"
             style={{width: "100%"}}>
-            <div className={classes.logoImage} style={{color: "#000000", display: 'flex', alignItems: "center", padding:"10px", height: "56px" }}>
+            <div className={classes.logoImage} style={{color: "#FFFFFF", display: 'flex', alignItems: "center", padding:"10px", height: "56px" }}>
               <div style={{width: "50px", height: "50px", backgroundColor: "#565656",  borderRadius: "4px"}}></div>
               <div style={{marginLeft: "10px", paddingRight: "10px", flex: '1'}}>username</div>
             </div>
           </NavLink>
-          <NavLink to={'/app/account/'} style={{alignItems: "center", display: "flex", color: "black"}}>
+          <NavLink to={'/app/account/'}
+            className={classes.logoLink}
+            style={{alignItems: "center", display: "flex", color: "black"}}>
             <SettingsIcon style={{float: 'right', zIndex: "2", padding: '10px'}}/>
           </NavLink>
           <NavLink to={'/admin/'} style={{alignItems: "center", display: "flex", color: "black"}}>
@@ -176,38 +192,19 @@ class UserDashboard extends React.Component {
           </NavLink>
         </div>
         <Divider />
-        <List>
+        <div style={{display: "flex", flexWrap: "wrap", maxWidth: "250px" }}>
           {this.props.route.routes.map((route, index) => (
-            <NavLink exact={route.exact} to={route.path} key={index + 2} activeClassName="active" onClick={this.handleCloseNav}>
-              <ListItem button key={index}>
+            <NavLink exact={route.exact} to={route.path} className="navlink" key={index + 2} onClick={this.handleCloseNav}
+              style={{paddingLeft: "15px", marginLeft: "5px", marginRight: "5px", marginBottom: "5px", borderRadius: "3px"}}>
+              <div style={{display: "flex", width: "225px", height: "50px", paggingLeft: "15px", alignItems: "center"}}>
                 <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={route.title} />
-              </ListItem>
+                {route.title}
+              </div>
             </NavLink>
           ))}
-        </List>
+        </div>
       </div>
     );
-
-
-    // let modalProps = {}
-    // if(typeof document !== "undefined"){
-    //   modalProps = {
-    //     container: {document.getElementById("sidebar")}
-    //     style: {position: 'absolute'},
-    //     classes: {
-    //       root: classes.rootAppbar
-    //     }
-    //   }
-    // } else {
-    //   modalProps = {
-    //     style: {position: 'absolute'},
-    //     classes: {
-    //       root: classes.rootAppbar
-    //     }
-    //   }
-    // }
-
     const mobileSideBar = (
       <SwipeableDrawer
         open={this.props.app.navOpen}
@@ -229,7 +226,7 @@ class UserDashboard extends React.Component {
             position: "absolute"
           },
           classes: {
-            root: classes.rootMobileSidebar
+            root: classes.rootMobileSidebarPaper
           }
         }}
         >
@@ -242,17 +239,15 @@ class UserDashboard extends React.Component {
         </div>
       </SwipeableDrawer>
     )
-
     //This returns a childFactory to provide to TransitionGroup
-    const childFactoryCreator = (classNames) => (
+    const childFactoryCreator = (classNames, timeout) => (
       (child) => {
-        console.log("UserDashboard childFactory classNames: " +classNames)
+        console.log("UserDashboard childFactory classNames: " +classNames+ " timeout: " + timeout)
         return React.cloneElement(child, {
-          classNames
+          classNames, timeout
         })
       }
     );
-
 
     return (
       <div id="wrapper" className={classes.mainPanel}>
@@ -292,7 +287,7 @@ class UserDashboard extends React.Component {
         <div id="mainPanel" className={classes.routes}>
           {mobileSideBar}
           {appBar}
-          <TransitionGroup childFactory={childFactoryCreator(this.getClassName(this.props.location))}>
+          <TransitionGroup childFactory={childFactoryCreator(this.getClassName(this.props.location), this.getTransitionTimeout(this.props.location))}>
             <CSSTransition
               key={this.props.location.key}
               classNames={this.getClassName(this.props.location)}

@@ -3,17 +3,19 @@ import {
   transition,
   container
 } from "assets/jss/material-dashboard-react.jsx";
-
+const defaultBackgroundColor = "#454545"
+const sideBarBackgroundColor = "#323232"
 const appStyle = theme => ({
   root: {
     zIndex: "1 !important",
   },
   rootAppbar: {
-    zIndex: "3 !important"
+    backgroundColor: sideBarBackgroundColor+ "!important"
   },
   rootSidebarPaper: {
     transitionDelay: "0",
-    transition: "transform 0ms !important"
+    transition: "transform 0ms !important",
+    backgroundColor: sideBarBackgroundColor
   },
   rootMobileSidebar: {
     [theme.breakpoints.up("md")]: {
@@ -23,12 +25,15 @@ const appStyle = theme => ({
     },
     zIndex: "1 !important",
     transitionDelay: "0ms",
-    transition: "z-index 0ms"
+    transition: "z-index 0ms",
   },
   rootMobileSidebarBackdrop: {
     [theme.breakpoints.up("md")]: {
       backgroundColor: "transparent"
     }
+  },
+  rootMobileSidebarPaper: {
+    backgroundColor: sideBarBackgroundColor
   },
   adminRoot: {
     position: "relative",
@@ -55,7 +60,6 @@ const appStyle = theme => ({
     width: '250px',
     height: "100%",
     transform: "translateX(-250px)",
-    backgroundColor: "white",
   },
   routes: {
     position: "absolute",
@@ -66,8 +70,7 @@ const appStyle = theme => ({
     width: '100%',
     height: "100%",
     marginLeft: "0px",
-    overflow: "hidden",
-
+    overflow: "hidden"
   },
   mainPanel: {
     [theme.breakpoints.up("md")]: {
@@ -80,13 +83,17 @@ const appStyle = theme => ({
     maxHeight: "100vh",
     transition: "margin-left 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1), width 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1)",
     width: "100%",
-    overflowScrolling: "touch"
+    overflowScrolling: "touch",
+    backgroundColor: defaultBackgroundColor
   },
   content: {
+    overflow: "auto",
     marginTop: "0px",
     padding: "30px 15px",
+    height: "100%",
     minHeight: "calc(100vh - 125px)",
-    backgroundColor: "#323232",
+    backgroundColor: defaultBackgroundColor,
+    width: "calc(100% - 30px)",
     webkitBoxShadow: "-3px 0px 5px -3px rgba(0,0,0,0.75)",
     mozBoxShadow: "-3px 0px 5px -3px rgba(0,0,0,0.75)",
     boxShadow: "-3px 0px 5px -3px rgba(0,0,0,0.75)"
@@ -103,6 +110,12 @@ const appStyle = theme => ({
   home: {
     width: "100%",
     height: `calc(100% - ${64}px)`
+  },
+  navLink : {
+    width: '100%'
+  },
+  activeNavLink: {
+    backgroundColor: "#565656"
   }
 });
 

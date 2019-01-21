@@ -20,6 +20,10 @@
   position: absolute;
   top: 60px;
 } */
+.active {
+  pointer-events: none;
+  background-color: grey;
+}
 .fade-enter {
   opacity: 0;
   z-index: 1;
@@ -37,8 +41,9 @@
   transition: opacity 200ms ease-in;
 }
 
-.app-bar-slide{
-  z-index: 2 !important;
+.app-bar-slide,
+.app-bar-slide2,
+.app-bar-slide3 {
   position: absolute !important;
   top: 0px;
   left: 0;
@@ -47,15 +52,15 @@
   -moz-box-shadow: 0px 3px 0px 3px rgba(0,0,0,0.75);
   box-shadow: 0px 3px 0px 3px rgba(0,0,0,0.75);
 }
+
+.app-bar-slide{
+  z-index: 1 !important;
+}
 .app-bar-slide2{
   z-index: 3 !important;
-  position: absolute !important;
-  top: 0px;
-  left: 0;
-  width: 100%;
-  -webkit-box-shadow: 0px 3px 0px 3px rgba(0,0,0,0.75);
-  -moz-box-shadow: 0px 3px 0px 3px rgba(0,0,0,0.75);
-  box-shadow: 0px 3px 0px 3px rgba(0,0,0,0.75);
+}
+.app-bar-slide3{
+  z-index: 6 !important;
 }
 @media only screen and (max-width: 600px){
   .slide1,
@@ -70,20 +75,21 @@
   position: absolute;
   left: 0;
   top: 64px;
-  width: 100%;
   height: 100%;
+  width: 100%;
 }
-
 .slide1 {
-  z-index: 1 !important;
+  z-index: 0 !important;
 }
 .slide2 {
-  z-index: 3 !important;
+  z-index: 1 !important;
 }
 .slide3 {
-  z-index: 5 !important;
+  z-index: 2 !important;
 }
-
+.-exit-done{
+  z-index: 1 !important;
+}
 .slideLeft0-exit{
   opacity: 1
 }
@@ -92,7 +98,6 @@
   transition: opacity 200ms ease-in;
 }
 .slideLeft1-enter {
-  top: 0;
   z-index: 2 !important;
   transform: translate3d(100%, 0, 0);
 }
@@ -267,6 +272,13 @@ a:hover, a:focus {
     color: #0fed8a;
     text-decoration: none;
 }
+a.navlink:focus {
+  color: white;
+}
+a.navlink:hover {
+  color: white;
+  background-color: #565656;
+}
 
 legend {
     border-bottom: 0;
@@ -313,7 +325,7 @@ output {
 label {
     font-size: 14px;
     line-height: 1.42857;
-    color: #AAAAAA;
+    color: #FFFFFF;
     font-weight: 400;
 }
 
