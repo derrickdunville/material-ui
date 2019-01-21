@@ -26,10 +26,16 @@ class AccountContainer extends Component {
       prevDepth: getPathDepth(props.location),
       prevPath: window.previousLocation
     }
-    if(window.accountFrom === undefined){
-      window.accountFrom = window.previousLocation
+    if(window.previousLocation != undefined){
+      console.log("prevPath: ", window.previousLocation)
+    } else {
+      window.accountFrom = "/app/"
     }
-    console.log("accontFrom: ", window.accountFrom.pathname)
+    if(window.accountFrom == undefined){
+      window.accountFrom = window.previousLocation.pathname
+    }
+    console.log("accountFrom: ", window.accountFrom)
+    // console.log("accontFrom: ", window.accountFrom.pathname)
     this.getClassName = this.getClassName.bind(this);
     this.getTransitionTimeout = this.getTransitionTimeout.bind(this);
     this.clearAccountFrom = this.clearAccountFrom.bind(this)
@@ -103,7 +109,7 @@ class AccountContainer extends Component {
                 let backPath = prop.backPath
                 if(this.props.location.pathname === '/app/account/'){
                   if(window.accountFrom !== undefined){
-                    backPath = window.accountFrom.pathname
+                    backPath = window.accountFrom
                   } else {
                     backPath = prop.backPath
                   }
