@@ -77,8 +77,8 @@ const appStyle = theme => ({
     top: "0",
     height: "100vh",
     position: "relative",
-    ...transition,
-    maxHeight: "100%",
+    maxHeight: "100vh",
+    transition: "margin-left 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1), width 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1)",
     width: "100%",
     overflowScrolling: "touch"
   },
