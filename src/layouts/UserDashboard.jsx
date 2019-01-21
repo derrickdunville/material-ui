@@ -68,7 +68,7 @@ class UserDashboard extends React.Component {
   componentDidMount(){
     if(!this.props.location.pathname.endsWith('/')){
       console.log("doesn't end with /")
-      this.props.history.push(`${this.props.location.pathname}/`)
+      this.props.history.replace(`${this.props.location.pathname}/`)
     }
     // this causes a render immediatly which helps the sidebar get into its correct parent component
     if(window.innerWidth >= 960){

@@ -6,7 +6,7 @@ import {
 
 const appStyle = theme => ({
   root: {
-    zIndex: "1 !important"
+    zIndex: "1 !important",
   },
   rootAppbar: {
     zIndex: "3 !important"
@@ -66,7 +66,7 @@ const appStyle = theme => ({
     width: '100%',
     height: "100%",
     marginLeft: "0px",
-    overflow: "auto",
+    overflow: "hidden",
 
   },
   mainPanel: {
@@ -85,9 +85,11 @@ const appStyle = theme => ({
   content: {
     marginTop: "0px",
     padding: "30px 15px",
-    minHeight: "calc(100vh - 123px)",
+    minHeight: "calc(100vh - 125px)",
     backgroundColor: "#323232",
-    boxShadow: "0px 3px 0px 3px rgba(0,0,0,0.75)"
+    webkitBoxShadow: "-3px 0px 5px -3px rgba(0,0,0,0.75)",
+    mozBoxShadow: "-3px 0px 5px -3px rgba(0,0,0,0.75)",
+    boxShadow: "-3px 0px 5px -3px rgba(0,0,0,0.75)"
   },
   container: {
     marginTop: "0px"
