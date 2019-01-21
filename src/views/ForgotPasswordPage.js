@@ -46,7 +46,7 @@ class ForgotPasswordPage extends Component {
         {this.head()}
         <div className={classes.authContainer}>
           <div className={classes.authLeft}>
-            <NavLink to="/">
+            <NavLink exact to="/">
               <img src={logo} className={classes.img} />
             </NavLink>
           </div>

@@ -87,8 +87,9 @@ class AccountContainer extends Component {
           <Switch location={this.props.location}>
             {this.props.route.routes.map((prop, key) => {
               return <Route exact={prop.exact} path={prop.path} key={key} render={routeProps => {
+                console.log
                 return(
-                  <AppBar position="static" color="default" style={{backgroundColor: "#454545"}} className="app-bar-slide2">
+                  <AppBar position="static" color="default" style={{backgroundColor: "#454545", color: "#FFFFFF"}} className="app-bar-slide2">
                     <Toolbar>
                       <NavLink exact to={prop.backPath} style={{color: "black"}}>
                         <IconButton color="inherit" aria-label="Menu">

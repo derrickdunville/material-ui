@@ -22,7 +22,7 @@
 } */
 .active {
   pointer-events: none;
-  background-color: grey;
+  background-color: #565656;
 }
 .fade-enter {
   opacity: 0;
@@ -78,15 +78,18 @@
   height: 100%;
   width: 100%;
 }
+@media only screen and (max-width: 960px){
+  .slide2 {
+    z-index: 1 !important;
+  }
+}
 .slide1 {
   z-index: 0 !important;
 }
-.slide2 {
-  z-index: 1 !important;
-}
-.slide3 {
+.slide2, .slide3 {
   z-index: 2 !important;
 }
+
 .-exit-done{
   z-index: 1 !important;
 }
@@ -277,7 +280,7 @@ a.navlink:focus {
 }
 a.navlink:hover {
   color: white;
-  background-color: #565656;
+  background-color: #454545;
 }
 
 legend {

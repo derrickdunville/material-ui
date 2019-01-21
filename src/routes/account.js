@@ -10,6 +10,7 @@ export default [
     path: '/app/account/',
     title: "Account",
     zIndex: 2,
+    hidden: true,
     routes: [
       {
         ...Account,

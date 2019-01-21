@@ -64,7 +64,7 @@ class LoginPage extends Component {
       <div className={classes.authWrapper}>
         <div className={classes.authContainer}>
           <div className={classes.authLeft}>
-            <NavLink to="/">
+            <NavLink exact to="/">
               <img src={logo} className={classes.img} />
             </NavLink>
           </div>

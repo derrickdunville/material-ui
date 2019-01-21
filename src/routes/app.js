@@ -53,7 +53,8 @@ export default [
             path: '/app/',
             exact: true,
             title: "Page 0",
-            zIndex: "1"
+            zIndex: "1",
+            hidden: true,
           },
           {
             ...AppPage,
@@ -81,7 +82,7 @@ export default [
         ...NotFoundPage,
         path: '',
       }
-      
+
     ]
   }
 ]

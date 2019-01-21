@@ -178,7 +178,7 @@ class UserDashboard extends React.Component {
             activeClassName="active"
             style={{width: "100%"}}>
             <div className={classes.logoImage} style={{color: "#FFFFFF", display: 'flex', alignItems: "center", padding:"10px", height: "56px" }}>
-              <div style={{width: "50px", height: "50px", backgroundColor: "#565656",  borderRadius: "4px"}}></div>
+              <div style={{width: "50px", height: "50px", backgroundColor: "#232323",  borderRadius: "4px"}}></div>
               <div style={{marginLeft: "10px", paddingRight: "10px", flex: '1'}}>username</div>
             </div>
           </NavLink>
@@ -193,15 +193,21 @@ class UserDashboard extends React.Component {
         </div>
         <Divider />
         <div style={{display: "flex", flexWrap: "wrap", maxWidth: "250px" }}>
-          {this.props.route.routes.map((route, index) => (
-            <NavLink exact={route.exact} to={route.path} className="navlink" key={index + 2} onClick={this.handleCloseNav}
-              style={{paddingLeft: "15px", marginLeft: "5px", marginRight: "5px", marginBottom: "5px", borderRadius: "3px"}}>
-              <div style={{display: "flex", width: "225px", height: "50px", paggingLeft: "15px", alignItems: "center"}}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                {route.title}
-              </div>
-            </NavLink>
-          ))}
+          {this.props.route.routes.map((route, index) => {
+            if(route.hidden){
+              return (<div></div>)
+            } else {
+              return (
+                <NavLink
+                  exact={route.exact} to={route.path} className="navlink" key={index + 2} onClick={this.handleCloseNav}
+                  style={{paddingLeft: "15px", marginLeft: "5px", marginRight: "5px", marginBottom: "5px", borderRadius: "3px"}}>
+                  <div style={{display: "flex", width: "225px", height: "50px", paggingLeft: "15px", alignItems: "center"}}>
+                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                    {route.title}
+                  </div>
+                </NavLink>
+              )}
+          })}
         </div>
       </div>
     );
