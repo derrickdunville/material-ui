@@ -55,7 +55,7 @@ const appStyle = theme => ({
     width: '250px',
     height: "100%",
     transform: "translateX(-250px)",
-    backgroundColor: "black",
+    backgroundColor: "white",
   },
   routes: {
     position: "absolute",

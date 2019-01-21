@@ -149,8 +149,8 @@ class UserDashboard extends React.Component {
           exact
           className={classes.logoLink}
           activeClassName="active">
-          <div className={classes.logoImage} style={{color: "#000000", display: 'flex', alignItems: "center", justifyContent: "center", marginTop:"10px", height: "56px" }}>
-            <img src={logo} alt="logo" className={classes.img} style={{width: '80px'}}/>
+          <div className={classes.logoImage} style={{color: "#000000", display: 'flex', alignItems: "center", justifyContent: "center", paddingTop:"10px", height: "56px" }}>
+            <img src={logo} className={classes.img} style={{width: '80px'}}/>
             <h6>App Title</h6>
           </div>
         </NavLink>
@@ -257,6 +257,7 @@ class UserDashboard extends React.Component {
     return (
       <div id="wrapper" className={classes.mainPanel}>
         <div id="sidebar" ref={this.sidebar} className={classes.sidebar}>
+          {sideList}
           <SwipeableDrawer
             open={true}
             onClose={this.handleSidebar}
