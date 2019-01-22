@@ -23,18 +23,7 @@ const Navbar = ({ ...props }) => {
     return props.location.pathname.indexOf(routeName) > -1 ? true : false;
   }
   const { classes, color, logo, image, logoText, routes } = props;
-  // <a href="/api/logout"
-  //   className={classes.item + " " + classes.navbarRight}
-  //   key={100}
-  // >
-  //   <ListItem button className={classes.itemLink}>
-  //     <ListItemText
-  //       primary={"Logout"}
-  //       className={classes.itemText}
-  //       disableTypography={true}
-  //     />
-  //   </ListItem>
-  // </a>
+
   var links = (
     <div className={classes.navbarRight}>
       {props.auth.user ? (

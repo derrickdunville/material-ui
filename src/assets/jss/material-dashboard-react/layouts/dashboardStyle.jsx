@@ -119,7 +119,6 @@ const appStyle = theme => ({
     backgroundColor: "#565656"
   },
   appWrapper: {
-    width: "100vw",
     height: "100vh",
   }
 });

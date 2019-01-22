@@ -13,36 +13,11 @@ class Home extends Component {
     this.state = {
       mobileOpen: false
     };
-    this.resizeFunction = this.resizeFunction.bind(this);
   }
   handleDrawerToggle = () => {
     this.setState({ mobileOpen: !this.state.mobileOpen });
   };
-  getRoute() {
-    return this.props.location.pathname !== "/maps";
-  }
-  resizeFunction() {
-    if (window.innerWidth >= 960) {
-      this.setState({ mobileOpen: false });
-    }
-  }
-  componentDidMount() {
-    // if (navigator.platform.indexOf("Win") > -1) {
-    //   const ps = new PerfectScrollbar(this.refs.mainPanel);
-    // }
-    window.addEventListener("resize", this.resizeFunction);
-  }
-  componentDidUpdate(e) {
-    if (e.history.location.pathname !== e.location.pathname) {
-      this.refs.mainPanel.scrollTop = 0;
-      if (this.state.mobileOpen) {
-        this.setState({ mobileOpen: false });
-      }
-    }
-  }
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.resizeFunction);
-  }
+
   head(){
     return (
       <Helmet>
@@ -54,19 +29,17 @@ class Home extends Component {
   render(){
     const { classes, route, ...rest } = this.props;
     return (
-      <div className={classes.wrapper}>
+      <div className={classes.home}>
         <Navbar
           routes={this.props.routes}
           logoText={"App Title"}
           logo={logo}
           image={image}
-          handleDrawerToggle={this.handleDrawerToggle}
-          open={this.state.mobileOpen}
           color="blue"
           {...rest}
         />
-        <div className={classes.home} ref="mainPanel">
-          <div className={classes.home}>
+      <div style={{height: "100%", padding: "10px"}} ref="mainPanel">
+          <div>
             Welcome
           </div>
         </div>

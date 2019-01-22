@@ -18,7 +18,7 @@
 /* .transition-item {
   position: absolute;
   top: 60px;
-} */ 
+} */
 .active {
   pointer-events: none;
   background-color: #565656;
@@ -107,13 +107,6 @@
   z-index: 2 !important;
   transition: transform 200ms ease-in;
   transform: translate3d(0, 0, 0);
-}
-.slideLeft1-exit{
-  opacity: 1
-}
-.slideLeft1-exit.slideLeft1-exit-active{
-  /* opacity: 0;
-  transition: opacity 200ms ease-in; */
 }
 
 .slideRight1-exit {
@@ -271,7 +264,6 @@ a {
 }
 
 a:hover, a:focus {
-    color: #0fed8a;
     text-decoration: none;
 }
 a.navlink:focus {
