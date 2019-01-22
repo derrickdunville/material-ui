@@ -13,7 +13,7 @@
   * Hot Module Replacement ✅
   * Data fetching through a remote API
 
-## Installing
+## Installing 
 
 Once cloned locally, run `npm install`.
 

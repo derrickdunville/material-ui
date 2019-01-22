@@ -257,7 +257,7 @@ class UserDashboard extends React.Component {
     );
 
     return (
-      <div id="wrapper" className={classes.mainPanel}>
+      <div id="wrapper" className={classes.wrapper}>
         <div id="sidebar" ref={this.sidebar} className={classes.sidebar}>
           {sideList}
           <SwipeableDrawer
@@ -291,7 +291,7 @@ class UserDashboard extends React.Component {
             </div>
           </SwipeableDrawer>
         </div>
-        <div id="mainPanel" className={classes.routes}>
+        <div id="mainPanel" className={classes.mainPanel}>
           {mobileSideBar}
           {appBar}
           <TransitionGroup childFactory={childFactoryCreator(this.getClassName(this.props.location), this.getTransitionTimeout(this.props.location))}>

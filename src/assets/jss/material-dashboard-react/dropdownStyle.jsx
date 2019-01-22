@@ -3,7 +3,6 @@ import {
   primaryBoxShadow,
   defaultFont
 } from "assets/jss/material-dashboard-react.jsx";
-
 const dropdownStyle = theme => ({
   buttonLink: {
     [theme.breakpoints.down("md")]: {

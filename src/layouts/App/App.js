@@ -12,7 +12,7 @@ class App extends Component {
   render(){
     const { classes, route, ...rest } = this.props;
     return (
-      <div className={classes.wrapper}>
+      <div className={classes.appWrapper}>
         {renderRoutes(route.routes)}
       </div>
     )
