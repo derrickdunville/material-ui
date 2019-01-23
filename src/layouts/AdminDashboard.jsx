@@ -52,68 +52,97 @@ class AdminDashboard extends React.Component {
     super(props);
     this.state = {
       left: false,
-      prevDepth: getPathDepth(props.location)
+      mobile: true,
+      prevDepth: getPathDepth(props.location),
+      prevPath: props.location.pathname,
     }
     this.handleCloseNav = this.handleCloseNav.bind(this);
     this.handleOpenNav = this.handleOpenNav.bind(this);
+    this.handleSidebar = this.handleSidebar.bind(this);
     this.getClassName = this.getClassName.bind(this);
+    this.resizeFunction = this.resizeFunction.bind(this);
     this.getTransitionTimeout = this.getTransitionTimeout.bind(this);
+    this.sidebar = React.createRef();
+  }
+  componentDidMount(){
+    if(this.props.location.pathname === "/admin"){
+      this.props.history.replace(`${this.props.location.pathname}/`)
+    } else {
+      this.props.history.replace(`${this.props.location.pathname}`)
+    }
+    // this causes a render immediatly which helps the sidebar get into its correct parent component
+    if(window.innerWidth >= 960){
+      this.setState({ mobile: false})
+    } else {
+      this.setState({ mobile: true})
+    }
+     window.addEventListener("resize", this.resizeFunction);
+  }
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.resizeFunction);
   }
   componentWillReceiveProps () {
+    window.previousLocation = this.props.location
     this.setState({ prevDepth: getPathDepth(this.props.location) })
+    this.setState({ prevPath: this.props.location.pathname })
   }
-  toggleDrawer = (side, open) => () => {
-    console.log("toggle")
-    this.props.openNav()
-    this.setState({[side]: open});
-  };
+  resizeFunction() {
+    if (window.innerWidth >= 960 && this.state.mobile) {
+      this.setState({ mobile: false })
+    } else if(window.innerWidth < 960 && !this.state.mobile) {
+      this.setState({ mobile: true})
+    }
+  }
+  handleSidebar(){
+    return
+  }
   handleCloseNav(){
     this.props.closeAdminNav()
   }
   handleOpenNav(){
     this.props.openAdminNav()
   }
-  componentWillUnmount() {
-    // window.removeEventListener("resize", this.resizeFunction);
-    console.log("Admin Dashboard unmounted")
-    this.props.closeAdminNav()
-  }
 
   getClassName(location){
-    // console.log("AdminDashboard: getClass")
-    if(getPathDepth(location) == this.state.prevDepth){
-      return ""
+    let slideDepth = getPathDepth(location) - 3
+    if (slideDepth > 1){
+      slideDepth = 2
+    } else {
+      slideDepth = 1
     }
     if(getPathDepth(location) > this.state.prevDepth){
-      return "slideLeft"
+      return `slideLeft${slideDepth}`
+    } else if (getPathDepth(location) < this.state.prevDepth ){
+      return `slideRight${slideDepth}`
     } else {
-      return "slideRight"
+      return `slideLeft${slideDepth}`
     }
   }
   getTransitionTimeout(location){
+    let timeout = 0
     if(getPathDepth(location) == this.state.prevDepth){
-      return 0
+      timeout = 0
     } else {
-      return 500
+      timeout = 220
     }
+    return timeout
   }
   render() {
-    console.log("AdminDashboard render:")
     const { classes, route, ...rest } = this.props;
-    const childFactoryCreator = (classNames) => (
-      (child) => {
-        console.log("AdminDashboard childFactory classNames: " +classNames)
-        return React.cloneElement(child, {
-          classNames
-        })
-      }
-    );
     const appBar = (
-      <AppBar position="static" color="default" className="app-bar-slide" classes={{ root: classes.adminRoot }}>
+      <AppBar
+        position="static"
+        color="default"
+        className="app-bar-slide"
+        style={{backgroundColor: "#454545", color: "#FFFFFF"}}
+        classes={{ root: classes.rootAppBar,
+        colorDefault: classes.rootAppBar }}>
         <Toolbar>
-          <IconButton color="inherit" aria-label="Menu" onClick={this.handleOpenNav}>
-            <MenuIcon />
-          </IconButton>
+          {this.state.mobile && (
+            <IconButton color="inherit" aria-label="Menu" onClick={this.handleOpenNav}>
+              <MenuIcon />
+            </IconButton>
+          )}
           <Typography variant="title" color="inherit" style={{width: '100%'}}>
             Admin Root
           </Typography>
@@ -127,114 +156,132 @@ class AdminDashboard extends React.Component {
           exact
           className={classes.logoLink}
           activeClassName="active">
-          <div className={classes.logoImage} style={{color: "#000000", display: 'flex', alignItems: "center", justifyContent: "center", marginTop:"10px", height: "56px" }}>
+          <div className={classes.logoImage} style={{color: "#FFF", display: 'flex', alignItems: "center", justifyContent: "center", marginTop:"10px", height: "56px" }}>
             <img src={logo} alt="logo" className={classes.img} style={{width: '80px'}}/>
             <h6>Admin Root</h6>
           </div>
         </NavLink>
-        <NavLink to={'/app/'} style={{alignItems: "center", display: "flex", color: "black"}}>
-          <ArrowBack style={{float: 'right', zIndex: "2", padding: '10px'}} />
+        <NavLink to={'/app/'} style={{alignItems: "center", display: "flex", color: "#FFF"}}>
+          <ArrowBack style={{padding: '10px'}}/>
+          Exit Admin
         </NavLink>
-        <List>
-          {this.props.route.routes.map((route, index) => (
-            <NavLink exact={route.exact} to={route.path} key={index + 2} activeClassName="active" onClick={this.handleCloseNav}>
-              <ListItem button key={index}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={route.title} />
-              </ListItem>
-            </NavLink>
-          ))}
-        </List>
+        <div style={{display: "flex", flexWrap: "wrap", maxWidth: "250px" }}>
+          {this.props.route.routes.map((route, index) => {
+            if(route.hidden){
+              return (<div></div>)
+            } else {
+              return (
+                <NavLink
+                  exact={route.exact} to={route.path} className="navlink" key={index + 2} onClick={this.handleCloseNav}
+                  style={{paddingLeft: "15px", marginLeft: "5px", marginRight: "5px", marginBottom: "5px", borderRadius: "3px"}}>
+                  <div style={{display: "flex", width: "225px", height: "50px", paggingLeft: "15px", alignItems: "center"}}>
+                    <ListItemIcon style={{color: "#FFF"}}>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                    {route.title}
+                  </div>
+                </NavLink>
+              )}
+          })}
+        </div>
       </div>
     );
+    const mobileSideBar = (
+      <SwipeableDrawer
+        open={this.props.app.adminNavOpen}
+        onClose={this.handleCloseNav}
+        onOpen={this.handleOpenNav}
+        ModalProps={{
+          style: {position: 'absolute'},
+          classes: {
+            root: classes.rootMobileSidebar
+          }
+        }}
+        BackdropProps={{
+          style: { position: 'absolute' },
+          classes: { root: classes.rootMobileSidebarBackdrop}
+        }}
+        SlideProps={{ style: { position: 'absolute' } }}
+        PaperProps={{
+          style: {
+            position: "absolute"
+          },
+          classes: {
+            root: classes.rootMobileSidebarPaper
+          }
+        }}
+        >
+        <div
+          tabIndex={0}
+          role="button"
+          onKeyDown={this.handleCloseNav}
+        >
+          {sideList}
+        </div>
+      </SwipeableDrawer>
+    )
 
-    let sideBar = null
-    if(typeof document !== "undefined"){
-      sideBar = (
-        <SwipeableDrawer
-          open={this.props.app.adminNavOpen}
-          onClose={this.handleCloseNav}
-          onOpen={this.handleOpenNav}
-          ModalProps={{
-            container: document.getElementById('admin-wrapper'),
-            style: {position: 'relative'},
-            classes: {
-              root: classes.adminSidebar
-            }
-          }}
-          BackdropProps={{ style: { position: 'absolute' } }}
-          SlideProps={{ style: { position: 'relative' } }}
-          PaperProps={{
-            style: {
-              position: "absolute"
-            },
-            classes: {
-              root: classes.adminSidebar
-            }
-          }}
-          >
-          <div
-            tabIndex={0}
-            role="button"
-            onKeyDown={this.handleCloseNav}
-          >
-            {sideList}
-          </div>
-        </SwipeableDrawer>
-      )
-    } else {
-      sideBar = (
-        <SwipeableDrawer
-          open={this.props.app.adminNavOpen}
-          onClose={this.handleCloseNav}
-          onOpen={this.handleOpenNav}
-          ModalProps={{
-            style: {position: 'relative'},
-            classes: {
-              root: classes.adminSidebar
-            }
-          }}
-          BackdropProps={{ style: { position: 'absolute' } }}
-          SlideProps={{ style: { position: 'relative' } }}
-          PaperProps={{
-            style: {
-              position: "absolute"
-            },
-            classes: {
-              root: classes.adminSidebar
-            }
-          }}
-          >
-          <div
-            tabIndex={0}
-            role="button"
-            onKeyDown={this.handleCloseNav}
-          >
-            {sideList}
-          </div>
-        </SwipeableDrawer>
-      )
-    }
+    //This returns a childFactory to provide to TransitionGroup
+    const childFactoryCreator = (classNames, timeout) => (
+      (child) => {
+        return React.cloneElement(child, {
+          classNames, timeout
+        })
+      }
+    );
 
     return (
-      <div id="admin-wrapper" className={classes.adminWrapper}>
-        {sideBar}
-        {appBar}
-        <TransitionGroup childFactory={childFactoryCreator(this.getClassName(this.props.location))}>
-          <CSSTransition
-            key={this.props.location.key}
-            classNames={this.getClassName(this.props.location)}
-            timeout={this.getTransitionTimeout(this.props.location)}
-            mountOnEnter={true}
-            unmountOnExit={true}
+      <div id="wrapper" className={classes.wrapper}>
+        <div id="sidebar" ref={this.sidebar} className={classes.sidebar}>
+          {sideList}
+          <SwipeableDrawer
+            open={true}
+            onClose={this.handleSidebar}
+            onOpen={this.handleSidebar}
+            ModalProps={{
+            container: this.sidebar.current,
+              style: {position: 'absolute'},
+              classes: {
+                root: classes.rootAppbar
+              }
+            }}
+            BackdropProps={{ style: { position: 'absolute' } }}
+            SlideProps={{ style: { position: 'absolute' } }}
+            PaperProps={{
+              style: {
+                position: "absolute"
+              },
+              classes: {
+                root: classes.rootSidebarPaper
+              }
+            }}
             >
-            {renderRoutes(
-              this.props.route.routes,
-              null,
-              {location: this.props.location}
-            )}
-          </CSSTransition>
-        </TransitionGroup>
+            <div
+              tabIndex={0}
+              role="button"
+              onKeyDown={this.handleCloseNav}
+            >
+              {sideList}
+            </div>
+          </SwipeableDrawer>
+        </div>
+        <div id="mainPanel" className={classes.mainPanel}>
+          {mobileSideBar}
+          {appBar}
+          <TransitionGroup childFactory={childFactoryCreator(this.getClassName(this.props.location), this.getTransitionTimeout(this.props.location))}>
+            <CSSTransition
+              key={this.props.location.key}
+              classNames={this.getClassName(this.props.location)}
+              timeout={this.getTransitionTimeout(this.props.location)}
+              mountOnEnter={true}
+              unmountOnExit={true}
+              >
+              {renderRoutes(
+                this.props.route.routes,
+                null,
+                {location: this.props.location}
+              )}
+            </CSSTransition>
+          </TransitionGroup>
+        </div>
       </div>
     );
   }

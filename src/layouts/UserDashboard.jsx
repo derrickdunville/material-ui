@@ -44,7 +44,7 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 
 function getPathDepth (location) {
-  console.log("pathDepth: ", (location || {} ).pathname.split('/').length)
+  // console.log("pathDepth: ", (location || {} ).pathname.split('/').length)
     return (location || {} ).pathname.split('/').length
 }
 
@@ -53,9 +53,9 @@ class UserDashboard extends React.Component {
     super(props);
     this.state = {
       left: false,
+      mobile: true,
       prevDepth: getPathDepth(props.location),
       prevPath: props.location.pathname,
-      mobile: true,
     }
     this.handleCloseNav = this.handleCloseNav.bind(this);
     this.handleOpenNav = this.handleOpenNav.bind(this);
@@ -66,9 +66,9 @@ class UserDashboard extends React.Component {
     this.sidebar = React.createRef();
   }
   componentDidMount(){
-    console.dir(this.props.location.pathname)
+    // console.dir(this.props.location.pathname)
     if(this.props.location.pathname === "/app"){
-      console.log("doesn't end with /")
+      // console.log("doesn't end with /")
       this.props.history.replace(`${this.props.location.pathname}/`)
     } else {
       this.props.history.replace(`${this.props.location.pathname}`)
@@ -97,7 +97,7 @@ class UserDashboard extends React.Component {
     }
   }
   handleSidebar(){
-    console.log("sidebar toggle")
+    return
   }
   handleCloseNav(){
     this.props.closeNav()
@@ -126,14 +126,12 @@ class UserDashboard extends React.Component {
     if(getPathDepth(location) == this.state.prevDepth){
       timeout = 0
     } else {
-      timeout = 200
+      timeout = 220
     }
-    console.log("timeout: ", timeout)
     return timeout
   }
 
   render() {
-    console.dir(this.sidebar)
     const { classes, route, ...rest } = this.props;
     const appBar = (
       <AppBar
@@ -196,7 +194,7 @@ class UserDashboard extends React.Component {
         <div style={{display: "flex", flexWrap: "wrap", maxWidth: "250px" }}>
           {this.props.route.routes.map((route, index) => {
             if(route.hidden){
-              return (<div></div>)
+              return (<div key={index+2}></div>)
             } else {
               return (
                 <NavLink
@@ -249,7 +247,6 @@ class UserDashboard extends React.Component {
     //This returns a childFactory to provide to TransitionGroup
     const childFactoryCreator = (classNames, timeout) => (
       (child) => {
-        console.log("UserDashboard childFactory classNames: " +classNames+ " timeout: " + timeout)
         return React.cloneElement(child, {
           classNames, timeout
         })
@@ -268,7 +265,7 @@ class UserDashboard extends React.Component {
             container: this.sidebar.current,
               style: {position: 'absolute'},
               classes: {
-                root: classes.rootAppbar
+                root: classes.rootSidebar
               }
             }}
             BackdropProps={{ style: { position: 'absolute' } }}

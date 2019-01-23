@@ -43,7 +43,7 @@
 .app-bar-slide,
 .app-bar-slide2,
 .app-bar-slide3 {
-  position: absolute !important;
+  position: relative !important;
   top: 0px;
   left: 0;
   width: 100%;
@@ -62,18 +62,15 @@
   z-index: 6 !important;
 }
 @media only screen and (max-width: 600px){
-  .slide1,
-  .slide2,
-  .slide3 {
-    top: 56px !important;
+  .slide1{
+    margin-top: 56px !important;
   }
 }
 .slide1,
 .slide2,
 .slide3 {
-  position: absolute;
+  position: relative;
   left: 0;
-  top: 64px;
   height: 100%;
   width: 100%;
 }
@@ -84,6 +81,7 @@
 }
 .slide1 {
   z-index: 0 !important;
+  margin-top: 64px;
 }
 .slide2, .slide3 {
   z-index: 2 !important;
@@ -108,7 +106,6 @@
   transition: transform 200ms ease-in;
   transform: translate3d(0, 0, 0);
 }
-
 .slideRight1-exit {
   z-index: 3 !important;
   transform: translate3d(0, 0, 0);
@@ -118,14 +115,13 @@
   transition: transform 200ms ease-in;
   transform: translate3d(100%, 0, 0);
 }
-
 .slideLeft2-enter {
   z-index: 4 !important;
   transform: translate3d(100%, 0, 0);
 }
 .slideLeft2-enter.slideLeft2-enter-active {
   z-index: 4 !important;
-  transition: transform 200ms ease-in;
+  transition: transform 200ms ease-out;
   transform: translate3d(0, 0, 0);
 }
 .slideLeft2-enter-done {
@@ -135,20 +131,39 @@
   z-index: 3 !important;
   opacity: 1;
 }
-.slideLeft2-exit.slideLeft2-exit-active{
-  /* opacity: 0;
-  transition: opacity 200ms ease-in; */
-}
 .slideRight2-exit {
   z-index: 4 !important;
   transform: translate3d(0, 0, 0);
 }
 .slideRight2-exit.slideRight2-exit-active {
   z-index: 4 !important;
-  transition: transform 200ms ease-in;
+  transition: transform 200ms ease-out;
   transform: translate3d(100%, 0, 0);
 }
 
+.slideLeft1-enter,
+.slideLeft1-exit,
+.slideLeft1-enter-done,
+.slideLeft1-exit-done,
+.slideRight1-enter,
+.slideRight1-exit,
+.slideRight1-enter-done,
+.slideRight1-exit-done,
+.slideLeft2-enter,
+.slideLeft2-exit,
+.slideLeft2-enter-done,
+.slideLeft2-exit-done,
+.slideRight2-enter,
+.slideRight2-exit,
+.slideRight2-enter-done,
+.slideRight2-exit-done,
+ {
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+slide
 
 .ct-grid {
     stroke: rgba(255, 255, 255, 0.2);

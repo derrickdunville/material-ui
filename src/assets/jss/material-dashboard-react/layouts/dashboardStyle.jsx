@@ -12,20 +12,18 @@ const appStyle = theme => ({
   rootAppbar: {
     backgroundColor: sideBarBackgroundColor+ "!important"
   },
+  rootSidebar: {
+    backgroundColor: sideBarBackgroundColor+ "!important",
+    zIndex: "1"
+  },
   rootSidebarPaper: {
-    transitionDelay: "0",
-    transition: "transform 0ms !important",
-    backgroundColor: sideBarBackgroundColor
+    backgroundColor: sideBarBackgroundColor,
+    zIndex: "2",
+    transition: "transform 0ms, z-index 0ms !important",
+
   },
   rootMobileSidebar: {
-    [theme.breakpoints.up("md")]: {
-      zIndex: "-1 !important",
-      transitionDelay: "225ms",
-      transition: "z-index 225ms",
-    },
     zIndex: "1 !important",
-    transitionDelay: "0ms",
-    transition: "z-index 0ms",
   },
   rootMobileSidebarBackdrop: {
     [theme.breakpoints.up("md")]: {
@@ -33,7 +31,8 @@ const appStyle = theme => ({
     }
   },
   rootMobileSidebarPaper: {
-    backgroundColor: sideBarBackgroundColor
+    zIndex: "1",
+    backgroundColor: sideBarBackgroundColor,
   },
   adminRoot: {
     position: "relative",
@@ -81,6 +80,7 @@ const appStyle = theme => ({
     top: "0",
     height: "100vh",
     position: "relative",
+    zIndex: "0",
     maxHeight: "100vh",
     transition: "margin-left 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1), width 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1)",
     width: "100%",
