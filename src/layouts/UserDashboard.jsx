@@ -64,6 +64,7 @@ class UserDashboard extends React.Component {
     this.resizeFunction = this.resizeFunction.bind(this);
     this.getTransitionTimeout = this.getTransitionTimeout.bind(this);
     this.sidebar = React.createRef();
+    this.wrapper = React.createRef();
   }
   componentDidMount(){
     // console.dir(this.props.location.pathname)
@@ -135,7 +136,7 @@ class UserDashboard extends React.Component {
     const { classes, route, ...rest } = this.props;
     const appBar = (
       <AppBar
-        position="static"
+        position="fixed"
         color="default"
         className="app-bar-slide"
         style={{backgroundColor: "#454545", color: "#FFFFFF"}}
@@ -144,11 +145,9 @@ class UserDashboard extends React.Component {
           colorDefault: classes.rootAppBar
         }}>
         <Toolbar>
-          {this.state.mobile && (
-            <IconButton color="inherit" aria-label="Menu" onClick={this.handleOpenNav}>
-              <MenuIcon />
-            </IconButton>
-          )}
+          <IconButton className={classes.menuIcon} color="inherit" aria-label="Menu" onClick={this.handleOpenNav}>
+            <MenuIcon />
+          </IconButton>
           <Typography variant="title" color="inherit" style={{width: '100%'}}>
             App Root
           </Typography>
@@ -184,10 +183,10 @@ class UserDashboard extends React.Component {
           <NavLink to={'/app/account/'}
             className={classes.logoLink}
             style={{alignItems: "center", display: "flex", color: "#FFFFFF"}}>
-            <SettingsIcon style={{float: 'right', zIndex: "2", padding: '10px'}}/>
+            <SettingsIcon style={{float: 'right', padding: '10px'}}/>
           </NavLink>
           <NavLink to={'/admin/'} style={{alignItems: "center", display: "flex", color: "#FFFFFF"}}>
-            <GavelIcon style={{float: 'right', zIndex: "2", padding: '10px'}} />
+            <GavelIcon style={{float: 'right', padding: '10px'}} />
           </NavLink>
         </div>
         <Divider />
@@ -216,6 +215,7 @@ class UserDashboard extends React.Component {
         onClose={this.handleCloseNav}
         onOpen={this.handleOpenNav}
         ModalProps={{
+          container: this.wrapper.current,
           style: {position: 'absolute'},
           classes: {
             root: classes.rootMobileSidebar
@@ -254,39 +254,9 @@ class UserDashboard extends React.Component {
     );
 
     return (
-      <div id="wrapper" className={classes.wrapper}>
+      <div id="wrapper"  className={classes.wrapper}>
         <div id="sidebar" ref={this.sidebar} className={classes.sidebar}>
           {sideList}
-          <SwipeableDrawer
-            open={true}
-            onClose={this.handleSidebar}
-            onOpen={this.handleSidebar}
-            ModalProps={{
-            container: this.sidebar.current,
-              style: {position: 'absolute'},
-              classes: {
-                root: classes.rootSidebar
-              }
-            }}
-            BackdropProps={{ style: { position: 'absolute' } }}
-            SlideProps={{ style: { position: 'absolute' } }}
-            PaperProps={{
-              style: {
-                position: "absolute"
-              },
-              classes: {
-                root: classes.rootSidebarPaper
-              }
-            }}
-            >
-            <div
-              tabIndex={0}
-              role="button"
-              onKeyDown={this.handleCloseNav}
-            >
-              {sideList}
-            </div>
-          </SwipeableDrawer>
         </div>
         <div id="mainPanel" className={classes.mainPanel}>
           {mobileSideBar}

@@ -79,7 +79,7 @@ const navbarStyle = theme => ({
     fontWeight: "400",
     lineHeight: "30px",
     textDecoration: "none",
-    backgroundColor: "transparent",
+    backgroundColor: "transparent !important",
     "&,&:hover": {
       color: "#FFFFFF"
     },

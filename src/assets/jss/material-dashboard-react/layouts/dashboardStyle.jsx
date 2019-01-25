@@ -18,12 +18,16 @@ const appStyle = theme => ({
   },
   rootSidebarPaper: {
     backgroundColor: sideBarBackgroundColor,
-    zIndex: "2",
-    transition: "transform 0ms, z-index 0ms !important",
+    transition: "transform 0ms !important",
 
   },
   rootMobileSidebar: {
-    zIndex: "1 !important",
+    zIndex: "1",
+    transition: "z-index",
+    [theme.breakpoints.up("md")]: {
+      zIndex: "-1",
+      transitionDelay: '300ms',
+    }
   },
   rootMobileSidebarBackdrop: {
     [theme.breakpoints.up("md")]: {
@@ -31,8 +35,13 @@ const appStyle = theme => ({
     }
   },
   rootMobileSidebarPaper: {
-    zIndex: "1",
     backgroundColor: sideBarBackgroundColor,
+    zIndex: "1",
+    transition: "z-index",
+    [theme.breakpoints.up("md")]: {
+      zIndex: "-1",
+      transitionDelay: '300ms',
+    }
   },
   adminRoot: {
     position: "relative",
@@ -64,9 +73,13 @@ const appStyle = theme => ({
 
   },
   sidebar: {
+    backgroundColor: sideBarBackgroundColor,
     position: "relative",
     width: '250px',
-    height: "100%",
+    zIndex: "-1",
+    [theme.breakpoints.up("md")]: {
+      zIndex: "1 !important",
+    },
   },
   routes: {
     position: "absolute",
@@ -78,21 +91,20 @@ const appStyle = theme => ({
   },
   mainPanel: {
     top: "0",
-    height: "100vh",
     position: "relative",
-    zIndex: "0",
     maxHeight: "100vh",
     transition: "margin-left 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1), width 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1)",
     width: "100%",
     overflowScrolling: "touch",
-    backgroundColor: defaultBackgroundColor
+    backgroundColor: defaultBackgroundColor,
+    overflow: "hidden"
   },
   content: {
-    overflow: "auto",
+    overflowX: "hidden",
+    overflowY: "auto",
     marginTop: "0px",
     padding: "30px 15px",
-    height: "100%",
-    minHeight: "calc(100vh - 125px)",
+    height: "calc(100vh - 124px)",
     backgroundColor: defaultBackgroundColor,
     width: "calc(100% - 30px)",
     webkitBoxShadow: "-3px 0px 5px -3px rgba(0,0,0,0.75)",
@@ -103,7 +115,7 @@ const appStyle = theme => ({
     marginTop: "0px"
   },
   list: {
-    width: 250
+    width: 250,
   },
   fullList: {
     width: 'auto'
@@ -118,8 +130,10 @@ const appStyle = theme => ({
   activeNavLink: {
     backgroundColor: "#565656"
   },
-  appWrapper: {
-    height: "100vh",
+  menuIcon: {
+    [theme.breakpoints.up("md")]: {
+      display: "none"
+    },
   }
 });
 
