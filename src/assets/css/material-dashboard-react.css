@@ -74,6 +74,10 @@
   width: 100%;
   margin-top: 64px;
 }
+.admin-slide1,
+.admin-slide2 {
+  margin-top: 64px;
+}
 @media only screen and (max-width: 960px){
   .slide2 {
     z-index: 1 !important;

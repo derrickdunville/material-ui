@@ -6,7 +6,22 @@ export const fetchUser = (userId) => async (dispatch, getState, api) => {
     payload: res
   })
 }
-
+export const CLEAR_USER = "CLEAR_USER"
+export const clearUser = () => async (dispatch, getState, api) =>{
+  dispatch({ type: CLEAR_USER })
+}
+export const CREATE_USER = "CREATE_USER"
+export const CREATE_USER_SUCCESS = "CREATE_USER_SUCCESS"
+export const CREATE_USER_FAIL = "CREATE_USER_FAIL"
+export const createUser = (user) => async (dispatch, getState, api) =>{
+  dispatch({ type: types.CREATE_USER })
+  try {
+    const res = await api.post('/user', user)
+    dispatch({ type: types.CREATE_USER_SUCCESS, payload: res })
+  } catch (error) {
+    dispatch({ type: types.CREATE_USER_FAIL, payload: error.response })
+  }
+}
 export const FETCH_USERS = 'FETCH_USERS'
 export const fetchUsers = () => async (dispatch, getState, api) => {
   const res = await api.get('/users')
