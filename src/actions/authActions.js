@@ -10,13 +10,22 @@ export const resetAuth = () => async (dispatch) => {
 }
 
 export const loginUser = (history, username, password) => async (dispatch, getState, api) => {
-  dispatch({ type: types.LOGIN_USER, payload: {}})
+  dispatch({
+    type: types.LOGIN_USER,
+    payload: {}
+  })
   try {
     const res = await api.post('/login', {"username": username, "password": password})
-    dispatch({ type: types.LOGIN_USER_SUCCESS, payload: res })
+    dispatch({
+      type: types.LOGIN_USER_SUCCESS,
+      payload: res
+    })
     history.push('/app/')
   } catch (error) {
-    dispatch({ type: types.LOGIN_USER_FAIL, payload: error.response })
+    dispatch({
+      type: types.LOGIN_USER_FAIL,
+       payload: error.response
+     })
   }
 }
 
@@ -29,11 +38,9 @@ export const signUpUser = (history, email, username, password, confirm_password)
       "password": password,
       "confirm_password": confirm_password
     })
-    console.dir(res)
     dispatch({ type: types.SIGN_UP_USER_SUCCESS, payload: res })
     history.push('/app/')
   } catch (error) {
-    console.dir(error.response)
     dispatch({ type: types.SIGN_UP_USER_FAIL, payload: error.response })
   }
 }
@@ -42,10 +49,8 @@ export const forgotPassword = (email) => async (dispatch, getState, api) => {
   dispatch({ type: types.FORGOT_PASSWORD })
   try {
     const res = await api.post('/forgot-password', { "email": email })
-    console.dir(res)
     dispatch({ type: types.FORGOT_PASSWORD_SUCCESS, payload: res })
   } catch (error) {
-    console.dir(error.response)
     dispatch({ type: types.FORGOT_PASSWORD_FAIL, payload: error.response })
   }
 }
@@ -54,10 +59,8 @@ export const verifyPasswordResetToken = (reset_token) => async (dispatch, getSta
   dispatch({ type: types.VERIFY_RESET_PASSWORD_TOKEN })
   try {
     const res = await api.post('/verify-password-reset-token', { "resetToken": reset_token })
-    console.dir(res)
     dispatch({ type: types.VERIFY_RESET_PASSWORD_TOKEN_SUCCESS, payload: res })
   } catch (error) {
-    console.dir(error.response)
     dispatch({ type: types.VERIFY_RESET_PASSWORD_TOKEN_FAIL, payload: error.response })
   }
 }
@@ -65,10 +68,8 @@ export const resetPassword = (reset_token, new_password) => async (dispatch, get
   dispatch({ type: types.RESET_PASSWORD })
   try {
     const res = await api.post('/reset-password', { "resetToken": reset_token, "newPassword": new_password })
-    console.dir(res)
     dispatch({ type: types.RESET_PASSWORD_SUCCESS, payload: res })
   } catch (error) {
-    console.dir(error.response)
     dispatch({ type: types.RESET_PASSWORD_FAIL, payload: error.response })
   }
 }

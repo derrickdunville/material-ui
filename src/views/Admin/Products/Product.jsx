@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { NavLink, Switch, Route, Redirect, withRouter } from "react-router-dom"
 import { Helmet } from 'react-helmet'
-import { getUser, deleteUser, clearUser } from 'actions/userActions'
-import EditUserForm from './EditUserForm.jsx'
+import { getProduct, deleteProduct, clearProduct } from 'actions/productActions'
+import EditProductForm from './EditProductForm.jsx'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -16,7 +16,7 @@ import Edit from '@material-ui/icons/Edit'
 import withStyles from "@material-ui/core/styles/withStyles"
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx"
 
-class User extends Component {
+class Product extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,21 +42,21 @@ class User extends Component {
     this.setState({deleteOpen: false})
   }
   handleDelete(){
-    this.props.deleteUser(this.props.user._id)
+    this.props.deleteProduct(this.props.product._id)
   }
   componentDidMount(){
-    console.log("User componentDidMount")
-    this.props.getUser(this.props.match.params.username)
+    console.log("Product componentDidMount")
+    this.props.getProduct(this.props.match.params.id)
   }
   componentWillUnmount(){
-    this.props.clearUser();
+    this.props.clearProduct();
   }
 
   head(){
     return (
       <Helmet>
-        <title>{`User`}</title>
-        <meta property="og:title" content="User"/>
+        <title>{`Product`}</title>
+        <meta property="og:title" content="Product"/>
       </Helmet>
     )
   }
@@ -71,21 +71,21 @@ class User extends Component {
         className="app-bar-slide2"
         >
         <Toolbar>
-          <NavLink exact to={"/admin/users"} style={{color: "#FFF"}}>
+          <NavLink exact to={"/admin/products"} style={{color: "#FFF"}}>
             <IconButton color="inherit" aria-label="Menu">
               <ArrowBack />
             </IconButton>
           </NavLink>
           <Typography variant="title" color="inherit">
-            {this.props.user.username}
+            {this.props.product.name}
           </Typography>
         </Toolbar>
       </AppBar>
     )
 
-    const deleteUser = (
+    const deleteProduct = (
       <div>
-        Are you sure you want to delete user {this.props.user.username}?
+        Are you sure you want to delete product {this.props.product.name}?
           <Button onClick={this.handleDelete}>
             Delete
           </Button>
@@ -94,12 +94,12 @@ class User extends Component {
           </Button>
       </div>
     )
-    const editUser = (
+    const editProduct = (
       <div>
         <Button onClick={this.closeEdit}>
           Cancel
         </Button>
-        <EditUserForm />
+        <EditProductForm />
       </div>
     )
     return (
@@ -115,20 +115,21 @@ class User extends Component {
               <IconButton onClick={this.openEdit} color="inherit" aria-label="Menu">
                 <Edit />
               </IconButton>
-              <h5>{this.props.user.username}</h5>
-              <h5>{this.props.user.email}</h5>
-              <h5>{this.props.user.created_at}</h5>
+              <h5>{this.props.product.name}</h5>
+              <h5>{this.props.product.amount}</h5>
+              <h5>{this.props.product.description}</h5>
+              <h5>{this.props.product.created_at}</h5>
             </div>
           ):(
             <div>
               {this.state.deleteOpen && (
                 <div className={classes.content}>
-                  {deleteUser}
+                  {deleteProduct}
                 </div>
               )}
               {this.state.editOpen && (
                 <div className={classes.content}>
-                  {editUser}
+                  {editProduct}
                 </div>
               )}
             </div>
@@ -141,17 +142,17 @@ class User extends Component {
 
 function mapStateToProps(state) {
   return {
-    user: state.users.user
+    product: state.products.product
   }
 }
 
 function loadData(store, match){
-  console.log("admin/users/user.loadData")
+  console.log("admin/products/product.loadData")
   console.dir(match.params)
-  return store.dispatch(getUser(match.params.username))
+  return store.dispatch(getProduct(match.params.id))
 }
 
 export default {
   loadData,
-  component: withRouter(connect(mapStateToProps, {getUser, clearUser, deleteUser})(withStyles(dashboardStyle)(User)))
+  component: withRouter(connect(mapStateToProps, {getProduct, clearProduct, deleteProduct})(withStyles(dashboardStyle)(Product)))
 }

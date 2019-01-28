@@ -129,24 +129,7 @@ class AdminDashboard extends React.Component {
   }
   render() {
     const { classes, route, ...rest } = this.props
-    const appBar = (
-      <AppBar
-        position="static"
-        color="default"
-        className="app-bar-slide"
-        style={{backgroundColor: "#454545", color: "#FFFFFF"}}
-        classes={{ root: classes.rootAppBar,
-        colorDefault: classes.rootAppBar }}>
-        <Toolbar>
-          <IconButton color="inherit" aria-label="Menu" onClick={this.handleOpenNav}>
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="title" color="inherit" style={{width: '100%'}}>
-            Admin Root
-          </Typography>
-        </Toolbar>
-      </AppBar>
-    )
+
     const switchRoutes = (
       <Switch location={this.props.location}>
         {this.props.route.routes.map((prop, key) => {
@@ -160,7 +143,7 @@ class AdminDashboard extends React.Component {
                 classes={{ root: classes.rootAppBar,
                 colorDefault: classes.rootAppBar }}>
                 <Toolbar>
-                  <IconButton color="inherit" aria-label="Menu" onClick={this.handleOpenNav}>
+                  <IconButton className={classes.menuIcon} color="inherit" aria-label="Menu" onClick={this.handleOpenNav}>
                     <MenuIcon />
                   </IconButton>
                   <Typography variant="title" color="inherit" style={{width: '100%'}}>

@@ -4,10 +4,11 @@ import { Helmet } from 'react-helmet'
 import withStyles from "@material-ui/core/styles/withStyles"
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx"
 import { withRouter } from "react-router-dom"
-import { fetchUsers } from 'actions'
+import { getUsers } from 'actions/userActions'
 import { NavLink } from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton'
 import Add from '@material-ui/icons/Add'
+import Close from '@material-ui/icons/Close'
 import CreateUserForm from './CreateUserForm.jsx'
 import FormControl from "@material-ui/core/FormControl";
 import TextField from
@@ -30,7 +31,7 @@ class Users extends Component {
   }
 
   componentDidMount(){
-    this.props.fetchUsers()
+    this.props.getUsers()
   }
   head(){
     return (
@@ -67,17 +68,23 @@ class Users extends Component {
       <div className={`slide${route.zIndex}`}>
         {this.head()}
         <div className={classes.route} ref="mainPanel">
-          <div className={classes.content}>
-            Users
-            <IconButton onClick={this.openNewUser} color="inherit" aria-label="Menu">
-              <Add />
-            </IconButton>
-            {this.state.createUserOpen ? (
+          {this.state.createUserOpen ? (
+            <div className={classes.content}>
+              New User
+              <IconButton onClick={this.closeNewUser} color="inherit" aria-label="Menu">
+                <Close />
+              </IconButton>
               <CreateUserForm />
-            ):(
+            </div>
+          ):(
+            <div className={classes.content}>
+              {this.props.users.total} Users
+              <IconButton onClick={this.openNewUser} color="inherit" aria-label="Menu">
+                <Add />
+              </IconButton>
               <ul>{this.renderUsers()}</ul>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     )
@@ -93,10 +100,10 @@ function mapStateToProps(state) {
 function loadData(store, match){
   console.log("Admin/Users.loadData")
   console.dir(match.params)
-  return store.dispatch(fetchUsers())
+  return store.dispatch(getUsers())
 }
 
 export default {
   loadData,
-  component: withRouter(connect(mapStateToProps, {fetchUsers})(withStyles(dashboardStyle)(Users)))
+  component: withRouter(connect(mapStateToProps, {getUsers})(withStyles(dashboardStyle)(Users)))
 }

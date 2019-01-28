@@ -1,18 +1,19 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { postUser } from 'actions/userActions'
+import { putUser } from 'actions/userActions'
 import Button from "components/CustomButtons/Button.jsx";
 import CustomTextField from 'components/CustomTextField/CustomTextField.jsx'
 import withStyles from "@material-ui/core/styles/withStyles";
 import formStyle from "assets/jss/material-dashboard-react/views/formStyle.jsx"
 
-class CreateUserForm extends Component {
+class EditUserForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username:'',
-      email:'',
-      password:'',
+      id: this.props.user._id,
+      username: this.props.user.username,
+      email: this.props.user.email,
+      password: '',
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -30,12 +31,16 @@ class CreateUserForm extends Component {
   }
   handleSubmit(event){
     event.preventDefault()
+    let form_data = new FormData()
     let user = {
       username: this.state.username,
       email: this.state.email,
-      password: this.state.password
     }
-    this.props.postUser(user)
+    if(this.state.password !== ''){
+      user.password = this.state.password
+    }
+    form_data.append('user', JSON.stringify(user))
+    this.props.putUser(this.state.id, form_data)
   }
 
   render(){
@@ -79,7 +84,7 @@ class CreateUserForm extends Component {
           color="primary"
           type="submit"
           onClick={this.handleSubmit}>
-          Create
+          Save
         </Button>
         </form>
       </div>
@@ -88,8 +93,10 @@ class CreateUserForm extends Component {
 }
 function mapStateToProps(state) {
   return {
-    users: state.users
+    user: state.users.user,
+    puttingUser : state.users.puttingUser,
+    puttingUserError: state.users.puttingUserError
   }
 }
 
-export default connect(mapStateToProps, { postUser })(withStyles(formStyle)(CreateUserForm))
+export default connect(mapStateToProps, { putUser })(withStyles(formStyle)(EditUserForm))

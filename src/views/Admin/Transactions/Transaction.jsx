@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { NavLink, Switch, Route, Redirect, withRouter } from "react-router-dom"
 import { Helmet } from 'react-helmet'
-import { getUser, deleteUser, clearUser } from 'actions/userActions'
-import EditUserForm from './EditUserForm.jsx'
+import { getTransaction, deleteTransaction, clearTransaction } from 'actions/transactionActions'
+import EditTransactionForm from './EditTransactionForm.jsx'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -16,7 +16,7 @@ import Edit from '@material-ui/icons/Edit'
 import withStyles from "@material-ui/core/styles/withStyles"
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx"
 
-class User extends Component {
+class Transaction extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,21 +42,21 @@ class User extends Component {
     this.setState({deleteOpen: false})
   }
   handleDelete(){
-    this.props.deleteUser(this.props.user._id)
+    this.props.deleteTransaction(this.props.transaction._id)
   }
   componentDidMount(){
-    console.log("User componentDidMount")
-    this.props.getUser(this.props.match.params.username)
+    console.log("Transaction componentDidMount")
+    this.props.getTransaction(this.props.match.params.transactionname)
   }
   componentWillUnmount(){
-    this.props.clearUser();
+    this.props.clearTransaction();
   }
 
   head(){
     return (
       <Helmet>
-        <title>{`User`}</title>
-        <meta property="og:title" content="User"/>
+        <title>{`Transaction`}</title>
+        <meta property="og:title" content="Transaction"/>
       </Helmet>
     )
   }
@@ -71,21 +71,21 @@ class User extends Component {
         className="app-bar-slide2"
         >
         <Toolbar>
-          <NavLink exact to={"/admin/users"} style={{color: "#FFF"}}>
+          <NavLink exact to={"/admin/transactions"} style={{color: "#FFF"}}>
             <IconButton color="inherit" aria-label="Menu">
               <ArrowBack />
             </IconButton>
           </NavLink>
           <Typography variant="title" color="inherit">
-            {this.props.user.username}
+            {this.props.transaction.transactionname}
           </Typography>
         </Toolbar>
       </AppBar>
     )
 
-    const deleteUser = (
+    const deleteTransaction = (
       <div>
-        Are you sure you want to delete user {this.props.user.username}?
+        Are you sure you want to delete transaction {this.props.transaction.transactionname}?
           <Button onClick={this.handleDelete}>
             Delete
           </Button>
@@ -94,12 +94,12 @@ class User extends Component {
           </Button>
       </div>
     )
-    const editUser = (
+    const editTransaction = (
       <div>
         <Button onClick={this.closeEdit}>
           Cancel
         </Button>
-        <EditUserForm />
+        <EditTransactionForm />
       </div>
     )
     return (
@@ -115,20 +115,20 @@ class User extends Component {
               <IconButton onClick={this.openEdit} color="inherit" aria-label="Menu">
                 <Edit />
               </IconButton>
-              <h5>{this.props.user.username}</h5>
-              <h5>{this.props.user.email}</h5>
-              <h5>{this.props.user.created_at}</h5>
+              <h5>{this.props.transaction.transactionname}</h5>
+              <h5>{this.props.transaction.email}</h5>
+              <h5>{this.props.transaction.created_at}</h5>
             </div>
           ):(
             <div>
               {this.state.deleteOpen && (
                 <div className={classes.content}>
-                  {deleteUser}
+                  {deleteTransaction}
                 </div>
               )}
               {this.state.editOpen && (
                 <div className={classes.content}>
-                  {editUser}
+                  {editTransaction}
                 </div>
               )}
             </div>
@@ -141,17 +141,17 @@ class User extends Component {
 
 function mapStateToProps(state) {
   return {
-    user: state.users.user
+    transaction: state.transactions.transaction
   }
 }
 
 function loadData(store, match){
-  console.log("admin/users/user.loadData")
+  console.log("admin/transactions/transaction.loadData")
   console.dir(match.params)
-  return store.dispatch(getUser(match.params.username))
+  return store.dispatch(getTransaction(match.params.transactionname))
 }
 
 export default {
   loadData,
-  component: withRouter(connect(mapStateToProps, {getUser, clearUser, deleteUser})(withStyles(dashboardStyle)(User)))
+  component: withRouter(connect(mapStateToProps, {getTransaction, clearTransaction, deleteTransaction})(withStyles(dashboardStyle)(Transaction)))
 }

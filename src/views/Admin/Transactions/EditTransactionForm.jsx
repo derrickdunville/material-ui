@@ -1,25 +1,26 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { postUser } from 'actions/userActions'
+import { putTransaction } from 'actions/transactionActions'
 import Button from "components/CustomButtons/Button.jsx";
 import CustomTextField from 'components/CustomTextField/CustomTextField.jsx'
 import withStyles from "@material-ui/core/styles/withStyles";
 import formStyle from "assets/jss/material-dashboard-react/views/formStyle.jsx"
 
-class CreateUserForm extends Component {
+class EditTransactionForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username:'',
-      email:'',
-      password:'',
+      id: this.props.transaction._id,
+      transactionname: this.props.transaction.transactionname,
+      email: this.props.transaction.email,
+      password: '',
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
   handleChange(event){
-    if(event.target.name === 'username'){
-        this.setState({ username: event.target.value })
+    if(event.target.name === 'transactionname'){
+        this.setState({ transactionname: event.target.value })
     }
     if(event.target.name === 'email'){
       this.setState({ email: event.target.value })
@@ -30,12 +31,16 @@ class CreateUserForm extends Component {
   }
   handleSubmit(event){
     event.preventDefault()
-    let user = {
-      username: this.state.username,
+    let form_data = new FormData()
+    let transaction = {
+      transactionname: this.state.transactionname,
       email: this.state.email,
-      password: this.state.password
     }
-    this.props.postUser(user)
+    if(this.state.password !== ''){
+      transaction.password = this.state.password
+    }
+    form_data.append('transaction', JSON.stringify(transaction))
+    this.props.putTransaction(this.state.id, form_data)
   }
 
   render(){
@@ -44,12 +49,12 @@ class CreateUserForm extends Component {
       <div className={classes.formWrapper}>
         <form onSubmit={this.handleSubmit}>
           <CustomTextField
-            labelText="Username"
+            labelText="Transactionname"
             inputType="text"
             formControlProps={{fullWidth: true}}
             inputProps={{
-              name: 'username',
-              value: this.state.username,
+              name: 'transactionname',
+              value: this.state.transactionname,
               onChange: this.handleChange
             }}
           />
@@ -79,7 +84,7 @@ class CreateUserForm extends Component {
           color="primary"
           type="submit"
           onClick={this.handleSubmit}>
-          Create
+          Save
         </Button>
         </form>
       </div>
@@ -88,8 +93,10 @@ class CreateUserForm extends Component {
 }
 function mapStateToProps(state) {
   return {
-    users: state.users
+    transaction: state.transactions.transaction,
+    puttingTransaction : state.transactions.puttingTransaction,
+    puttingTransactionError: state.transactions.puttingTransactionError
   }
 }
 
-export default connect(mapStateToProps, { postUser })(withStyles(formStyle)(CreateUserForm))
+export default connect(mapStateToProps, { putTransaction })(withStyles(formStyle)(EditTransactionForm))
