@@ -1,11 +1,22 @@
 import * as types from '../constants/user-action-types'
 
-export const getUsers = () => async (dispatch, getState, api) => {
+export const getUsers = (filter=undefined, page=0, limit=10, order="asc", orderBy="username") => async (dispatch, getState, api) => {
   dispatch({
     type: types.GET_USERS
   })
+  let url = "/users?page=" + page +"&limit=" + limit + "&sort="+orderBy+":"+order+""
+  if(filter !== undefined){
+    if(filter.username !== undefined){
+      url += "&username=" + filter.username
+    }
+    if(filter.email !== undefined){
+      url += "&email=" + filter.email
+    }
+  }
+
+  console.log("Url: " + url)
   try {
-    const res = await api.get('/users')
+    const res = await api.get(url)
     dispatch({
       type: types.GET_USERS_SUCCESS,
       payload: res

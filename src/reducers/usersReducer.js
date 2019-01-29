@@ -7,6 +7,8 @@ const initialState = {
   error: false,
 
   user: false,
+  page: 0,
+  limit: 10,
 
   gettingUser: false,
   gettingUserError: false,
@@ -47,6 +49,7 @@ export default (state=initialState, action) => {
       return {
         ...state,
         gettingUsers: false,
+        loaded: true,
         ...action.payload.data
       }
     case types.GET_USERS_FAIL:

@@ -49,7 +49,7 @@ const customTextFieldStyle = {
     backgroundColor: "transparent !important"
   },
   root: {
-    "&:hover:not($disabled):not($focused):not($error) $notchedOutline": {
+    "&:hover:not($disabled) $notchedOutline": {
       borderColor: "#000000 !important",
       zIndex: "1"
     },
