@@ -19,6 +19,27 @@
   position: absolute;
   top: 60px;
 } */
+.noselect {
+  -webkit-touch-callout: none !important; /* iOS Safari */
+    -webkit-user-select: none !important; /* Safari */
+     -khtml-user-select: none !important; /* Konqueror HTML */
+       -moz-user-select: none !important; /* Firefox */
+        -ms-user-select: none !important; /* Internet Explorer/Edge */
+            user-select: none !important; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+                                  -webkit-tap-highlight-color: rgba(0,0,0,0);
+
+}
+
+.file_select_wrapper:focus-within{
+  border: 1px solid #0FED8A;
+}
+.select-menu-item:focus {
+  background-color: #565656 !important;
+}
+.select-menu-item:hover {
+  background-color: #454545 !important;
+}
 .active {
   pointer-events: none;
   background-color: #565656;

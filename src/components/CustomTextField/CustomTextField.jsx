@@ -26,10 +26,6 @@ function CustomTextField({ ...props }) {
     success
   } = props;
 
-  const marginTop = classNames({
-    [classes.marginTop]: labelText === undefined
-  });
-
   return (
     <FormControl
       {...formControlProps}
@@ -57,7 +53,6 @@ function CustomTextField({ ...props }) {
         label={labelText}
         type={inputType}
         autoComplete="current-password"
-        margin="normal"
         variant="outlined"
       />
     </FormControl>

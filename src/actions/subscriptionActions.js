@@ -1,11 +1,20 @@
 import * as types from '../constants/subscription-action-types'
 
-export const getSubscriptions = () => async (dispatch, getState, api) => {
+export const getSubscriptions = (filter=undefined, page=0, limit=10, order="asc", orderBy="name") => async (dispatch, getState, api) => {
   dispatch({
     type: types.GET_SUBSCRIPTIONS
   })
+  let url = "/subscriptions?page=" + page +"&limit=" + limit + "&sort="+orderBy+":"+order+""
+  if(filter !== undefined){
+    if(filter.id !== undefined){
+      url += "&id=" + filter.id
+    }
+    if(filter.username !== undefined){
+      url += "&username=" + filter.username
+    }
+  }
   try {
-    const res = await api.get('/subscriptions')
+    const res = await api.get(url)
     dispatch({
       type: types.GET_SUBSCRIPTIONS_SUCCESS,
       payload: res

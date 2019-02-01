@@ -44,7 +44,7 @@ class Users extends Component {
     this.state = {
       createUserOpen: false,
       search: "",
-      searchColumn: "username",
+      searchColumn: "Username",
       anchorEl: null,
       labelWidth: 0,
       order: "asc",
@@ -70,10 +70,10 @@ class Users extends Component {
   getFilter(){
     let filter = {}
     if(this.state.search !== ''){
-      if(this.state.searchColumn === 'username'){
+      if(this.state.searchColumn === 'Username'){
         filter.username = this.state.search
       }
-      if(this.state.searchColumn === 'email'){
+      if(this.state.searchColumn === 'Email'){
         filter.email = this.state.search
       }
     }
@@ -130,63 +130,56 @@ class Users extends Component {
       {id:"username", label:"Username", numeric: false, disablePadding: false},
       {id:"email", label:"Email", numeric: false, disablePadding: false}
     ]
-
-    if(this.props.users.docs){
-      return (
-        <Paper style={{width: "100%", backgroundColor: "#454545"}}>
-          <Table style={{color: "white"}}>
-            <EnhancedTableHead
-              columns={tableColumns}
-              order={this.state.order}
-              orderBy={this.state.orderBy}
-              onRequestSort={this.handleRequestSort}
-              />
-            <TableBody>
-              {this.props.users.docs.map(user => (
-                <TableRow key={user._id}>
-                  <CustomTableCell component="th" scope="row">
-                    <NavLink
-                      to={`/admin/users/${user.username}`}
-                      key={user._id}
-                      >
-                      {user.username}
-                    </NavLink>
-                  </CustomTableCell>
-                  <CustomTableCell align="right">{user.email}</CustomTableCell>
-                </TableRow>
-              ))}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 48 * emptyRows }}>
-                  <CustomTableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[10, 25, 50, 100]}
-                  colSpan={3}
-                  style={{color: "white"}}
-                  count={this.props.users.total}
-                  rowsPerPage={this.props.users.limit}
-                  page={this.props.users.page}
-                  SelectProps={{
-                    native: true,
-                  }}
-                  onChangePage={this.handleChangePage}
-                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActions}
-                />
+    return (
+      <Paper style={{width: "100%", backgroundColor: "#454545"}}>
+        <Table style={{color: "white"}}>
+          <EnhancedTableHead
+            columns={tableColumns}
+            order={this.state.order}
+            orderBy={this.state.orderBy}
+            onRequestSort={this.handleRequestSort}
+            />
+          <TableBody>
+            {this.props.users.docs.map(user => (
+              <TableRow key={user._id}>
+                <CustomTableCell component="th" scope="row">
+                  <NavLink
+                    to={`/admin/users/${user.username}`}
+                    key={user._id}
+                    >
+                    {user.username}
+                  </NavLink>
+                </CustomTableCell>
+                <CustomTableCell align="right">{user.email}</CustomTableCell>
               </TableRow>
-            </TableFooter>
-          </Table>
-        </Paper>
-      )
-    } else {
-      return (
-        <div>Hmmm... nothing here</div>
-      )
-    }
+            ))}
+            {emptyRows > 0 && (
+              <TableRow style={{ height: 48 * emptyRows }}>
+                <CustomTableCell colSpan={6} />
+              </TableRow>
+            )}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[10, 25, 50, 100]}
+                colSpan={3}
+                style={{color: "white"}}
+                count={this.props.users.total}
+                rowsPerPage={this.props.users.limit}
+                page={this.props.users.page}
+                SelectProps={{
+                  native: true,
+                }}
+                onChangePage={this.handleChangePage}
+                onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                ActionsComponent={TablePaginationActions}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </Paper>
+    )
   }
 
   render(){
@@ -229,8 +222,8 @@ class Users extends Component {
             id="outlined-filter-simple" />
           }
         >
-          <MenuItem value="username">Username</MenuItem>
-          <MenuItem value="email">Email</MenuItem>
+          <MenuItem value="Username">Username</MenuItem>
+          <MenuItem value="Email">Email</MenuItem>
         </CustomSelect>
       </FormControl>
     )

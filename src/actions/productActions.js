@@ -1,11 +1,20 @@
 import * as types from '../constants/product-action-types'
 
-export const getProducts = () => async (dispatch, getState, api) => {
+export const getProducts = (filter=undefined, page=0, limit=10, order="asc", orderBy="name") => async (dispatch, getState, api) => {
   dispatch({
     type: types.GET_PRODUCTS
   })
+  let url = "/products?page=" + page +"&limit=" + limit + "&sort="+orderBy+":"+order+""
+  if(filter !== undefined){
+    if(filter.name !== undefined){
+      url += "&name=" + filter.name
+    }
+    if(filter.id !== undefined){
+      url += "&id=" + filter.id
+    }
+  }
   try {
-    const res = await api.get('/products')
+    const res = await api.get(url)
     dispatch({
       type: types.GET_PRODUCTS_SUCCESS,
       payload: res

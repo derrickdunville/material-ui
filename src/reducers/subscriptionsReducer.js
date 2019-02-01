@@ -24,6 +24,10 @@ const initialState = {
   error: false,
 
   subscription: false,
+  page: 0,
+  limit: 10,
+  total: 0,
+  docs: [],
 
   gettingSubscription: false,
   gettingSubscriptionError: false,

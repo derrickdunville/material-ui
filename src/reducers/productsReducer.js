@@ -24,6 +24,10 @@ const initialState = {
   error: false,
 
   product: false,
+  page: 0,
+  limit: 10,
+  total: 0,
+  docs: [],
 
   gettingProduct: false,
   gettingProductError: false,

@@ -1,9 +1,16 @@
 import * as types from '../constants/transaction-action-types'
 
-export const getTransactions = () => async (dispatch, getState, api) => {
+export const getTransactions = (filter=undefined, page=0, limit=10, order="asc", orderBy="name") => async (dispatch, getState, api) => {
   dispatch({
     type: types.GET_TRANSACTIONS
   })
+  let url = "/transaction?page=" + page +"&limit=" + limit + "&sort="+orderBy+":"+order+""
+
+  if(filter !== undefined){
+    if(filter.id !== undefined){
+      url += "&id=" + filter.id
+    }
+  }
   try {
     const res = await api.get('/transactions')
     dispatch({

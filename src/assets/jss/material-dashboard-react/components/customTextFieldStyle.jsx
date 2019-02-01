@@ -87,7 +87,6 @@ const customTextFieldStyle = {
     marginTop: "5px"
   },
   formControl: {
-    paddingBottom: "10px",
     margin: "0px 0 0 0",
     position: "relative"
   },

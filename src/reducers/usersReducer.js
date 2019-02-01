@@ -9,6 +9,8 @@ const initialState = {
   user: false,
   page: 0,
   limit: 10,
+  total: 0,
+  docs: [],
 
   gettingUser: false,
   gettingUserError: false,

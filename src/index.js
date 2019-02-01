@@ -21,7 +21,9 @@ const axiosInstance = axios.create({
 
 
 // Create a theme instance.
-const theme = createMuiTheme({palette: {}});
+const theme = createMuiTheme({
+  palette: {},
+});
 // Create a new class name generator.
 const generateClassName = createGenerateClassName();
 

@@ -51,7 +51,7 @@ class EditTransactionForm extends Component {
           <CustomTextField
             labelText="Transactionname"
             inputType="text"
-            formControlProps={{fullWidth: true}}
+            formControlProps={{classes: { root: classes.formControl}, fullWidth: true}}
             inputProps={{
               name: 'transactionname',
               value: this.state.transactionname,
@@ -61,7 +61,7 @@ class EditTransactionForm extends Component {
           <CustomTextField
             labelText="Email"
             inputType="text"
-            formControlProps={{fullWidth: true}}
+            formControlProps={{classes: { root: classes.formControl}, fullWidth: true}}
             inputProps={{
               name: 'email',
               value: this.state.email,
@@ -71,7 +71,7 @@ class EditTransactionForm extends Component {
           <CustomTextField
             labelText="Password"
             inputType="password"
-            formControlProps={{fullWidth: true}}
+            formControlProps={{classes: { root: classes.formControl}, fullWidth: true}}
             inputProps={{
               name: 'password',
               type: "password",
