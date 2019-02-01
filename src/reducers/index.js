@@ -6,6 +6,7 @@ import adminsReducer from './adminsReducer'
 import productsReducer from './productsReducer'
 import transactionsReducer from './transactionsReducer'
 import subscriptionsReducer from './subscriptionsReducer'
+import autocompleteReducer from './autocompleteReducer'
 
 export default combineReducers({
   app: appReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
   admins: adminsReducer,
   products: productsReducer,
   transactions: transactionsReducer,
-  subscriptions: subscriptionsReducer
+  subscriptions: subscriptionsReducer,
+  autocomplete: autocompleteReducer
 })

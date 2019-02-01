@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-
 import Select from 'react-select'
-import { autocompleteUser, clearAutocomleteUser } from 'actions/autocompleteActions'
+import { autocompleteProduct, clearAutocomleteProduct } from 'actions/autocompleteActions'
 import CustomOutlinedInput from "components/OutlinedInput/CustomOutlinedInput.jsx"
 
 const styles = {
@@ -42,12 +41,12 @@ const styles = {
     color: "white",
   })
 }
-class UserAutoComplete extends Component {
+class ProductsAutoComplete extends Component {
   constructor(props){
     super(props);
     this.state = {
         searchInput: '',
-        selectedUser: null
+        selected: null
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleCancel = this.handleCancel.bind(this)
@@ -55,16 +54,16 @@ class UserAutoComplete extends Component {
   }
   componentDidMount(){
     console.log("componentDidMount")
-    this.props.clearAutocomleteUser()
+    this.props.clearAutocomleteProduct()
   }
   handleInputChange(newInput){
     console.log("handleInputChange")
     this.setState({searchInput: newInput}, () => {
       if(this.state.searchInput !== ''){
-        this.props.autocompleteUser(this.state.searchInput)
+        this.props.autocompleteProduct(this.state.searchInput)
       } else {
-        this.props.clearAutocomleteUser()
-        console.log("should clear the users autocomplete list")
+        this.props.clearAutocomleteProduct()
+        console.log("should clear the autocomplete list")
       }
     })
   }
@@ -73,16 +72,15 @@ class UserAutoComplete extends Component {
   }
   handleChange(newValue){
     console.log("handleChange")
-    console.log("UserAutocomplete: newValue - " + JSON.stringify(newValue))
-    this.setState({ selectedUser: newValue }, () => {
+    this.setState({ selected: newValue }, () => {
       this.props.onChange(newValue)
     })
   }
   render(){
     const { rest } = this.props
     let options = []
-    this.props.users.map(user => {
-      options.push({value: user._id, label: user.username})
+    this.props.products.map(product => {
+      options.push({value: product._id, label: product.name})
     })
     return (
       <Select
@@ -92,20 +90,20 @@ class UserAutoComplete extends Component {
         isClearable={true}
         onChange={this.handleChange}
         onInputChange={this.handleInputChange}
-        placeholder="User" />
+        placeholder="Product" />
     )
   }
 }
 
 function mapStateToProps(state) {
   return {
-    users: state.autocomplete.users
+    products: state.autocomplete.products
   }
 }
 
-UserAutoComplete.propTypes = {
+ProductsAutoComplete.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, { autocompleteUser, clearAutocomleteUser })(UserAutoComplete)
+export default connect(mapStateToProps, { autocompleteProduct, clearAutocomleteProduct })(ProductsAutoComplete)

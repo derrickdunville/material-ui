@@ -19,7 +19,6 @@ const axiosInstance = axios.create({
   withCredentials: true
 })
 
-
 // Create a theme instance.
 const theme = createMuiTheme({
   palette: {},

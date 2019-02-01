@@ -8,6 +8,8 @@ import indexRoutes from "routes/index.jsx";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Routes from './routes/app'
 import { renderRoutes } from 'react-router-config'
+import { MuiPickersUtilsProvider } from 'material-ui-pickers';
+import DateFnsUtils from '@date-io/date-fns';
 
 class Client extends Component {
   componentDidMount() {
@@ -25,7 +27,9 @@ class Client extends Component {
   render(){
     return (
       <BrowserRouter>
-        <div>{renderRoutes(Routes)}</div>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <div>{renderRoutes(Routes)}</div>
+        </MuiPickersUtilsProvider>
       </BrowserRouter>
     )
   }
