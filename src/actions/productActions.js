@@ -43,7 +43,7 @@ export const getProduct = (product_id) => async (dispatch, getState, api) => {
      })
   }
 }
-export const postProduct = (product) => async (dispatch, getState, api) => {
+export const postProduct = (history, product) => async (dispatch, getState, api) => {
   dispatch({
     type: types.POST_PRODUCT
   })
@@ -53,19 +53,26 @@ export const postProduct = (product) => async (dispatch, getState, api) => {
       type: types.POST_PRODUCT_SUCCESS,
       payload: res
     })
+    console.log(res.data._id)
+    try{
+      history.push("/admin/products/" + res.data._id)
+    } catch(error){
+      console.dir(error)
+    }
   } catch (error) {
+    console.dir(error)
     dispatch({
       type: types.POST_PRODUCT_FAIL,
-       payload: error.response
-     })
+      payload: error.response
+    })
   }
 }
-export const putProduct = (product) => async (dispatch, getState, api) => {
+export const putProduct = (id, product) => async (dispatch, getState, api) => {
   dispatch({
     type: types.PUT_PRODUCT
   })
   try {
-    const res = await api.put(`/products/${product._id}`, product)
+    const res = await api.put(`/products/${id}`, product)
     dispatch({
       type: types.PUT_PRODUCT_SUCCESS,
       payload: res
@@ -77,17 +84,19 @@ export const putProduct = (product) => async (dispatch, getState, api) => {
      })
   }
 }
-export const deleteProduct = (product_id) => async (dispatch, getState, api) => {
+export const deleteProduct = (history, product_id) => async (dispatch, getState, api) => {
   dispatch({
     type: types.DELETE_PRODUCT
   })
   try {
-    const res = await api.delete(`/products/${product._id}`)
+    const res = await api.delete(`/products/${product_id}`)
     dispatch({
       type: types.DELETE_PRODUCT_SUCCESS,
       payload: res
     })
+    history.push("/admin/products")
   } catch (error) {
+    console.dir(error)
     dispatch({
       type: types.DELETE_PRODUCT_FAIL,
        payload: error.response
@@ -96,4 +105,10 @@ export const deleteProduct = (product_id) => async (dispatch, getState, api) => 
 }
 export const clearProduct = () => async (dispatch, getState, api) => {
   dispatch({ type: types.CLEAR_PRODUCT })
+}
+export const clearMessage = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.CLEAR_MESSAGE })
+}
+export const toggleEditOpen = () => (dispatch, getState, api) => {
+  dispatch({ type: types.TOGGLE_EDITING_PRODUCT })
 }

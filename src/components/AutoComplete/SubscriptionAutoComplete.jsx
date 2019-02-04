@@ -4,49 +4,14 @@ import { connect } from 'react-redux'
 import Select from 'react-select'
 import { autocompleteSubscription, clearAutocomleteSubscription } from 'actions/autocompleteActions'
 import CustomOutlinedInput from "components/OutlinedInput/CustomOutlinedInput.jsx"
+import autoCompleteStyle from "assets/jss/material-dashboard-react/components/autoCompleteStyle.jsx"
 
-const styles = {
-  input:  (styles) => ({
-    ...styles,
-    color: "white",
-    backgroundColor: "#202225"
-  }),
-  menu:  (styles) => ({
-    ...styles,
-    zIndex: "2",
-    marginTop: "2px",
-    backgroundColor: "#202225"
-  }),
-  control: (styles, state) => {
-    return ({
-    ...styles,
-    marginBottom: "14px",
-    height: "56px",
-    width: "100%",
-    color: "white",
-    border: state.isFocused ? "1px solid #0FED8A" : "1px solid black",
-    boxShadow: state.isFocused ? "inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6)" : "none",
-    backgroundColor: "#202225 !important",
-    '&:hover' : {
-      border: state.isFocused ? "1px solid #0FED8A" : "1px solid black"
-    }
-  })},
-  option: (styles, { isFocused }) => ({
-    ...styles,
-    color: "white",
-    backgroundColor: isFocused ? "#565656" : "#202225"
-  }),
-  singleValue: (styles) => ({
-    ...styles,
-    color: "white",
-  })
-}
 class SubscriptionsAutoComplete extends Component {
   constructor(props){
     super(props);
     this.state = {
         searchInput: '',
-        selected: null
+        selected: this.props.value
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -76,8 +41,10 @@ class SubscriptionsAutoComplete extends Component {
     })
     return (
       <Select
+        value={this.state.selected}
         options={options}
-        styles={styles}
+        styles={autoCompleteStyle}
+        isDisabled={this.props.disabled}
         isSearchable={true}
         isClearable={true}
         onChange={this.handleChange}
@@ -94,7 +61,6 @@ function mapStateToProps(state) {
 }
 
 SubscriptionsAutoComplete.propTypes = {
-  onCancel: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired
 };
 

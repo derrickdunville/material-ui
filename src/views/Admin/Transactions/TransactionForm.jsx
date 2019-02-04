@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { postTransaction } from 'actions/transactionActions'
+import { postTransaction, putTransaction } from 'actions/transactionActions'
 import Button from "components/CustomButtons/Button.jsx";
 import CustomTextField from 'components/CustomTextField/CustomTextField.jsx'
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -14,21 +14,41 @@ import InputLabel from '@material-ui/core/InputLabel'
 import CustomOutlinedInput from 'components/OutlinedInput/CustomOutlinedInput.jsx'
 import CustomDatePicker from 'components/DatePicker/CustomDatePicker.jsx'
 
-class CreateTransactionForm extends Component {
+class TransactionForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      trans_num:'',
-      user: null,
-      product: null,
-      sub_total: '',
-      tax_amount: '',
-      tax_rate: '',
-      status: '',
-      gateway: '',
-      subscription: null,
-      created_at: null,
-      expires_at: null
+    if(props.editing){
+      this.state = {
+        _id: this.props.transaction._id,
+        trans_num: this.props.transaction.trans_num,
+        user: {value: this.props.transaction.user._id, label: this.props.transaction.user.username},
+        product: {value: this.props.transaction.product._id, label: this.props.transaction.product.name},
+        amount: this.props.amount,
+        sub_total: this.props.transaction.total,
+        tax_amount: this.props.transaction.tax_amount,
+        tax_rate: this.props.transaction.tax_rate,
+        status: this.props.transaction.status,
+        gateway: this.props.transaction.gateway,
+        subscription: this.props.transaction.subscription || null,
+        created_at: this.props.transaction.created_at,
+        expires_at: this.props.transaction.expires_at
+      }
+    } else {
+      this.state = {
+        _id: '',
+        trans_num: '',
+        user: null,
+        product: null,
+        amount: '',
+        sub_total: '',
+        tax_amount: '',
+        tax_rate: '',
+        status: '',
+        gateway: '',
+        subscription: null,
+        created_at: null,
+        expires_at: null
+      }
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -60,20 +80,28 @@ class CreateTransactionForm extends Component {
   }
   handleSubmit(event){
     event.preventDefault()
-    let transaction = {
-      trans_num: this.state.trans_num,
-      user: this.state.user.value,
-      product: this.state.product.value,
-      total: this.state.sub_total,
-      gateway: this.state.gateway.toLowerCase(),
-      status: this.state.status.toLowerCase(),
-      created_at: this.state.created_at,
-      expires_at: this.state.expires_at
+    if(!this.props.disabled){
+      let transaction = {
+        trans_num: this.state.trans_num,
+        user: this.state.user.value,
+        product: this.state.product.value,
+        amount: this.state.amount,
+        total: this.state.sub_total,
+        gateway: this.state.gateway.toLowerCase(),
+        status: this.state.status.toLowerCase(),
+        created_at: this.state.created_at,
+        expires_at: this.state.expires_at
+      }
+      if(this.state.tax_amount != '') transaction.tax_amount = this.state.tax_amount
+      if(this.state.tax_rate !== '') transaction.tax_rate = this.state.tax_rate
+      if(this.state.subscriptions != null) transaction.subscription = this.state.subscription.value
+      if(this.props.editing) {
+        transaction._id = this.props.transaction._id
+        this.props.putTransaction(transaction)
+      } else {
+        this.props.postTransaction(transaction)
+      }
     }
-    if(this.state.tax_amount != '') transaction.tax_amount = this.state.tax_amount
-    if(this.state.tax_rate !== '') transaction.tax_rate = this.state.tax_rate
-    if(this.state.subscriptions != null) transaction.subscription = this.state.subscription.value
-    this.props.postTransaction(transaction)
   }
 
   render(){
@@ -81,6 +109,19 @@ class CreateTransactionForm extends Component {
     return(
       <div className={classes.formWrapper}>
         <form onSubmit={this.handleSubmit}>
+          {this.props.editing && (
+            <CustomTextField
+              labelText="ID"
+              inputType="text"
+              formControlProps={{classes: { root: classes.formControl}, fullWidth: true}}
+              inputProps={{
+                name: '_id',
+                value: this.state._id,
+                onChange: this.handleChange,
+                disabled: true
+              }}
+            />
+          )}
           <CustomTextField
             labelText="Transaction Number"
             inputType="text"
@@ -88,14 +129,31 @@ class CreateTransactionForm extends Component {
             inputProps={{
               name: 'trans_num',
               value: this.state.trans_num,
-              onChange: this.handleChange
+              onChange: this.handleChange,
+              disabled: this.props.disabled
             }}
           />
           <UserAutoComplete
+            disabled={this.props.disabled}
+            value={this.state.user}
             onChange={this.handleUserChange}
             />
           <ProductAutoComplete
+            disabled={this.props.disabled}
+            value={this.state.product}
             onChange={this.handleProductChange}
+            />
+            <CustomTextField
+              labelText="Amount"
+              inputType="text"
+              formControlProps={{classes: { root: classes.formControl}, fullWidth: true}}
+              inputProps={{
+                name: 'amount',
+                type: "text",
+                value: this.state.amount,
+                onChange: this.handleChange,
+                disabled: this.props.disabled
+              }}
             />
           <CustomTextField
             labelText="Sub-Total"
@@ -105,7 +163,8 @@ class CreateTransactionForm extends Component {
               name: 'sub_total',
               type: "text",
               value: this.state.sub_total,
-              onChange: this.handleChange
+              onChange: this.handleChange,
+              disabled: this.props.disabled
             }}
           />
           <CustomTextField
@@ -116,7 +175,8 @@ class CreateTransactionForm extends Component {
               name: 'tax_amount',
               type: "text",
               value: this.state.tax_amount,
-              onChange: this.handleChange
+              onChange: this.handleChange,
+              disabled: this.props.disabled
             }}
           />
           <CustomTextField
@@ -127,7 +187,8 @@ class CreateTransactionForm extends Component {
               name: 'tax_rate',
               type: "text",
               value: this.state.tax_rate,
-              onChange: this.handleChange
+              onChange: this.handleChange,
+              disabled: this.props.disabled
             }}
           />
           <FormControl classes={{root: classes.formControl}} variant="outlined" style={{width: "100%", backgroundColor: "#202225", borderRadius: "4px"}}>
@@ -135,6 +196,7 @@ class CreateTransactionForm extends Component {
               Status
             </InputLabel>
             <CustomSelect
+              disabled={this.props.disabled}
               value={this.state.status}
               onChange={this.handleChange}
               name="status"
@@ -149,6 +211,7 @@ class CreateTransactionForm extends Component {
               Gateway
             </InputLabel>
             <CustomSelect
+              disabled={this.props.disabled}
               value={this.state.gateway}
               onChange={this.handleChange}
               name="gateway"
@@ -159,6 +222,8 @@ class CreateTransactionForm extends Component {
             </CustomSelect>
           </FormControl>
           <SubscriptionAutoComplete
+            disabled={this.props.disabled}
+            value={this.state.subscription}
             onChange={this.handleSubscriptionChange}
             />
           <CustomDatePicker
@@ -168,6 +233,7 @@ class CreateTransactionForm extends Component {
             label="Created"
             name="created_at"
             format="MM/dd/yyyy"
+            disabled={this.props.disabled}
             value={this.state.created_at}
             onChange={this.handleCreateDateChange}
             mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
@@ -179,17 +245,22 @@ class CreateTransactionForm extends Component {
             label="Expires"
             name="expires_at"
             format="MM/dd/yyyy"
+            disabled={this.props.disabled}
             value={this.state.expires_at}
             onChange={this.handleExpireDateChange}
             mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
           />
-          <Button
-            style={{width: '100px', height: '50px', float: "right"}}
-            color="primary"
-            type="submit"
-            onClick={this.handleSubmit}>
-            Create
-          </Button>
+        {!this.props.disabled && (
+          <div>
+            <Button
+              style={{width: '100px', height: '50px', float: "right"}}
+              color="primary"
+              type="submit"
+              onClick={this.handleSubmit}>
+              {this.props.editing ? "Save" : "Create"}
+            </Button>
+          </div>
+        )}
         </form>
       </div>
     )
@@ -197,8 +268,8 @@ class CreateTransactionForm extends Component {
 }
 function mapStateToProps(state) {
   return {
-    transactions: state.transactions
+    transaction: state.transactions.transaction
   }
 }
 
-export default connect(mapStateToProps, { postTransaction })(withStyles(formStyle)(CreateTransactionForm))
+export default connect(mapStateToProps, { postTransaction, putTransaction })(withStyles(formStyle)(TransactionForm))

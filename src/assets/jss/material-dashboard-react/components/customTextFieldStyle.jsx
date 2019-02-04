@@ -8,6 +8,7 @@ import {
 
 const customTextFieldStyle = {
   disabled: {
+    color: "#a1a1a1",
     "&:before": {
       backgroundColor: "transparent !important"
     }

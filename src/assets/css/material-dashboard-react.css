@@ -19,6 +19,16 @@
   position: absolute;
   top: 60px;
 } */
+.avatar_button:hover #avatar_button_text {
+  opacity: 1;
+  transition: opacity 100ms ease-in;
+  background-color: #0003;
+}
+#avatar_button_text {
+  opacity: 0;
+  color: white;
+}
+
 .noselect {
   -webkit-touch-callout: none !important; /* iOS Safari */
     -webkit-user-select: none !important; /* Safari */

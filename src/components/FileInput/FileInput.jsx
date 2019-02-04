@@ -79,10 +79,11 @@ class FileInput extends Component {
           variant="outlined"
           style={{width: "100%", backgroundColor: "#202225", borderRadius: "4px"}}
           {...this.props.formControlProps}>
-          <InputLabel style={{color: "white"}}>
+          <InputLabel disabled={this.props.disabled} style={{color: "white"}}>
             {this.props.label}
           </InputLabel>
           <CustomOutlinedInput
+            disabled={this.props.disabled}
             style={{color: "white", outline: "none"}}
             type="text"
             inputProps={{
@@ -95,15 +96,30 @@ class FileInput extends Component {
               },
               onClick: this.handleFileSelect,
               onKeyPress: this.handleKeyPress,
-              className: "noselect"
+              className: "noselect",
+              disabled: this.props.disabled
             }}
             labelWidth={this.props.labelWidth}
             value={this.state.file}
             endAdornment={
               <InputAdornment>
-                {this.state.file == '' ?
-                  <Add style={{cursor: "pointer"}} onClick={this.handleFileSelect}/>
-                  : <Close style={{cursor: "pointer"}} onClick={this.handleCancel} />}
+                {this.state.file == '' ? (
+                  <div>
+                  {this.props.disabled ? (
+                    <Add style={{cursor: "pointer"}}/>
+                  ):(
+                    <Add style={{cursor: "pointer"}} onClick={this.handleFileSelect}/>
+                  )}
+                </div>
+                ):(
+                  <div>
+                  {this.props.disabled ? (
+                    <Close style={{cursor: "pointer"}}/>
+                  ):(
+                    <Close style={{cursor: "pointer"}} onClick={this.handleCancel}/>
+                  )}
+                  </div>
+                )}
               </InputAdornment>
             }
             {...rest}/>

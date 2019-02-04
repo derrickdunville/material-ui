@@ -57,14 +57,15 @@ class UserDashboard extends React.Component {
       prevDepth: getPathDepth(props.location),
       prevPath: props.location.pathname,
     }
-    this.handleCloseNav = this.handleCloseNav.bind(this);
-    this.handleOpenNav = this.handleOpenNav.bind(this);
-    this.handleSidebar = this.handleSidebar.bind(this);
-    this.getClassName = this.getClassName.bind(this);
-    this.resizeFunction = this.resizeFunction.bind(this);
-    this.getTransitionTimeout = this.getTransitionTimeout.bind(this);
-    this.sidebar = React.createRef();
-    this.wrapper = React.createRef();
+    this.handleCloseNav = this.handleCloseNav.bind(this)
+    this.handleOpenNav = this.handleOpenNav.bind(this)
+    this.handleSidebar = this.handleSidebar.bind(this)
+    this.getClassName = this.getClassName.bind(this)
+    this.resizeFunction = this.resizeFunction.bind(this)
+    this.getTransitionTimeout = this.getTransitionTimeout.bind(this)
+    this.sidebar = React.createRef()
+    this.wrapper = React.createRef()
+    this.mobileSidebar = React.createRef()
   }
   componentDidMount(){
     // console.dir(this.props.location.pathname)
@@ -215,11 +216,11 @@ class UserDashboard extends React.Component {
         onClose={this.handleCloseNav}
         onOpen={this.handleOpenNav}
         ModalProps={{
-          container: this.wrapper.current,
           style: {position: 'absolute'},
           classes: {
             root: classes.rootMobileSidebar
-          }
+          },
+          disableEnforceFocus: true
         }}
         BackdropProps={{
           style: { position: 'absolute' },
@@ -254,12 +255,14 @@ class UserDashboard extends React.Component {
     );
 
     return (
-      <div id="wrapper"  className={classes.wrapper}>
+      <div id="wrapper"  ref={this.wrapper} className={classes.wrapper}>
         <div id="sidebar" ref={this.sidebar} className={classes.sidebar}>
           {sideList}
         </div>
-        <div id="mainPanel" className={classes.mainPanel}>
+        <div id="mobileSidebar" ref={this.mobileSidebar}>
           {mobileSideBar}
+        </div>
+        <div id="mainPanel" className={classes.mainPanel}>
           {appBar}
           <TransitionGroup childFactory={childFactoryCreator(this.getClassName(this.props.location), this.getTransitionTimeout(this.props.location))}>
             <CSSTransition

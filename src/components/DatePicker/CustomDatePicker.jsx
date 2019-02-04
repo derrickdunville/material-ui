@@ -90,16 +90,27 @@ const datePickerTheme = createMuiTheme({
           borderColor: "#07C16E",
           boxShadow: "inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6)"
         },
+      },
+      disabled: {
+        color: "#a1a1a1 !important"
       }
     },
     MuiFormLabel: {
       root: {
         color: "white !important"
+      },
+      disabled: {
+        color: "#a1a1a1 !important"
       }
     },
     MuiIconButton: {
       root: {
         color: "white"
+      }
+    },
+    MuiInputLabel: {
+      shrink: {
+        color: "white !important"
       }
     }
   },

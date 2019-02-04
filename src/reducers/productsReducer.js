@@ -14,7 +14,9 @@ import {
   DELETE_PRODUCT,
   DELETE_PRODUCT_SUCCESS,
   DELETE_PRODUCT_FAIL,
-  CLEAR_PRODUCT
+  CLEAR_PRODUCT,
+  CLEAR_MESSAGE,
+  TOGGLE_EDITING_PRODUCT
 } from '../constants/product-action-types'
 
 const initialState = {
@@ -22,6 +24,7 @@ const initialState = {
   loading: false,
   message: false,
   error: false,
+  editOpen: false,
 
   product: false,
   page: 0,
@@ -65,6 +68,7 @@ export default (state=initialState, action) => {
         gettingProducts: true,
       }
     case GET_PRODUCTS_SUCCESS:
+      console.log("GET_PRODUCTS_SUCCESS")
       return {
         ...state,
         gettingProducts: false,
@@ -82,11 +86,12 @@ export default (state=initialState, action) => {
         postingProduct: true
       }
     case POST_PRODUCT_SUCCESS:
+      console.log("POST_PRODUCT_SUCCESS")
       return {
         ...state,
         postingProduct: false,
         // hmmmm, how should we handle posting success result
-        message: "created successfully"
+        message: "Product created successfully"
       }
     case POST_PRODUCT_FAIL:
       return {
@@ -103,6 +108,8 @@ export default (state=initialState, action) => {
       return {
         ...state,
         puttingProduct: false,
+        editOpen: false,
+        message: "Product updated successfully."
       }
     case PUT_PRODUCT_FAIL:
       return {
@@ -118,7 +125,8 @@ export default (state=initialState, action) => {
     case DELETE_PRODUCT_SUCCESS:
       return {
         ...state,
-        deletingProduct: false
+        deletingProduct: false,
+        message: "Product deleted successfully."
       }
     case DELETE_PRODUCT_FAIL:
       return {
@@ -131,6 +139,16 @@ export default (state=initialState, action) => {
         ...state,
         product: false,
         gettingProductError: false
+      }
+    case CLEAR_MESSAGE:
+      return {
+        ...state,
+        message: false
+      }
+    case TOGGLE_EDITING_PRODUCT:
+      return {
+        ...state,
+        editOpen: !state.editOpen
       }
     default:
       return state

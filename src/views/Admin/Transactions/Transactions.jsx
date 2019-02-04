@@ -11,7 +11,7 @@ import { NavLink } from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton'
 import Add from '@material-ui/icons/Add'
 import Close from '@material-ui/icons/Close'
-import CreateTransactionForm from './CreateTransactionForm.jsx'
+import TransactionForm from './TransactionForm.jsx'
 import FormControl from "@material-ui/core/FormControl";
 import TextField from
 "@material-ui/core/TextField"
@@ -144,13 +144,13 @@ class Transactions extends Component {
               <TableRow key={transaction._id}>
                 <CustomTableCell component="th" scope="row">
                   <NavLink
-                    to={`/admin/transactions/${transaction.transactionname}`}
+                    to={`/admin/transactions/${transaction._id}`}
                     key={transaction._id}
                     >
-                    {transaction.transactionname}
+                    {transaction.trans_num}
                   </NavLink>
                 </CustomTableCell>
-                <CustomTableCell align="right">{transaction.email}</CustomTableCell>
+                <CustomTableCell align="right">{transaction.user.username}</CustomTableCell>
               </TableRow>
             ))}
             {emptyRows > 0 && (
@@ -181,7 +181,7 @@ class Transactions extends Component {
       </Paper>
     )
   }
-  
+
   render(){
     const { classes, route, ...rest } = this.props;
     const { anchorEl } = this.state;
@@ -237,7 +237,7 @@ class Transactions extends Component {
               <IconButton onClick={this.closeNewTransaction} color="inherit" aria-label="Menu">
                 <Close />
               </IconButton>
-              <CreateTransactionForm />
+              <TransactionForm />
             </div>
           ):(
             <div className={classes.content}>

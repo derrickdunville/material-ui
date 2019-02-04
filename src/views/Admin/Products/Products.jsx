@@ -6,12 +6,12 @@ import PropTypes from 'prop-types';
 import withStyles from "@material-ui/core/styles/withStyles"
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx"
 import { withRouter } from "react-router-dom"
-import { getProducts } from 'actions/productActions'
+import { getProducts, clearMessage } from 'actions/productActions'
 import { NavLink } from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton'
 import Add from '@material-ui/icons/Add'
 import Close from '@material-ui/icons/Close'
-import CreateProductForm from './CreateProductForm.jsx'
+import ProductForm from './ProductForm.jsx'
 import FormControl from "@material-ui/core/FormControl";
 import TextField from
 "@material-ui/core/TextField"
@@ -37,6 +37,7 @@ import CustomTableSortLabel from "components/TableSortLabel/CustomTableSortLabel
 import CustomMenuItem from "components/MenuItem/CustomMenuItem.jsx"
 import CustomSelect from "components/Select/CustomSelect.jsx"
 import CustomOutlinedInput from 'components/OutlinedInput/CustomOutlinedInput.jsx'
+import CustomSnackbar from "components/Snackbar/CustomSnackbar.jsx"
 
 class Products extends Component {
   constructor(props) {
@@ -109,7 +110,7 @@ class Products extends Component {
   }
   componentDidMount(){
     if(!this.props.products.loaded){
-      this.props.getProducts()
+      // this.props.getProducts()
     }
     this.setState({
      labelWidth: ReactDOM.findDOMNode(this.InputLabelRef).offsetWidth,
@@ -239,7 +240,7 @@ class Products extends Component {
               <IconButton onClick={this.closeNewProduct} color="inherit" aria-label="Menu">
                 <Close />
               </IconButton>
-              <CreateProductForm />
+              <ProductForm />
             </div>
           ):(
             <div className={classes.content}>
@@ -257,6 +258,15 @@ class Products extends Component {
               <div>
                 {this.renderProducts()}
               </div>
+              <CustomSnackbar
+                color="success"
+                message={!this.props.products.message ? "" : this.props.products.message}
+                classes={{}}
+                place="br"
+                open={!this.props.products.message ? false : true}
+                onClose={() => this.props.clearMessage()}
+                close
+                />
             </div>
           )}
         </div>
@@ -279,5 +289,5 @@ function loadData(store, match){
 
 export default {
   loadData,
-  component: withRouter(connect(mapStateToProps, {getProducts})(withStyles(dashboardStyle)(Products)))
+  component: withRouter(connect(mapStateToProps, { getProducts, clearMessage })(withStyles(dashboardStyle)(Products)))
 }

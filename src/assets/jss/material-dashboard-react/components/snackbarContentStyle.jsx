@@ -5,7 +5,8 @@ import {
   successBoxShadow,
   warningBoxShadow,
   dangerBoxShadow,
-  roseBoxShadow
+  roseBoxShadow,
+  defaultBackgroundColor
 } from "assets/jss/material-dashboard-react.jsx";
 
 const snackbarContentStyle = {
@@ -16,6 +17,8 @@ const snackbarContentStyle = {
     padding: "20px 15px",
     lineHeight: "20px",
     marginBottom: "20px",
+    marginRight: "20px",
+    marginLeft: "20px",
     fontSize: "14px",
     backgroundColor: "white",
     color: "#555555",

@@ -19,6 +19,9 @@ const style = {
     // borderRadius: "4px",
     // border: "1px solid #07C16E",
     // boxShadow: "inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6)"
+  },
+  disabled: {
+    color: "#a1a1a1"
   }
 }
 
@@ -28,7 +31,8 @@ function CustomSelect({ ...props }) {
     <Select
       classes={{
         root: classes.root,
-        icon: classes.icon
+        icon: classes.icon,
+        disabled: classes.disabled
       }}
       MenuProps={{
         classes: {

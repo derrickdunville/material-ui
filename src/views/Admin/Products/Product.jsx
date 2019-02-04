@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { NavLink, Switch, Route, Redirect, withRouter } from "react-router-dom"
 import { Helmet } from 'react-helmet'
-import { getProduct, deleteProduct, clearProduct } from 'actions/productActions'
-import EditProductForm from './EditProductForm.jsx'
+import { getProduct, deleteProduct, clearProduct, clearMessage, toggleEditOpen } from 'actions/productActions'
+import ProductForm from './ProductForm.jsx'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -15,25 +15,22 @@ import Delete from '@material-ui/icons/Delete'
 import Edit from '@material-ui/icons/Edit'
 import withStyles from "@material-ui/core/styles/withStyles"
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx"
+import AlertDialog from "components/AlertDialog/AlertDialog.jsx"
+import CustomSnackbar from "components/Snackbar/CustomSnackbar.jsx"
 
 class Product extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editOpen: false,
       deleteOpen: false
     }
-    this.openEdit = this.openEdit.bind(this)
-    this.closeEdit = this.closeEdit.bind(this)
+    this.toggleEdit = this.toggleEdit.bind(this)
     this.openDelete = this.openDelete.bind(this)
     this.closeDelete = this.closeDelete.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
   }
-  openEdit(){
-    this.setState({editOpen: true})
-  }
-  closeEdit(){
-    this.setState({editOpen: false})
+  toggleEdit(){
+    this.props.toggleEditOpen()
   }
   openDelete(){
     this.setState({deleteOpen: true})
@@ -42,11 +39,13 @@ class Product extends Component {
     this.setState({deleteOpen: false})
   }
   handleDelete(){
-    this.props.deleteProduct(this.props.product._id)
+    this.props.deleteProduct(this.props.history, this.props.product._id)
   }
   componentDidMount(){
     console.log("Product componentDidMount")
-    this.props.getProduct(this.props.match.params.id)
+    if(!this.props.products.loaded){
+      this.props.getProduct(this.props.match.params.id)
+    }
   }
   componentWillUnmount(){
     this.props.clearProduct();
@@ -83,66 +82,64 @@ class Product extends Component {
       </AppBar>
     )
 
-    const deleteProduct = (
-      <div>
-        Are you sure you want to delete product {this.props.product.name}?
-          <Button onClick={this.handleDelete}>
-            Delete
-          </Button>
-          <Button onClick={this.closeDelete}>
-            Cancel
-          </Button>
-      </div>
-    )
-    const editProduct = (
-      <div>
-        <Button onClick={this.closeEdit}>
-          Cancel
-        </Button>
-        <EditProductForm />
-      </div>
-    )
     return (
       <div className={`admin-slide${route.zIndex}`}>
         {this.head()}
         {appBar}
         <div className={classes.route} ref="mainPanel">
-          {(!this.state.deleteOpen && !this.state.editOpen) ? (
-            <div className={classes.content}>
-              <IconButton onClick={this.openDelete} color="inherit" aria-label="Menu">
-                <Delete />
-              </IconButton>
-              <IconButton onClick={this.openEdit} color="inherit" aria-label="Menu">
-                <Edit />
-              </IconButton>
-              <h5>{this.props.product.name}</h5>
-              <h5>{this.props.product.amount}</h5>
-              <h5>{this.props.product.description}</h5>
-              <h5>{this.props.product.created_at}</h5>
-            </div>
-          ):(
-            <div>
-              {this.state.deleteOpen && (
-                <div className={classes.content}>
-                  {deleteProduct}
+          <div className={classes.content}>
+            {this.props.product ? (
+              <div>
+                <div style={{display: "flex", marginBottom: "10px"}}>
+                  <Button style={{width: "100%", marginRight: "10px"}} variant="outlined" color="default" onClick={this.toggleEdit}>
+                    {this.props.editOpen ? "Cancel" : "Edit"}
+                  </Button>
+                  <AlertDialog
+                    style={{width: "100%"}}
+                    buttonText="Delete"
+                    buttonColor="secondary"
+                    open={this.state.deleteOpen}
+                    title={`Delete ${this.props.product.name}?`}
+                    text="Are you sure you would like to delete this product? This will result in this product being end-dated. It will not actually be deleted permenantly but it will no longer be purchaseable and will disappear from the corresponding product page. Associated content will still be available to those who have purchased it."
+                    leftAction={this.closeDelete}
+                    leftActionText="Cancel"
+                    leftActionColor="default"
+                    rightAction={this.handleDelete}
+                    rightActionText="Delete"
+                    rightActionColor="secondary"
+                    onClick={this.openDelete}
+                    onClose={this.closeDelete}
+                    />
                 </div>
-              )}
-              {this.state.editOpen && (
-                <div className={classes.content}>
-                  {editProduct}
+                <div>
+                  <ProductForm editing={true} disabled={!this.props.editOpen}/>
                 </div>
+              </div>
+              ):(
+                <div> Loading ...</div>
               )}
+              <CustomSnackbar
+                color="success"
+                message={!this.props.message ? "" : this.props.message}
+                classes={{}}
+                place="br"
+                open={!this.props.message ? false : true}
+                onClose={() => this.props.clearMessage()}
+                close
+                />
             </div>
-          )}
+          </div>
         </div>
-      </div>
     )
   }
 }
 
 function mapStateToProps(state) {
   return {
-    product: state.products.product
+    products: state.products,
+    product: state.products.product,
+    message: state.products.message,
+    editOpen: state.products.editOpen
   }
 }
 
@@ -154,5 +151,16 @@ function loadData(store, match){
 
 export default {
   loadData,
-  component: withRouter(connect(mapStateToProps, {getProduct, clearProduct, deleteProduct})(withStyles(dashboardStyle)(Product)))
+  component: withRouter(
+    connect(
+      mapStateToProps,
+      {
+        getProduct,
+        clearProduct,
+        deleteProduct,
+        clearMessage,
+        toggleEditOpen
+      }
+    )
+    (withStyles(dashboardStyle)(Product)))
 }

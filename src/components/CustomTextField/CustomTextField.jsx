@@ -36,7 +36,8 @@ function CustomTextField({ ...props }) {
           classes: {
             root: classes.cssOutlinedInput,
             notchedOutline: classes.notchedOutline,
-            focused: classes.cssFocused
+            focused: classes.cssFocused,
+            disabled: classes.disabled
           },
           className: classes.input,
           ...inputProps,

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { postProduct } from 'actions/productActions'
+import { withRouter } from 'react-router'
+import { postProduct, putProduct } from 'actions/productActions'
 import Button from "components/CustomButtons/Button.jsx"
 import CustomTextField from 'components/CustomTextField/CustomTextField.jsx'
 import CustomSelect from "components/Select/CustomSelect.jsx"
@@ -12,40 +13,52 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Checkbox from '@material-ui/core/Checkbox'
 import Check from '@material-ui/icons/Check'
 import Paper from '@material-ui/core/Paper'
-
 import ImageInput from 'components/ImageInput/ImageInput.jsx'
 import FileInput from 'components/FileInput/FileInput.jsx'
-
 import withStyles from "@material-ui/core/styles/withStyles"
 import formStyle from "assets/jss/material-dashboard-react/views/formStyle.jsx"
 
-class CreateProductForm extends Component {
+function toTitleCase(str) {
+    return str.replace(
+        /\w\S*/g,
+        function(txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        }
+    );
+}
+class ProductForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      name:'',
-      amount:'',
-      description: '',
-      interval: '',
-      access: '',
-      allowRenewals: false,
-      trialPeriod: false,
-      category: '',
-      discordRoleId: '',
-
-      file: undefined,
-      coverImageFile: undefined,
-      videoId: ''
-
+    if(props.editing){
+      this.state = {
+        ...this.props.product,
+        category: toTitleCase(this.props.product.category)
+      }
+    } else {
+      this.state = {
+        name:'',
+        amount:'',
+        description: '',
+        interval: '',
+        access: '',
+        allow_renewals: false,
+        trial_period: false,
+        category: '',
+        discord_role_id: '',
+        file: undefined,
+        cover_image: undefined,
+        video_id: ''
+      }
     }
+
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleFileChange = this.handleFileChange.bind(this)
     this.handleFileCancel = this.handleFileCancel.bind(this)
   }
   handleChange(event){
-    if(event.target.name === "allowRenewals" ||
-      event.target.name === "trialPeriod" ){
+    if(event.target.name === "allow_renewals" ||
+      event.target.name === "trial_period" ){
       this.setState({[event.target.name]: event.target.checked})
     } else {
       this.setState({[event.target.name]: event.target.value })
@@ -68,13 +81,16 @@ class CreateProductForm extends Component {
       interval: this.state.interval.toLowerCase(),
       access: this.state.access.toLowerCase(),
     }
-    if(product.category == "class" && this.state.coverImageFile !== undefined){
-      form_data.append('cover_image', this.state.coverImageFile)
+    if(product.category == "class" && this.state.cover_image !== undefined){
+      form_data.append('cover_image', this.state.cover_image)
     }
     form_data.append("product", JSON.stringify(product))
-    this.props.postProduct(form_data)
+    if(this.props.editing){
+      this.props.putProduct(this.props.product._id, form_data)
+    } else {
+      this.props.postProduct(this.props.history, form_data)
+    }
   }
-
 
   render(){
     const { classes } = this.props;
@@ -83,6 +99,19 @@ class CreateProductForm extends Component {
         <form onSubmit={this.handleSubmit}>
           <Paper style={{backgroundColor: "#383838", padding: "10px", marginBottom: "10px"}}>
             <div style={{marginBottom: "10px"}}>Product Information</div>
+              {this.props.editing && (
+                <CustomTextField
+                  labelText="ID"
+                  inputType="text"
+                  formControlProps={{classes: { root: classes.formControl}, fullWidth: true}}
+                  inputProps={{
+                    name: '_id',
+                    value: this.state._id,
+                    onChange: this.handleChange,
+                    disabled: true
+                  }}
+                />
+              )}
             <CustomTextField
               labelText="Name"
               inputType="text"
@@ -90,7 +119,8 @@ class CreateProductForm extends Component {
               inputProps={{
                 name: 'name',
                 value: this.state.name,
-                onChange: this.handleChange
+                onChange: this.handleChange,
+                disabled: this.props.disabled
               }}
             />
             <CustomTextField
@@ -100,7 +130,8 @@ class CreateProductForm extends Component {
               inputProps={{
                 name: 'description',
                 value: this.state.description,
-                onChange: this.handleChange
+                onChange: this.handleChange,
+                disabled: this.props.disabled
               }}
             />
             <FormControl variant="outlined" style={{width: "100%", backgroundColor: "#202225", borderRadius: "4px"}}>
@@ -108,6 +139,7 @@ class CreateProductForm extends Component {
                 Category
               </InputLabel>
               <CustomSelect
+                disabled={this.props.disabled}
                 value={this.state.category}
                 onChange={this.handleChange}
                 name="category"
@@ -127,9 +159,10 @@ class CreateProductForm extends Component {
                   inputType="text"
                   formControlProps={{classes: { root: classes.formControl}, fullWidth: true}}
                   inputProps={{
-                    name: 'videoId',
-                    value: this.state.videoId,
-                    onChange: this.handleChange
+                    name: 'video_id',
+                    value: this.state.video_id,
+                    onChange: this.handleChange,
+                    disabled: this.props.disabled
                   }}
                 />
               )}
@@ -139,23 +172,26 @@ class CreateProductForm extends Component {
                   inputType="text"
                   formControlProps={{classes: { root: classes.formControl}, fullWidth: true}}
                   inputProps={{
-                    name: 'discordRoleId',
-                    value: this.state.discordRoleId,
-                    onChange: this.handleChange
+                    name: 'discord_role_id',
+                    value: this.state.discord_role_id,
+                    onChange: this.handleChange,
+                    disabled: this.props.disabled
                   }}
                 />
               )}
               <FileInput
+                disabled={this.props.disabled}
                 label="Cover Image"
                 labelWidth={100}
                 exstentions=".png,.jpg"
-                name="coverImageFile"
+                name="cover_image"
                 onChange={this.handleFileChange}
                 onCancel={this.handleFileCancel}
                 formControlProps={{classes: { root: classes.formControl}, fullWidth: true}}
                 />
               {(this.state.category === 'Script' || this.state.category === 'Scanner') && (
                 <FileInput
+                  disabled={this.props.disabled}
                   label="File"
                   labelWidth={26}
                   exstentions=".txt"
@@ -175,7 +211,8 @@ class CreateProductForm extends Component {
               inputProps={{
                 name: 'amount',
                 value: this.state.amount,
-                onChange: this.handleChange
+                onChange: this.handleChange,
+                disabled: this.props.disabled
               }}
             />
             <FormControl classes={{root: classes.formControl}} variant="outlined" style={{width: "100%", backgroundColor: "#202225", borderRadius: "4px"}}>
@@ -183,6 +220,7 @@ class CreateProductForm extends Component {
                 Interval
               </InputLabel>
               <CustomSelect
+                disabled={this.props.disabled}
                 value={this.state.interval}
                 onChange={this.handleChange}
                 name="interval"
@@ -197,6 +235,7 @@ class CreateProductForm extends Component {
                 Access
               </InputLabel>
               <CustomSelect
+                disabled={this.props.disabled}
                 value={this.state.access}
                 onChange={this.handleChange}
                 name="access"
@@ -207,13 +246,15 @@ class CreateProductForm extends Component {
               </CustomSelect>
             </FormControl>
           </Paper>
-          <Button
-            style={{width: '100px', height: '50px', float: "right"}}
-            color="primary"
-            type="submit"
-            onClick={this.handleSubmit}>
-            Create
-          </Button>
+          {!this.props.disabled && (
+            <Button
+              style={{width: '100px', height: '50px', float: "right"}}
+              color="primary"
+              type="submit"
+              onClick={this.handleSubmit}>
+              {!this.props.editing ? "Create" : "Save"}
+            </Button>
+          )}
         </form>
       </div>
     )
@@ -221,20 +262,20 @@ class CreateProductForm extends Component {
 }
 function mapStateToProps(state) {
   return {
-    products: state.products
+    product: state.products.product
   }
 }
 
-export default connect(mapStateToProps, { postProduct })(withStyles(formStyle)(CreateProductForm))
+export default connect(mapStateToProps, { postProduct, putProduct })(withRouter(withStyles(formStyle)(ProductForm)))
 
 // <FormControlLabel
 //   control={
 //     <Checkbox
 //       color="default"
-//       name="allowRenewals"
-//       checked={this.state.allowRenewals}
+//       name="allow_renewals"
+//       checked={this.state.allow_renewals}
 //       onChange={this.handleChange}
-//       value="allowRenewals"
+//       value="allow_renewals"
 //       classes={{
 //        root: classes.checkboxRoot,
 //        checked: classes.checked,
@@ -248,10 +289,10 @@ export default connect(mapStateToProps, { postProduct })(withStyles(formStyle)(C
 //   control={
 //     <Checkbox
 //       color="default"
-//       name="trialPeriod"
-//       checked={this.state.trialPeriod}
+//       name="trial_period"
+//       checked={this.state.trial_period}
 //       onChange={this.handleChange}
-//       value="trialPeriod"
+//       value="trial_period"
 //       classes={{
 //        root: classes.checkboxRoot,
 //        checked: classes.checked,
