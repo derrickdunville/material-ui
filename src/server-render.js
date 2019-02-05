@@ -58,6 +58,7 @@ function renderApp(req, store, context) {
         <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+        <script src="https://js.stripe.com/v3/"></script>
       </head>
       <body>
         <div id="root">${rendered}</div>

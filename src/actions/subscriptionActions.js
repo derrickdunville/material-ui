@@ -97,3 +97,9 @@ export const deleteSubscription = (subscription_id) => async (dispatch, getState
 export const clearSubscription = () => async (dispatch, getState, api) => {
   dispatch({ type: types.CLEAR_SUBSCRIPTION })
 }
+export const toggleCancelSubscriptionOpen = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.TOGGLE_CANCEL_SUBSCRIPTION })
+}
+export const clearCancelSuccessMessage = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.CLEAR_CANCEL_SUCCESS_MESSAGE })
+}

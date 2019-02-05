@@ -14,7 +14,9 @@ import {
   DELETE_SUBSCRIPTION,
   DELETE_SUBSCRIPTION_SUCCESS,
   DELETE_SUBSCRIPTION_FAIL,
-  CLEAR_SUBSCRIPTION
+  CLEAR_SUBSCRIPTION,
+  TOGGLE_CANCEL_SUBSCRIPTION,
+  CLEAR_CANCEL_SUCCESS_MESSAGE
 } from '../constants/subscription-action-types'
 
 const initialState = {
@@ -103,6 +105,7 @@ export default (state=initialState, action) => {
       return {
         ...state,
         puttingSubscription: false,
+        cancelSuccessMessage: "Membership successfully canceled"
       }
     case PUT_SUBSCRIPTION_FAIL:
       return {

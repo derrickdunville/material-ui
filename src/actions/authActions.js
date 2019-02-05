@@ -4,11 +4,9 @@ export const fetchCurrentUser = () => async (dispatch, getState, api) => {
   const res = await api.get('/@me')
   dispatch({ type: types.FETCH_CURRENT_USER, payload: res })
 }
-
 export const resetAuth = () => async (dispatch) => {
   dispatch({ type: types.RESET_AUTH })
 }
-
 export const loginUser = (history, username, password) => async (dispatch, getState, api) => {
   dispatch({
     type: types.LOGIN_USER,
@@ -28,7 +26,6 @@ export const loginUser = (history, username, password) => async (dispatch, getSt
      })
   }
 }
-
 export const signUpUser = (history, email, username, password, confirm_password) => async (dispatch, getState, api) => {
   dispatch({ type: types.SIGN_UP_USER })
   try {
@@ -44,7 +41,6 @@ export const signUpUser = (history, email, username, password, confirm_password)
     dispatch({ type: types.SIGN_UP_USER_FAIL, payload: error.response })
   }
 }
-
 export const forgotPassword = (email) => async (dispatch, getState, api) => {
   dispatch({ type: types.FORGOT_PASSWORD })
   try {
@@ -54,7 +50,6 @@ export const forgotPassword = (email) => async (dispatch, getState, api) => {
     dispatch({ type: types.FORGOT_PASSWORD_FAIL, payload: error.response })
   }
 }
-
 export const verifyPasswordResetToken = (reset_token) => async (dispatch, getState, api) => {
   dispatch({ type: types.VERIFY_RESET_PASSWORD_TOKEN })
   try {
@@ -76,4 +71,36 @@ export const resetPassword = (reset_token, new_password) => async (dispatch, get
 export const logoutUser = () => async (dispatch, getState, api) => {
   const res = await api.post('/logout')
   dispatch({ type: types.LOGOUT_USER, payload: res })
+}
+
+export const toggleCancelSubscriptionOpen = () => async (dispatch, getState, api) => {
+  dispatch({type: types.TOGGLE_CANCEL_SUBSCRIPTION_OPEN})
+}
+export const cancelSubscription = (subscription_id) => async (dispatch, getState, api) => {
+  dispatch({ type: types.CANCEL_SUBSCRIPTION })
+  try {
+    const res = await api.put(`/subscriptions/${subscription_id}`, {cancel_at_period_end: true})
+    dispatch({ type: types.CANCEL_SUBSCRIPTION_SUCCESS, payload: res })
+  } catch (error) {
+    dispatch({ type: types.CANCEL_SUBSCRIPTION_FAIL, payload: error.response })
+  }
+}
+export const clearCancelSubscription = () => async (dispatch, getState, api) => {
+  dispatch({type: types.CLEAR_CANCEL_SUBSCRIPTION})
+}
+
+export const toggleResumeSubscriptionOpen = () => async (dispatch, getState, api) => {
+  dispatch({type: types.TOGGLE_RESUME_SUBSCRIPTION_OPEN})
+}
+export const resumeSubscription = (subscription_id) => async (dispatch, getState, api) => {
+  dispatch({ type: types.RESUME_SUBSCRIPTION })
+  try {
+    const res = await api.put(`/subscriptions/${subscription_id}`, {cancel_at_period_end: false})
+    dispatch({ type: types.RESUME_SUBSCRIPTION_SUCCESS, payload: res })
+  } catch (error) {
+    dispatch({ type: types.RESUME_SUBSCRIPTION_FAIL, payload: error.response })
+  }
+}
+export const clearResumeSubscription = () => async (dispatch, getState, api) => {
+  dispatch({type: types.CLEAR_RESUME_SUBSCRIPTION})
 }

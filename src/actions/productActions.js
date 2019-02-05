@@ -12,6 +12,9 @@ export const getProducts = (filter=undefined, page=0, limit=10, order="asc", ord
     if(filter.id !== undefined){
       url += "&id=" + filter.id
     }
+    if(filter.category !== undefined){
+      url += "&category=" + filter.category
+    }
   }
   try {
     const res = await api.get(url)

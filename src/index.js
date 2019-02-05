@@ -13,6 +13,7 @@ import {
 import { createHashHistory } from "history";
 import reducers from "./reducers"
 import axios from 'axios'
+import {StripeProvider} from 'react-stripe-elements';
 
 const axiosInstance = axios.create({
   baseURL: '/api',

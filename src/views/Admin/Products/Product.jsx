@@ -15,7 +15,7 @@ import Delete from '@material-ui/icons/Delete'
 import Edit from '@material-ui/icons/Edit'
 import withStyles from "@material-ui/core/styles/withStyles"
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx"
-import AlertDialog from "components/AlertDialog/AlertDialog.jsx"
+import AlertDialog from "components/Dialog/AlertDialog.jsx"
 import CustomSnackbar from "components/Snackbar/CustomSnackbar.jsx"
 
 class Product extends Component {
