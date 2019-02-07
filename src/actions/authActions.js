@@ -73,6 +73,19 @@ export const logoutUser = () => async (dispatch, getState, api) => {
   dispatch({ type: types.LOGOUT_USER, payload: res })
 }
 
+export const toggleCreateSubscriptionOpen = () => async (dispatch, getState, api) => {
+  dispatch({type: types.TOGGLE_CREATE_SUBSCRIPTION_OPEN})
+}
+export const createSubscription = (subscription) => async (dispatch, getState, api) => {
+  dispatch({ type: types.CREATE_SUBSCRIPTION })
+  try {
+    const res = await api.post(`/subscriptions/`, subscription)
+    console.dir(res)
+    dispatch({ type: types.CREATE_SUBSCRIPTION_SUCCESS, payload: res })
+  } catch (error) {
+    dispatch({ type: types.CREATE_SUBSCRIPTION_FAIL, payload: error.response })
+  }
+}
 export const toggleCancelSubscriptionOpen = () => async (dispatch, getState, api) => {
   dispatch({type: types.TOGGLE_CANCEL_SUBSCRIPTION_OPEN})
 }
@@ -103,4 +116,27 @@ export const resumeSubscription = (subscription_id) => async (dispatch, getState
 }
 export const clearResumeSubscription = () => async (dispatch, getState, api) => {
   dispatch({type: types.CLEAR_RESUME_SUBSCRIPTION})
+}
+
+export const toggleUpdatePaymentMethodOpen = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.TOGGLE_UPDATE_PAYMENT_METHOD_OPEN})
+}
+export const updatePaymentMethod = (token) => async (dispatch, getState, api) => {
+  dispatch({ type: types.UPDATE_PAYMENT_METHOD })
+  try {
+    const res = await api.put(`@me/payment_method`, {stripe_token: token})
+    dispatch({ type: types.UPDATE_PAYMENT_METHOD_SUCCESS, payload: res })
+  } catch (error) {
+    dispatch({ type: types.UPDATE_PAYMENT_METHOD_FAIL, payload: error.response })
+  }
+}
+
+export const getPaymentMethod = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.GET_PAYMENT_METHOD })
+  try {
+    const res = await api.get(`@me/payment_method`)
+    dispatch({ type: types.GET_PAYMENT_METHOD_SUCCESS, payload: res })
+  } catch (error) {
+    dispatch({ type: types.GET_PAYMENT_METHOD_FAIL, payload: error.response })
+  }
 }

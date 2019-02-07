@@ -33,7 +33,7 @@ export default [
         backPath: '/app/account/',
         title: "Billing",
         zIndex: 3
-      }
+      },
     ]
   }
 ]

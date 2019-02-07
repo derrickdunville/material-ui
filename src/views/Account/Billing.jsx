@@ -7,6 +7,7 @@ import Paper from "@material-ui/core/Paper"
 import { parseDate } from "utils/DateUtils"
 import { getProducts } from "actions/productActions"
 import {
+  toggleCreateSubscriptionOpen,
   cancelSubscription,
   toggleCancelSubscriptionOpen,
   clearCancelSubscription,
@@ -19,14 +20,14 @@ import AlertDialog from "components/Dialog/AlertDialog.jsx"
 import SubscribeDialog from "components/Dialog/SubscribeDialog.jsx"
 import { Elements } from 'react-stripe-elements'
 import Button from '@material-ui/core/Button'
+import PaymentMethod from 'components/Stripe/PaymentMethod.jsx'
 
 class Billing extends Component {
   constructor(props) {
     super(props);
     this.state = {
       mobileOpen: false,
-      subscribeOpen: false,
-      openMembership: "",
+      openMembership: {},
       cancelMembership: "",
       resumeMembership: "",
       checked: false
@@ -41,6 +42,7 @@ class Billing extends Component {
     this.openResume = this.openResume.bind(this)
     this.closeResume = this.closeResume.bind(this)
     this.handleResume = this.handleResume.bind(this)
+    this.getOpenProduct = this.getOpenProduct.bind(this)
   }
   componentDidMount() {
      this.setState(state => ({ checked: !state.checked }));
@@ -50,10 +52,11 @@ class Billing extends Component {
     this.setState(state => ({ checked: !state.checked }));
   }
   closeSubscribe() {
-    this.setState({ subscribeOpen: false, openMembership: "" })
+    this.props.toggleCreateSubscriptionOpen()
   }
   openSubscribe(event) {
-    this.setState({ subscribeOpen: true, openMembership: event.target.name })
+    this.setState({ openMembership: this.getOpenProduct(event.target.name)}, () =>
+    this.props.toggleCreateSubscriptionOpen())
   }
   openCancel(event){
     this.setState({ cancelMembership: event.target.name }, () =>
@@ -96,7 +99,10 @@ class Billing extends Component {
 
   renderSubscriptions(){
     return (
-      <div>
+      <Paper style={{backgroundColor: "#383838", padding: "10px", marginBottom: "10px"}}>
+        {this.props.subscriptions.length == 0 && (
+          <div>No Active Memberships</div>
+        )}
         {this.props.subscriptions.map(subscription => (
           <div key={subscription._id}
             style={{
@@ -104,14 +110,13 @@ class Billing extends Component {
               alignItems: "center"
             }}>
             <div style={{ borderRadius:"4px", height: "70px", minWidth:"70px", width: "60px", backgroundColor: "white", marginRight: "10px"}}></div>
-            <div style={{ width: "100%" }}>
+            <div style={{ width: "100%", paddingRight: "10px" }}>
               <div style={{fontSize: "18px", fontWeight: '1'}}>{subscription.product.name}</div>
               {subscription.cancel_at_period_end ? (
                 <div style={{fontSize: "14px", fontWeight: '1'}}>Canceled and ends on {parseDate(subscription.current_period_end)}</div>
               ):(
                 <div style={{fontSize: "14px", fontWeight: '1'}}>${(subscription.product.amount/100).toFixed(2)} occurs on {parseDate(subscription.current_period_end)}</div>
               )}
-
             </div>
             <div>
               <AlertDialog
@@ -159,76 +164,71 @@ class Billing extends Component {
             </div>
           </div>
         ))}
-      </div>
+      </Paper>
     )
   }
   renderMemberships(){
     return (
       <div>
-        <div style={{marginBottom: "10px"}}>Memberships</div>
-        {this.props.products.length == 0 && (
-          <div>Empty</div>
-        )}
-        {this.props.products.map(product => (
-          <div key={product._id}
-            style={{
-              display: "flex",
-              height: "80px",
-              alignItems: "center",
-              backgroundColor: "#202225",
-              marginBottom: "10px",
-              borderRadius: "4px",
-              paddingLeft: "10px",
-              paddingRight: "10px"
-            }}>
-            <div style={{
-                height: "60px",
-                width: "60px",
-                marginRight: "10px"
+      {this.props.products.length != 0 ? (
+        <Paper style={{backgroundColor: "#383838", padding: "10px", marginBottom: "10px"}}>
+          <div style={{marginBottom: "10px"}}>Memberships</div>
+          {this.props.products.length == 0 && (
+            <div>Empty</div>
+          )}
+          {this.props.products.map(product => (
+            <div key={product._id}
+              style={{
+                display: "flex",
+                height: "80px",
+                alignItems: "center",
+                backgroundColor: "#202225",
+                marginBottom: "10px",
+                borderRadius: "4px",
+                paddingLeft: "10px",
+                paddingRight: "10px"
               }}>
-              <img src={defaultPic} style={{width: "60px", height: "60px"}}/>
-            </div>
-            <div style={{width: "100%"}}>
-              <div style={{fontSize: '18px', fontWeight: '1'}}>
-              {product.name}
+              <div style={{
+                  height: "60px",
+                  width: "60px",
+                  marginRight: "10px"
+                }}>
+                <img src={defaultPic} style={{width: "60px", height: "60px"}}/>
               </div>
-              <div style={{fontSize: '15px'}}>
-                ${(product.amount/100).toFixed(2)} {product.interval}
+              <div style={{width: "100%"}}>
+                <div style={{fontSize: '18px', fontWeight: '1'}}>
+                {product.name}
+                </div>
+                <div style={{fontSize: '15px'}}>
+                  ${(product.amount/100).toFixed(2)} {product.interval}
+                </div>
+              </div>
+              <div>
+                <Button variant="outlined" name={product._id} color="primary" onClick={this.openSubscribe}>Subscribe</Button>
               </div>
             </div>
-            <div>
-              <SubscribeDialog
-                name={product._id}
-                product={product}
-                style={{width: "100%"}}
-                buttonText="Subscribe"
-                buttonColor="primary"
-                open={this.state.subscribeOpen && this.state.openMembership == product._id}
-                title={`Subscribe to ${product.name}`}
-                text={`Thank you for subscribing to ${product.name}. You will not be charged until you click "Pay".`}
-                leftAction={this.closeSubscribe}
-                leftActionText="Cancel"
-                leftActionColor="default"
-                rightAction={this.handleSubscribe}
-                rightActionText="Pay"
-                rightActionColor="primary"
-                onClick={this.openSubscribe}
-                onClose={this.closeSubscribe}
-                />
-            </div>
-          </div>
-        ))}
+          ))}
+        </Paper>
+      ):(<div></div>)}
       </div>
     )
   }
   renderPaymentMethod(){
     return(
-      <div>Payment Method</div>
+      <Paper style={{backgroundColor: "#383838", padding: "10px", marginBottom: "10px"}}>
+        <div style={{marginBottom: "10px"}}>Payment Method</div>
+        <div>
+          <PaymentMethod
+            action="update"
+            />
+        </div>
+      </Paper>
+
     )
   }
   renderTransactions(){
     return (
-      <div>
+      <Paper style={{backgroundColor: "#383838", padding: "10px", marginBottom: "10px"}}>
         <div style={{marginBottom: "10px"}}>Billing History</div>
         <div
           style={{
@@ -289,8 +289,17 @@ class Billing extends Component {
              </div>
            </div>
          ))}
-      </div>
+      </Paper>
     )
+  }
+
+  getOpenProduct(id){
+    for(let i = 0; i < this.props.products.length; ++i){
+      if(this.props.products[i]._id == id){
+        return this.props.products[i]
+      }
+    }
+    return {}
   }
   render(){
     const { classes, route, ...rest } = this.props;
@@ -299,18 +308,30 @@ class Billing extends Component {
         {this.head()}
         <div className={classes.route} ref="mainPanel">
           <div className={classes.content}>
-            <Paper style={{backgroundColor: "#383838", padding: "10px", marginBottom: "10px"}}>
-              {this.renderSubscriptions()}
-            </Paper>
-            <Paper style={{backgroundColor: "#383838", padding: "10px", marginBottom: "10px"}}>
-              {this.renderMemberships()}
-            </Paper>
-            <Paper style={{backgroundColor: "#383838", padding: "10px", marginBottom: "10px"}}>
-              {this.renderPaymentMethod()}
-            </Paper>
-            <Paper style={{backgroundColor: "#383838", padding: "10px", marginBottom: "10px"}}>
-              {this.renderTransactions()}
-            </Paper>
+            {this.renderSubscriptions()}
+            {this.renderMemberships()}
+            {this.renderPaymentMethod()}
+            {this.renderTransactions()}
+            <SubscribeDialog
+              loading={this.props.auth.creatingSubscription}
+              loadingMessage="Subscribing"
+              successMessage={this.props.auth.createSubscriptionSuccessMessage}
+              product={this.state.openMembership}
+              style={{width: "100%"}}
+              buttonText="Subscribe"
+              buttonColor="primary"
+              open={this.props.auth.createSubscriptionOpen}
+              title={`Subscribe to ${this.state.openMembership.name}`}
+              text={`Thank you for subscribing to ${this.state.openMembership.name}. You will not be charged until you click "Pay".`}
+              leftAction={this.closeSubscribe}
+              leftActionText="Cancel"
+              leftActionColor="default"
+              rightAction={this.handleSubscribe}
+              rightActionText="Pay"
+              rightActionColor="primary"
+              onClick={this.openSubscribe}
+              onClose={this.closeSubscribe}
+              />
           </div>
         </div>
       </div>
@@ -350,6 +371,7 @@ function mapStateToProps(state) {
 export default {
   component: connect(mapStateToProps, {
     getProducts,
+    toggleCreateSubscriptionOpen,
     cancelSubscription,
     toggleCancelSubscriptionOpen,
     clearCancelSubscription,

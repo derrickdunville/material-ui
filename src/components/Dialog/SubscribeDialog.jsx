@@ -7,6 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import PaymentMethod from 'components/Stripe/PaymentMethod.jsx'
 import {injectStripe} from 'react-stripe-elements';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 class SubscribeDialog extends React.Component {
   constructor(props){
@@ -16,15 +17,11 @@ class SubscribeDialog extends React.Component {
   handleSubmit(token) {
     console.log("SubscribeDialog handleSubmit")
     ev.preventDefault();
-    console.log('Received Stripe token in SubscribeDialog:', token);
   }
   render() {
-    const { name, style, open, onClick, onClose, buttonColor, buttonText, title, text, leftAction, leftActionText, leftActionColor, rightAction, rightActionText, rightActionColor} = this.props
+    const { loading, loadingMessage, successMessage, name, style, open, onClick, onClose, buttonColor, buttonText, title, text} = this.props
     return (
       <div name={name} style={{...style}}>
-        <Button name={name} style={{width: "100%"}} variant="outlined" color={buttonColor || "primary"} onClick={onClick}>
-          {buttonText}
-        </Button>
         <Dialog
           PaperProps={{
             style: {
@@ -36,15 +33,54 @@ class SubscribeDialog extends React.Component {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
-          <DialogContent style={{paddingBottom: "8px"}}>
-            <DialogContentText id="alert-dialog-description">
-              {text}
-            </DialogContentText>
-          </DialogContent>
-          <div style={{marginTop: "20px"}}>
-            <PaymentMethod product={this.props.product} onClose={this.props.onClose}/>
+        {loading ? (
+          <div style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "20px"
+            }}>
+            <div>
+              <CircularProgress />
+            </div>
+            <div>
+              <DialogTitle id="alert-dialog-title">{loadingMessage}</DialogTitle>
+            </div>
           </div>
+        ):(
+          <div>
+            {!successMessage ? (
+              <div>
+                <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+                <DialogContent style={{paddingBottom: "8px"}}>
+                  <DialogContentText id="alert-dialog-description">
+                    {text}
+                  </DialogContentText>
+                </DialogContent>
+                <div style={{paddingBottom: "8px", paddingRight: "8px",paddingLeft:"24px"}}>
+                  <div style={{color: "black"}}>
+                    Pay with
+                  </div>
+                  <PaymentMethod action={"subscription"} product={this.props.product} onClose={this.props.onClose}/>
+                </div>
+              </div>
+            ):(
+              <div>
+                <DialogTitle id="alert-dialog-title">Welcome</DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    {successMessage}
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={onClose} color="primary">
+                    OK
+                  </Button>
+                </DialogActions>
+              </div>
+            )}
+          </div>
+        )}
         </Dialog>
       </div>
     );

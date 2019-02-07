@@ -19,6 +19,24 @@
   position: absolute;
   top: 60px;
 } */
+.update {
+  color: "white"
+}
+.StripeElement {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+.StripeElement--focus {
+
+}
+
+.StripeElement--invalid {
+  border-color: #fa755a;
+}
+
+.StripeElement--webkit-autofill {
+  background-color: #fefde5 !important;
+}
 .avatar_button:hover #avatar_button_text {
   opacity: 1;
   transition: opacity 100ms ease-in;

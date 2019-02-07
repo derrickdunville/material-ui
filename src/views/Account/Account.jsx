@@ -41,6 +41,11 @@ class Account extends Component {
                 Billing
               </NavLink>
             </div>
+            <div style={{width: '100%'}}>
+              <NavLink to={"/app/account/connections/"} style={{width: '100%'}}>
+                Connections
+              </NavLink>
+            </div>
           </div>
         </div>
       </div>

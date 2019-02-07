@@ -8,6 +8,13 @@ const initialState = {
   validResetToken: false,
   verifyMessage: false,
 
+  payment_method: false,
+
+  createSubscriptionOpen: false,
+  creatingSubscription: false,
+  createSubscriptionSuccessMessage: false,
+  createSubscriptionFailMessage: false,
+
   cancelSubscriptionOpen: false,
   cancelingSubscription: false,
   cancelingSubscriptionSuccessMessage: false,
@@ -16,7 +23,10 @@ const initialState = {
   resumeSubscriptionOpen: false,
   resumingSubscription: false,
   resumingSubscriptionSuccessMessage: false,
-  resumingSubscriptionFailMessage: false
+  resumingSubscriptionFailMessage: false,
+
+  editPaymentMethodOpen: false,
+  updatingPaymentMethod: false
 
 }
 export default function(state = initialState, action) {
@@ -209,10 +219,68 @@ export default function(state = initialState, action) {
         resumingSubscriptionSuccessMessage: false,
         resumingSubscriptionFailMessage: false,
       }
+
+    case types.CREATE_SUBSCRIPTION:
+      return {
+        ...state,
+        creatingSubscription: true
+      }
+    case types.CREATE_SUBSCRIPTION_SUCCESS:
+      return {
+        ...state,
+        creatingSubscription: false,
+        user: {
+          ...state.user,
+          subscriptions: [...state.user.subscriptions, action.payload.data]
+        },
+        createSubscriptionSuccessMessage: "Congratulations! You have successfully subscribed to " + action.payload.data.product.name,
+        createSubscriptionFailMessage: false
+      }
+    case types.CREATE_SUBSCRIPTION_FAIL:
+      return {
+        ...state,
+        creatingSubscription: false,
+        createSubscriptionSuccessMessage: false,
+        createSubscriptionFailMessage: ""
+      }
+    case types.TOGGLE_CREATE_SUBSCRIPTION_OPEN:
+      return {
+        ...state,
+        createSubscriptionOpen: !state.createSubscriptionOpen
+      }
+    case types.UPDATE_PAYMENT_METHOD:
+      return {
+        ...state,
+        updatingPaymentMethod: true,
+      }
+    case types.UPDATE_PAYMENT_METHOD_SUCCESS:
+      return {
+        ...state,
+        payment_method: action.payload.data,
+        editPaymentMethodOpen: false,
+        updatingPaymentMethod: false,
+      }
+    case types.UPDATE_PAYMENT_METHOD_FAIL:
+      return {
+        ...state,
+        payment_method: false,
+        updatingPaymentMethod: false,
+      }
+    case types.GET_PAYMENT_METHOD_SUCCESS:
+      return {
+        ...state,
+        payment_method: action.payload.data
+      }
+    case types.TOGGLE_UPDATE_PAYMENT_METHOD_OPEN:
+      return {
+        ...state,
+        editPaymentMethodOpen: !state.editPaymentMethodOpen
+      }
     default:
       return state
   }
 }
+
 
 function updateSubscription(subscriptions, action) {
     return subscriptions.map( (subscription, index) => {
