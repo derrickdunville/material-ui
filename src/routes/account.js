@@ -3,6 +3,7 @@ import AccountContainer from '../containers/AccountContainer.jsx'
 import Account from '../views/Account/Account.jsx'
 import Profile from '../views/Account/Profile.jsx'
 import Billing from '../views/Account/Billing.jsx'
+import Connections from 'views/Account/Connections/Connections.jsx'
 
 export default [
   {
@@ -32,6 +33,13 @@ export default [
         path: '/app/account/billing/',
         backPath: '/app/account/',
         title: "Billing",
+        zIndex: 3
+      },
+      {
+        ...Connections,
+        path: '/app/account/connections/',
+        backPath: '/app/account/',
+        title: "Connections",
         zIndex: 3
       },
     ]

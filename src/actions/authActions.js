@@ -140,3 +140,17 @@ export const getPaymentMethod = () => async (dispatch, getState, api) => {
     dispatch({ type: types.GET_PAYMENT_METHOD_FAIL, payload: error.response })
   }
 }
+function openInNewTab(state) {
+  var win = window.open(`https://discordapp.com/api/oauth2/authorize?client_id=${discord_client_id}&redirect_uri=${redirect}&state=${state}&response_type=code&scope=identify%20guilds.join`, '_blank')
+  win.focus();
+}
+export const discordOAuthStateLoad = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.DISCORD_OAUTH_STATE_LOAD })
+  try {
+    const res = await api.put(`/oauth/discord/state`)
+    dispatch({ type: types.DISCORD_OAUTH_STATE_LOAD_SUCCESS, payload: res })
+    openInNewTab(res.data.oauth_state)
+  } catch (error) {
+    dispatch({ type: types.DISCORD_OAUTH_STATE_LOAD_FAIL, payload: error.response })
+  }
+}
