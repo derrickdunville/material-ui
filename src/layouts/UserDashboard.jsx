@@ -42,6 +42,7 @@ import { openNav, closeNav } from "../actions"
 import { connect } from 'react-redux'
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
+import requireAuth from 'components/hocs/requireAuth'
 
 function getPathDepth (location) {
   // console.log("pathDepth: ", (location || {} ).pathname.split('/').length)
@@ -178,7 +179,7 @@ class UserDashboard extends React.Component {
             style={{width: "100%"}}>
             <div className={classes.logoImage} style={{color: "#FFFFFF", display: 'flex', alignItems: "center", padding:"10px", height: "56px" }}>
               <div style={{width: "50px", height: "50px", backgroundColor: "#232323",  borderRadius: "4px"}}></div>
-              <div style={{marginLeft: "10px", paddingRight: "10px", flex: '1'}}>username</div>
+              <div style={{marginLeft: "10px", paddingRight: "10px", flex: '1'}}>{this.props.user.username}</div>
             </div>
           </NavLink>
           <NavLink to={'/app/account/'}
@@ -186,9 +187,11 @@ class UserDashboard extends React.Component {
             style={{alignItems: "center", display: "flex", color: "#FFFFFF"}}>
             <SettingsIcon style={{float: 'right', padding: '10px'}}/>
           </NavLink>
-          <NavLink to={'/admin/'} style={{alignItems: "center", display: "flex", color: "#FFFFFF"}}>
-            <GavelIcon style={{float: 'right', padding: '10px'}} />
-          </NavLink>
+          {this.props.user.roles.includes("admin") && (
+            <NavLink to={'/admin/'} style={{alignItems: "center", display: "flex", color: "#FFFFFF"}}>
+              <GavelIcon style={{float: 'right', padding: '10px'}} />
+            </NavLink>
+          )}
         </div>
         <Divider />
         <div style={{display: "flex", flexWrap: "wrap", maxWidth: "250px" }}>
@@ -291,9 +294,10 @@ UserDashboard.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    app: state.app
+    app: state.app,
+    user: state.auth.user
   }
 }
 export default {
-  component: withRouter(connect(mapStateToProps, { openNav, closeNav })(withStyles(dashboardStyle)(UserDashboard)))
+  component: requireAuth(withRouter(connect(mapStateToProps, { openNav, closeNav })(withStyles(dashboardStyle)(UserDashboard))))
 }

@@ -6,6 +6,7 @@ import dashboardStyle from 'assets/jss/material-dashboard-react/layouts/dashboar
 import { withRouter } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import discord_icon from 'assets/img/discord_icon.png'
+import { discordOAuthStateLoad, discordOAuthRevoke } from 'actions/authActions'
 
 class Discord extends Component {
   constructor(props) {
@@ -15,10 +16,10 @@ class Discord extends Component {
   }
 
   connectDiscord(){
-    console.log("connect discord")
+    this.props.discordOAuthStateLoad()
   }
   revokeDiscord(){
-    console.log("revoke discord")
+    this.props.discordOAuthRevoke()
   }
 
   render(){
@@ -34,7 +35,7 @@ class Discord extends Component {
         <img style={{width: "50px", height:"50px", marginRight: "10px"}} src={discord_icon}/>
         <div style={{width: "100%"}}>
           {this.props.discordUsername != null ? (
-            <div>{this.props.discordUsername}#{this.props.discordId}</div>
+            <div>{this.props.discordUsername}#{this.props.discordDiscriminator}</div>
           ):(
             <div>Not Connected</div>
           )}
@@ -53,8 +54,8 @@ class Discord extends Component {
 
 function mapStateToProps(state){
   return {
-    discordUsername: state.auth.user.discrodUsername || null,
-    discordId: state.auth.user.discordId || null
+    discordUsername: state.auth.user.discordUsername || null,
+    discordDiscriminator: state.auth.user.discordDiscriminator || null
   }
 }
-export default connect(mapStateToProps, {})(withStyles(dashboardStyle)(Discord))
+export default connect(mapStateToProps, { discordOAuthStateLoad, discordOAuthRevoke })(withStyles(dashboardStyle)(Discord))

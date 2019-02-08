@@ -51,6 +51,11 @@ const server = http.createServer(app);
 server.listen(3000, 'localhost', function(err) {
   if (err) throw err;
 
+  if(process.env.DISCORD_CLIENT_ID == undefined ||
+    process.env.DISCORD_CALLBACK == undefined){
+    console.error("DISCORD env vars not found. Discord OAuth will not work")
+  }
+
   const addr = server.address();
 
   console.log('Listening at http://%s:%d', addr.address, addr.port);

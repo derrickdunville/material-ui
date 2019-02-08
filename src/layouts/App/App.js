@@ -33,7 +33,11 @@ App.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
+function loadData(store){
+  return store.dispatch(fetchCurrentUser())
+}
+
 export default {
   component: connect(mapStateToProps, { fetchCurrentUser })(withStyles(dashboardStyle)(App)),
-  loadData: ({ dispatch }) => dispatch(fetchCurrentUser())
+  loadData
 }

@@ -1,4 +1,6 @@
 import * as types from '../constants/auth-action-types'
+const redirect = encodeURIComponent(process.env.DISCORD_CALLBACK)
+const discord_client_id = process.env.DISCORD_CLIENT_ID
 
 export const fetchCurrentUser = () => async (dispatch, getState, api) => {
   const res = await api.get('/@me')
@@ -141,16 +143,44 @@ export const getPaymentMethod = () => async (dispatch, getState, api) => {
   }
 }
 function openInNewTab(state) {
+  console.log("opening new tab")
   var win = window.open(`https://discordapp.com/api/oauth2/authorize?client_id=${discord_client_id}&redirect_uri=${redirect}&state=${state}&response_type=code&scope=identify%20guilds.join`, '_blank')
   win.focus();
 }
 export const discordOAuthStateLoad = () => async (dispatch, getState, api) => {
   dispatch({ type: types.DISCORD_OAUTH_STATE_LOAD })
   try {
-    const res = await api.put(`/oauth/discord/state`)
+    const res = await api.post(`/oauth/discord/state`)
     dispatch({ type: types.DISCORD_OAUTH_STATE_LOAD_SUCCESS, payload: res })
-    openInNewTab(res.data.oauth_state)
+    try {
+      console.log("about to open new tab")
+      openInNewTab(res.data.oauth_state)
+    } catch(error) {
+      console.log("error opening new tab to discord oauth")
+    }
   } catch (error) {
     dispatch({ type: types.DISCORD_OAUTH_STATE_LOAD_FAIL, payload: error.response })
+  }
+}
+export const discordOAuthRevoke = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.DISCORD_OAUTH_REVOKE })
+  try {
+    const res = await api.post(`/oauth/discord/revoke`)
+    dispatch({ type: types.DISCORD_OAUTH_REVOKE_SUCCESS, payload: res })
+  } catch (error) {
+    dispatch({ type: types.DISCORD_OAUTH_REVOKE_FAIL, payload: error.response })
+  }
+}
+export const logout = () => async (dispatch, getState, api) => {
+  try {
+    console.log("logging out")
+    const res = await api.get(`logout`)
+    if(res.status == 200){
+      console.log("redirecting")
+      window.location.href = "/"
+    }
+  } catch (error) {
+    console.dir(error)
+    console.log("error logging out");
   }
 }

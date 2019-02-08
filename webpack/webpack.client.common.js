@@ -5,6 +5,16 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import qs from 'querystring';
 import merge from 'webpack-merge'
 import common from './webpack.common.js'
+import webpack from 'webpack'
+
+const definePlugin = new webpack.DefinePlugin({
+  __DEV__: JSON.stringify(JSON.parse(process.env.NODE_ENV === 'development' || 'true')),
+  'process.env': {
+    API_URL: JSON.stringify(process.env.API_URL || 'http://localhost:3001/'),
+    DISCORD_CLIENT_ID: JSON.stringify(process.env.DISCORD_CLIENT_ID),
+    DISCORD_CALLBACK: JSON.stringify(process.env.DISCORD_CALLBACK)
+  }
+});
 
 module.exports = merge(common,
   {
@@ -16,7 +26,8 @@ module.exports = merge(common,
       filename: "bundle.js"
     },
     plugins: [
-      new CleanWebpackPlugin(['public'])
+      new CleanWebpackPlugin(['public']),
+      definePlugin
     ],
     module: {
       rules: [

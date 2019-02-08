@@ -42,6 +42,7 @@ import { openAdminNav, closeAdminNav } from "../actions"
 import { connect } from 'react-redux'
 import { TransitionGroup, CSSTransition } from "react-transition-group"
 
+import requireRole from 'components/hocs/requireRole'
 
 function getPathDepth (location) {
     return (location || {} ).pathname.split('/').length
@@ -264,5 +265,5 @@ function mapStateToProps(state) {
   }
 }
 export default {
-  component: withRouter(connect(mapStateToProps, { openAdminNav, closeAdminNav })(withStyles(dashboardStyle)(AdminDashboard)))
+  component: requireRole("admin")(withRouter(connect(mapStateToProps, { openAdminNav, closeAdminNav })(withStyles(dashboardStyle)(AdminDashboard))))
 }
