@@ -14,9 +14,10 @@ import AppPage from "../views/App/AppPage.jsx"
 
 import Classes from 'views/Products/Classes.jsx'
 import Scripts from 'views/Products/Scripts.jsx'
+import Scanners from 'views/Products/Scanners.jsx'
 import Product from 'views/Products/Product.jsx'
 
-import Scanners from 'views/Products/Scanners.jsx'
+import Chat from 'views/Chat/Chat.jsx'
 
 import accountRoutes from '../routes/account'
 import adminRoutes from '../routes/admin'
@@ -60,6 +61,13 @@ export default [
             title: "Home",
             hidden: true,
             zIndex: "1"
+          },
+          {
+            ...Chat,
+            path: '/app/chat',
+            title: "Chat",
+            zIndex: "1",
+            exact: true
           },
           {
             ...Classes,

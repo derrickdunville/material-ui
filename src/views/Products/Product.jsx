@@ -69,7 +69,7 @@ class Product extends Component {
     return (
       <div>
       {product != false ? (
-        <Paper style={{backgroundColor: "#565656", borderRadius: "4px", padding: "10px", marginBottom: "10px"}}>
+        <Paper style={{backgroundColor: "#383838", borderRadius: "4px", padding: "10px", marginBottom: "10px"}}>
           <div style={{width: "100%", borderRadius: "4px"}}>
             {product.cover_image != null ? (
              <img style={{ width: "100%", borderRadius: "4px", height:"auto"}} src={`https://s3.amazonaws.com/${product.cover_image.bucket}/${product.cover_image.key}`}/>

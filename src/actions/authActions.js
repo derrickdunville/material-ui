@@ -184,3 +184,23 @@ export const logout = () => async (dispatch, getState, api) => {
     console.log("error logging out");
   }
 }
+
+export const getMyDiscordGuildMember = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.GET_MY_DISCORD_GUILD_MEMBER })
+  try {
+    const res = await api.get(`oauth/discord/`)
+    dispatch({ type: types.GET_MY_DISCORD_GUILD_MEMBER_SUCCESS, payload: res })
+  } catch (error) {
+    dispatch({ type: types.GET_MY_DISCORD_GUILD_MEMBER_FAIL, payload: error.response })
+  }
+}
+
+export const joinDiscordServer = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.JOIN_DISCORD_SERVER })
+  try {
+    const res = await api.put(`oauth/discord/join`)
+    dispatch({ type: types.JOIN_DISCORD_SERVER_SUCCESS, payload: res })
+  } catch (error) {
+    dispatch({ type: types.JOIN_DISCORD_SERVER_FAIL, payload: error.response })
+  }
+}

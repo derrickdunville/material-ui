@@ -276,6 +276,23 @@ export default function(state = initialState, action) {
         ...state,
         editPaymentMethodOpen: !state.editPaymentMethodOpen
       }
+    case types.GET_MY_DISCORD_GUILD_MEMBER:
+      return {
+        ...state,
+        gettingMyDiscordGuildMember: true
+      }
+    case types.GET_MY_DISCORD_GUILD_MEMBER_SUCCESS:
+      return {
+        ...state,
+        gettingMyDiscordGuildMember: false,
+        discord_guild_member: action.payload.data.discord_guild_member
+      }
+    case types.GET_MY_DISCORD_GUILD_MEMBER_FAIL:
+      return {
+        ...state,
+        gettingMyDiscordGuildMember: false,
+        discord_guild_member: false
+      }
     default:
       return state
   }

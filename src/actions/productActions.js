@@ -117,7 +117,6 @@ export const toggleEditOpen = () => (dispatch, getState, api) => {
   dispatch({ type: types.TOGGLE_EDITING_PRODUCT })
 }
 
-
 export const downloadProduct = (product_id) => async (dispatch, getState, api) => {
   dispatch({
     type: types.DOWNLOAD_PRODUCT

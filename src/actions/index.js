@@ -60,3 +60,25 @@ export const openAdminNav = () => async (dispatch, getState, api) => {
 export const closeAdminNav = () => async (dispatch, getState, api) => {
   dispatch({ type: CLOSE_ADMIN_NAV })
 }
+
+export const LOAD_MEMBERSHIPS = "LOAD_MEMBERSHIPS"
+export const LOAD_MEMBERSHIPS_SUCCESS = "LOAD_MEMBERSHIPS_SUCCESS"
+export const LOAD_MEMBERSHIPS_FAIL = "LOAD_MEMBERSHIPS_FAIL"
+export const loadMemberships = (order="asc", orderBy="name") => async (dispatch, getState, api) => {
+  dispatch({
+    type: LOAD_MEMBERSHIPS
+  })
+  let url = "/products?page=" + 0 +"&limit=" + 100 + "&sort="+orderBy+":"+order+"&category=membership"
+  try {
+    const res = await api.get(url)
+    dispatch({
+      type: LOAD_MEMBERSHIPS_SUCCESS,
+      payload: res
+    })
+  } catch (error) {
+    dispatch({
+      type: LOAD_MEMBERSHIPS_FAIL,
+       payload: error.response
+     })
+  }
+}
