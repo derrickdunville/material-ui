@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from "prop-types";
 import { renderRoutes } from 'react-router-config'
-import { fetchCurrentUser } from '../../actions/authActions'
+import { fetchCurrentUser, getPaymentMethod } from '../../actions/authActions'
 import dashboardStyle from "../../assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
 import withStyles from "@material-ui/core/styles/withStyles";
 
@@ -11,6 +11,7 @@ class App extends Component {
     super(props);
     if(!this.props.user){
       this.props.fetchCurrentUser()
+      this.props.getPaymentMethod()
     }
   }
   render(){
@@ -34,10 +35,10 @@ App.propTypes = {
 };
 
 function loadData(store){
-  return store.dispatch(fetchCurrentUser())
+  return store.dispatch(fetchCurrentUser()).then(() => store.dispatch(getPaymentMethod()))
 }
 
 export default {
-  component: connect(mapStateToProps, { fetchCurrentUser })(withStyles(dashboardStyle)(App)),
+  component: connect(mapStateToProps, { fetchCurrentUser, getPaymentMethod })(withStyles(dashboardStyle)(App)),
   loadData
 }

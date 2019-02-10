@@ -12,6 +12,12 @@ import ResetPasswordPage from '../views/ResetPasswordPage'
 import UserDashboard from '../layouts/UserDashboard.jsx'
 import AppPage from "../views/App/AppPage.jsx"
 
+import Classes from 'views/Products/Classes.jsx'
+import Scripts from 'views/Products/Scripts.jsx'
+import Product from 'views/Products/Product.jsx'
+
+import Scanners from 'views/Products/Scanners.jsx'
+
 import accountRoutes from '../routes/account'
 import adminRoutes from '../routes/admin'
 // @material-ui/icons
@@ -51,27 +57,51 @@ export default [
             ...AppPage,
             path: '/app/',
             exact: true,
-            title: "Page 0",
-            zIndex: "1",
+            title: "Home",
             hidden: true,
-          },
-          {
-            ...AppPage,
-            path: '/app/1',
-            title: "Page 1",
             zIndex: "1"
           },
           {
-            ...AppPage,
-            path: '/app/2',
-            title: "Page 2",
-            zIndex: "1"
+            ...Classes,
+            path: '/app/classes',
+            title: "Classes",
+            zIndex: "1",
+            exact: true
           },
           {
-            ...AppPage,
-            path: '/app/3',
-            title: "Page 3",
-            zIndex: "1"
+            ...Product,
+            path: '/app/classes/:id',
+            title: "Classes",
+            hidden: true,
+            zIndex: "2"
+          },
+          {
+            ...Scanners,
+            path: '/app/scanners',
+            title: "Scanners",
+            zIndex: "1",
+            exact: true
+          },
+          {
+            ...Product,
+            path: '/app/scanners/:id',
+            title: "Scanners",
+            hidden: true,
+            zIndex: "2"
+          },
+          {
+            ...Scripts,
+            path: '/app/scripts',
+            title: "Scripts",
+            zIndex: "1",
+            exact: true
+          },
+          {
+            ...Product,
+            path: '/app/scripts/:id',
+            title: "Script",
+            hidden: true,
+            zIndex: "2"
           },
           ...accountRoutes
         ]

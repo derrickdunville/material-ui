@@ -12,17 +12,25 @@ import Add from '@material-ui/icons/Add';
 import Close from '@material-ui/icons/Close';
 import logo from "assets/img/faces/marc.jpg";
 
+function getImageUrl(image){
+  if(image != null){
+    return "https://s3.amazonaws.com/" + image.bucket + "/" + image.key
+  } else {
+    return null
+  }
+}
 class Avatar extends Component {
   constructor(props){
     super(props);
     this.state = {
         file: '',
-        image_url: null,
+        image_url: getImageUrl(this.props.current)
     }
     this.handleFileChange = this.handleFileChange.bind(this)
     this.handleFileSelect = this.handleFileSelect.bind(this)
     this.handleRemove = this.handleRemove.bind(this)
   }
+
   buildFileSelector(){
     const fileSelector = document.createElement('input')
     fileSelector.setAttribute('type', 'file')
@@ -55,7 +63,7 @@ class Avatar extends Component {
   handleRemove(event) {
     this.setState({
       file: '',
-      image_url: null
+      image_url: getImageUrl(this.props.current)
     })
     this.props.onRemove()
   }

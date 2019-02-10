@@ -43,6 +43,7 @@ import { connect } from 'react-redux'
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 import requireAuth from 'components/hocs/requireAuth'
+import MobileSidebar from 'components/Sidebar/MobileSidebar.jsx'
 
 function getPathDepth (location) {
   // console.log("pathDepth: ", (location || {} ).pathname.split('/').length)
@@ -136,26 +137,33 @@ class UserDashboard extends React.Component {
 
   render() {
     const { classes, route, ...rest } = this.props;
-    const appBar = (
-      <AppBar
-        position="fixed"
-        color="default"
-        className="app-bar-slide"
-        style={{backgroundColor: "#454545", color: "#FFFFFF"}}
-        classes={{
-          root: classes.rootAppBar,
-          colorDefault: classes.rootAppBar
-        }}>
-        <Toolbar>
-          <IconButton className={classes.menuIcon} color="inherit" aria-label="Menu" onClick={this.handleOpenNav}>
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="title" color="inherit" style={{width: '100%'}}>
-            App Root
-          </Typography>
-        </Toolbar>
-      </AppBar>
-    )
+    console.log("render UserDashboard")
+    const switchRoutes = (
+      <Switch location={this.props.location}>
+        {this.props.route.routes.map((prop, key) => {
+          return <Route exact={prop.exact} path={prop.path} key={key} render={routeProps => {
+            return(
+              <AppBar
+                position="static"
+                color="default"
+                className="app-bar-slide"
+                style={{backgroundColor: "#454545", color: "#FFFFFF"}}
+                classes={{ root: classes.rootAppBar,
+                colorDefault: classes.rootAppBar }}>
+                <Toolbar>
+                  <IconButton className={classes.menuIcon} color="inherit" aria-label="Menu" onClick={this.handleOpenNav}>
+                    <MenuIcon />
+                  </IconButton>
+                  <Typography variant="title" color="inherit" style={{width: '100%'}}>
+                    {prop.title}
+                  </Typography>
+                </Toolbar>
+              </AppBar>
+            )
+          }}/>
+        })}
+      </Switch>
+    );
     const sideList = (
       <div className={classes.list}>
         <NavLink exact to={"/"}
@@ -178,7 +186,12 @@ class UserDashboard extends React.Component {
             activeClassName="active"
             style={{width: "100%"}}>
             <div className={classes.logoImage} style={{color: "#FFFFFF", display: 'flex', alignItems: "center", padding:"10px", height: "56px" }}>
-              <div style={{width: "50px", height: "50px", backgroundColor: "#232323",  borderRadius: "4px"}}></div>
+              {this.props.user.avatar != null ? (
+                <img src={`https://s3.amazonaws.com/${this.props.user.avatar.bucket}/${this.props.user.avatar.key}`} className={classes.img} style={{width: "50px", height: "50px", borderRadius: "4px"}}/>
+              ):(
+                <img src={logo} className={classes.img} style={{width: "50px", height: "50px", borderRadius: "4px"}}/>
+              )}
+
               <div style={{marginLeft: "10px", paddingRight: "10px", flex: '1'}}>{this.props.user.username}</div>
             </div>
           </NavLink>
@@ -213,41 +226,7 @@ class UserDashboard extends React.Component {
         </div>
       </div>
     );
-    const mobileSideBar = (
-      <SwipeableDrawer
-        open={this.props.app.navOpen}
-        onClose={this.handleCloseNav}
-        onOpen={this.handleOpenNav}
-        ModalProps={{
-          style: {position: 'absolute'},
-          classes: {
-            root: classes.rootMobileSidebar
-          },
-          disableEnforceFocus: true
-        }}
-        BackdropProps={{
-          style: { position: 'absolute' },
-          classes: { root: classes.rootMobileSidebarBackdrop}
-        }}
-        SlideProps={{ style: { position: 'absolute' } }}
-        PaperProps={{
-          style: {
-            position: "absolute"
-          },
-          classes: {
-            root: classes.rootMobileSidebarPaper
-          }
-        }}
-        >
-        <div
-          tabIndex={0}
-          role="button"
-          onKeyDown={this.handleCloseNav}
-        >
-          {sideList}
-        </div>
-      </SwipeableDrawer>
-    )
+
     //This returns a childFactory to provide to TransitionGroup
     const childFactoryCreator = (classNames, timeout) => (
       (child) => {
@@ -262,26 +241,14 @@ class UserDashboard extends React.Component {
         <div id="sidebar" ref={this.sidebar} className={classes.sidebar}>
           {sideList}
         </div>
-        <div id="mobileSidebar" ref={this.mobileSidebar}>
-          {mobileSideBar}
-        </div>
+        <MobileSidebar sideList={sideList} />
         <div id="mainPanel" className={classes.mainPanel}>
-          {appBar}
-          <TransitionGroup childFactory={childFactoryCreator(this.getClassName(this.props.location), this.getTransitionTimeout(this.props.location))}>
-            <CSSTransition
-              key={this.props.location.key}
-              classNames={this.getClassName(this.props.location)}
-              timeout={this.getTransitionTimeout(this.props.location)}
-              mountOnEnter={true}
-              unmountOnExit={true}
-              >
-              {renderRoutes(
-                this.props.route.routes,
-                null,
-                {location: this.props.location}
-              )}
-            </CSSTransition>
-          </TransitionGroup>
+          {switchRoutes}
+          {renderRoutes(
+            this.props.route.routes,
+            null,
+            {location: this.props.location}
+          )}
         </div>
       </div>
     );
@@ -294,10 +261,25 @@ UserDashboard.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    app: state.app,
     user: state.auth.user
   }
 }
 export default {
   component: requireAuth(withRouter(connect(mapStateToProps, { openNav, closeNav })(withStyles(dashboardStyle)(UserDashboard))))
 }
+
+// <TransitionGroup childFactory={childFactoryCreator(this.getClassName(this.props.location), this.getTransitionTimeout(this.props.location))}>
+//   <CSSTransition
+//     key={this.props.location.key}
+//     classNames={this.getClassName(this.props.location)}
+//     timeout={this.getTransitionTimeout(this.props.location)}
+//     mountOnEnter={true}
+//     unmountOnExit={true}
+//     >
+//     {renderRoutes(
+//       this.props.route.routes,
+//       null,
+//       {location: this.props.location}
+//     )}
+//   </CSSTransition>
+// </TransitionGroup>

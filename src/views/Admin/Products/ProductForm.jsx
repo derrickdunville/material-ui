@@ -65,6 +65,7 @@ class ProductForm extends Component {
     }
   }
   handleFileChange(target, file){
+    console.log(target + "file changed")
     this.setState({[target]: file})
   }
   handleFileCancel(target){
@@ -81,8 +82,11 @@ class ProductForm extends Component {
       interval: this.state.interval.toLowerCase(),
       access: this.state.access.toLowerCase(),
     }
-    if(product.category == "class" && this.state.cover_image !== undefined){
+    if(this.state.cover_image !== undefined){
       form_data.append('cover_image', this.state.cover_image)
+    }
+    if(this.state.file !== undefined){
+      form_data.append('uploaded_file', this.state.file)
     }
     form_data.append("product", JSON.stringify(product))
     if(this.props.editing){

@@ -75,6 +75,7 @@ class ProfileForm extends Component {
                 marginTop: "10px"
               }}>
               <Avatar
+                current={this.props.user.avatar || null}
                 onChange={this.handleChangeAvatar}
                 onRemove={this.handleRemoveAvatar}/>
             </div>

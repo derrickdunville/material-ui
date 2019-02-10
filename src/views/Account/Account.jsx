@@ -55,6 +55,11 @@ class Account extends Component {
               </NavLink>
             </div>
             <div style={{width: '100%'}}>
+              <NavLink to={"/app/account/purchases/"} style={{width: '100%'}}>
+                My Purchases
+              </NavLink>
+            </div>
+            <div style={{width: '100%'}}>
                 <Button onClick={this.logout}>Logout</Button>
             </div>
           </div>

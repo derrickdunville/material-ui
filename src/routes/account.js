@@ -4,6 +4,7 @@ import Account from '../views/Account/Account.jsx'
 import Profile from '../views/Account/Profile.jsx'
 import Billing from '../views/Account/Billing.jsx'
 import Connections from 'views/Account/Connections/Connections.jsx'
+import MyPurchases from 'views/Account/MyPurchases.jsx'
 
 export default [
   {
@@ -40,6 +41,13 @@ export default [
         path: '/app/account/connections/',
         backPath: '/app/account/',
         title: "Connections",
+        zIndex: 3
+      },
+      {
+        ...MyPurchases,
+        path: '/app/account/purchases/',
+        backPath: '/app/account/',
+        title: "My Purchases",
         zIndex: 3
       },
     ]

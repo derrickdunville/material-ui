@@ -239,9 +239,9 @@ class Billing extends Component {
             alignItems: "center",
             borderRadius: "4px 4px 0 0"
           }}>
-          <div style={{fontSize: "13px", width: "100%", minWidth: "80px", paddingLeft: "10px"}}>DATE</div>
+          <div style={{fontSize: "13px", width: "90px", minWidth: "80px", paddingLeft: "10px"}}>DATE</div>
           <div style={{fontSize: "13px", width: "100%", minWidth: "100px"}}>PRODUCT</div>
-          <div style={{fontSize: "13px", width: "100%", float:"right", textAlign: "right", paddingRight: "10px"}}>AMOUNT</div>
+          <div style={{fontSize: "13px", width: "100px", float:"right", textAlign: "right", paddingRight: "10px"}}>AMOUNT</div>
         </div>
         <div style={{height: "1px", backgroundColor: "black"}}/>
         {this.props.transactions.length == 0 && (
@@ -268,7 +268,7 @@ class Billing extends Component {
              }}>
              <div style={{
                  fontSize: "13px",
-                 width: "100%",
+                 width: "90px",
                  minWidth: "80px",
                  paddingLeft: "10px"}}>
                {parseDate(transaction.created_at)}
@@ -277,15 +277,15 @@ class Billing extends Component {
                  fontSize: "13px",
                  width: "100%",
                  minWidth: "100px"}}>
-               {transaction.product.name}
+               {transaction.product.name} - {transaction.status}
              </div>
              <div style={{
                  fontSize: "13px",
-                 width: "100%",
+                 width: "100px",
                  float:"right",
                  textAlign: "right",
                  paddingRight: "10px"}}>
-               {(transaction.amount/100).toFixed(2)}
+               ${(transaction.amount/100).toFixed(2)}
              </div>
            </div>
          ))}

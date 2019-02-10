@@ -16,8 +16,12 @@ import {
   DELETE_PRODUCT_FAIL,
   CLEAR_PRODUCT,
   CLEAR_MESSAGE,
-  TOGGLE_EDITING_PRODUCT
+  TOGGLE_EDITING_PRODUCT,
+  DOWNLOAD_PRODUCT,
+  DOWNLOAD_PRODUCT_SUCCESS,
+  DOWNLOAD_PRODUCT_FAIL
 } from '../constants/product-action-types'
+import fileSaver from 'file-saver'
 
 const initialState = {
   loaded: false,
@@ -149,6 +153,24 @@ export default (state=initialState, action) => {
       return {
         ...state,
         editOpen: !state.editOpen
+      }
+    case DOWNLOAD_PRODUCT:
+      return {
+        ...state,
+        downloadingProduct: true
+      }
+    case DOWNLOAD_PRODUCT_SUCCESS:
+      // fileSaver.saveAs(action.payload.data, action.payload.filename)
+      return {
+        ...state,
+        downloadingProduct: false
+      }
+    case DOWNLOAD_PRODUCT_FAIL:
+      alert(action.payload.data.message)
+      return {
+        ...state,
+        downloadingProduct: false,
+        downloadProductErrorMessage: action.payload.data.message
       }
     default:
       return state

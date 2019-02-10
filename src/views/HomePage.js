@@ -30,6 +30,7 @@ class Home extends Component {
     const { classes, route, ...rest } = this.props;
     return (
       <div className={classes.home}>
+        {this.head()}
         <Navbar
           routes={this.props.routes}
           logoText={"App Title"}

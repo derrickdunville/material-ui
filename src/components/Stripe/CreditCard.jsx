@@ -42,6 +42,7 @@ class CreditCard extends Component {
     });
   };
   render(){
+    const { product } = this.props
     let styles = {}
     if(this.props.action == 'update'){
       styles = {
@@ -71,6 +72,10 @@ class CreditCard extends Component {
             alignItems: "center"
           }}>
           <CardElement style={styles} />
+        </div>
+        <div style={{ padding: "10px", fontSize: "11px", color: "#787878", lineHeight: "1.2"}}>
+          {this.props.action == "transaction" && (`*By purchasing this product you argee to our Terms of Service. You authorize us to immediatly charge the payment method provided at $${(product.amount/100).toFixed(2)} for this one-time purchase. This product is a digital product and is non-refundable.`)}
+          {this.props.action == "subscription" && (`*By purchasing this product you argee to our Terms of Service. ${product.name} is an auto-recurring subscription. You authorize us to immediatly charge the payment method provided at $${(product.amount/100).toFixed(2)} and to continue to do so automatically, ${product.interval}ly until you cancel. You may cancel anytime.`)}
         </div>
         <div style={{height: "36.5px"}}>
           <Button

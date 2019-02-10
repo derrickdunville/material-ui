@@ -1,4 +1,5 @@
 import * as types from '../constants/product-action-types'
+import fileSaver from 'file-saver'
 
 export const getProducts = (filter=undefined, page=0, limit=10, order="asc", orderBy="name") => async (dispatch, getState, api) => {
   dispatch({
@@ -114,4 +115,32 @@ export const clearMessage = () => async (dispatch, getState, api) => {
 }
 export const toggleEditOpen = () => (dispatch, getState, api) => {
   dispatch({ type: types.TOGGLE_EDITING_PRODUCT })
+}
+
+
+export const downloadProduct = (product_id) => async (dispatch, getState, api) => {
+  dispatch({
+    type: types.DOWNLOAD_PRODUCT
+  })
+  try {
+    console.log("downloading file")
+    const res = await api.get(`/products/${product_id}/download`, { responseTpye: 'blob'})
+    console.dir(res)
+    var filename = res.headers['content-disposition'].substring(22, res.headers['content-disposition'].length - 1)
+    console.log(filename)
+    const { data } = res
+    console.log("got the data", data)
+    var blob = new Blob([data], {type: res.headers['content-type']})
+    fileSaver.saveAs(blob, filename)
+    dispatch({
+      type: types.DOWNLOAD_PRODUCT_SUCCESS,
+      payload: res
+    })
+  } catch (error) {
+    console.dir(error.response)
+    dispatch({
+      type: types.DOWNLOAD_PRODUCT_FAIL,
+       payload: error.response
+     })
+  }
 }

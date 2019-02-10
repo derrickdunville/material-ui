@@ -123,14 +123,42 @@ class PaymentMethod extends Component {
         {this.state.editOpen || !this.props.payment_method ? (
           <Elements>
             <CreditCard
+              product={this.props.product}
               action="transaction"
               onClose={this.props.onClose}/>
           </Elements>
         ):(
-          <div style={{display:"flex", alignItems: "center", fontSize: "15px", fontWeight: '1'}}>
-            <CreditCardIcon fontSize='large' style={{marginRight: "10px"}}/>
-            <div style={{width: "100%"}}>{this.props.payment_method.brand} ending in {this.props.payment_method.last4} exp {this.props.payment_method.exp_month}/{this.props.payment_method.exp_year}</div>
-            <button onClick={this.editOpen}>Update</button>
+          <div>
+            <div style={{height: "37.2px", paddingRight: "16px", color: "black", display:"flex", alignItems: "center", fontSize: "15px", fontWeight: '1'}}>
+              <CreditCardIcon fontSize='large' style={{marginRight: "10px"}}/>
+              <div style={{color: "black", width: "100%"}}>{this.props.payment_method.brand} {this.props.payment_method.last4} - {this.props.payment_method.exp_month}/{this.props.payment_method.exp_year}</div>
+              <Button color="default" onClick={this.openEdit}>Update</Button>
+            </div>
+            <div style={{ padding: "10px", fontSize: "11px", color: "#787878", lineHeight: "1.2"}}>
+              *By purchasing this product you argee to our Terms of Service. You authorize us to
+              immediatly charge the payment method provided at ${(this.props.product.amount/100).toFixed(2)} for
+              this one-time purchase. This product is a digital product and is non-refundable.
+            </div>
+            <div style={{height: "36.5px"}}>
+              <Button
+                color="primary"
+                style={{
+                  float: "right",
+                }}
+                onClick={this.onSubmit}
+                >
+                {this.props.action == "update" ? "Save" : "Pay"}
+              </Button>
+              <Button
+                color="secondary"
+                style={{
+                  float: "right",
+                }}
+                onClick={this.props.onClose}
+                >
+                Cancel
+              </Button>
+            </div>
           </div>
         )}
       </div>
