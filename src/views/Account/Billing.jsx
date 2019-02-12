@@ -5,7 +5,7 @@ import withStyles from "@material-ui/core/styles/withStyles"
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx"
 import Paper from "@material-ui/core/Paper"
 import { parseDate } from "utils/DateUtils"
-import { getProducts } from "actions/productActions"
+import { loadMemberships } from "actions"
 import {
   toggleCreateSubscriptionOpen,
   cancelSubscription,
@@ -46,7 +46,7 @@ class Billing extends Component {
   }
   componentDidMount() {
      this.setState(state => ({ checked: !state.checked }));
-     this.props.getProducts({category: "membership"})
+     this.props.loadMemberships()
   }
   componentWillUnmount() {
     this.setState(state => ({ checked: !state.checked }));
@@ -345,7 +345,7 @@ function excludeSubscribedToProducts(products, subscriptions){
     for(let i = 0; i < products.length; ++i){
       let product = products[i]
       let found = false
-      for(let j = 0; j < products.length; ++j){
+      for(let j = 0; j < subscriptions.length; ++j){
         let subscription = subscriptions[j]
         if(product._id == subscription.product._id){
           found = true
@@ -363,14 +363,14 @@ function mapStateToProps(state) {
     cancelOpen: state.subscriptions.cancelOpen,
     transactions: state.auth.user.transactions || [],
     subscriptions: state.auth.user.subscriptions || [],
-    products: excludeSubscribedToProducts(state.products.docs, (state.auth.user.subscriptions || [])) || [],
+    products: excludeSubscribedToProducts(state.app.memberships.docs || [], (state.auth.user.subscriptions || [])) || [],
     auth: state.auth
   }
 }
 
 export default {
   component: connect(mapStateToProps, {
-    getProducts,
+    loadMemberships,
     toggleCreateSubscriptionOpen,
     cancelSubscription,
     toggleCancelSubscriptionOpen,

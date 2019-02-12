@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from "prop-types";
 import { renderRoutes } from 'react-router-config'
-import { fetchCurrentUser, getPaymentMethod } from '../../actions/authActions'
-import dashboardStyle from "../../assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
-import withStyles from "@material-ui/core/styles/withStyles";
+import { fetchCurrentUser, getPaymentMethod } from 'actions/authActions'
+import dashboardStyle from 'assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx'
+import withStyles from '@material-ui/core/styles/withStyles'
+import Socket from 'utils/Socket.jsx'
 
 class App extends Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class App extends Component {
     const { classes, route, ...rest } = this.props;
     return (
       <div>
+        <Socket/>
         {renderRoutes(route.routes)}
       </div>
     )

@@ -4,36 +4,36 @@ const defaultBackgroundColor = "#454545"
 
 const stepperStyle = {
   root: {
-    backgroundColor: defaultBackgroundColor,
+    backgroundColor: "transparent",
     padding: "0px"
   },
   labelRoot: {
     color: "white !important",
-    fontSize: "22px !important",
+    fontSize: "20px !important",
     fontWeight: "1 !important",
   },
   labelLabelRoot: {
-    color: "#989898",
-    fontSize: "22px !important",
+    color: "#a1a1a1",
+    fontSize: "20px !important",
     fontWeight: "1 !important",
   },
   labelActive: {
-    fontSize: "22px",
+    fontSize: "20px",
     fontWeight: "1 !important",
     color: "white !important",
   },
   labelDisabled: {
-    fontSize: "22px",
+    fontSize: "20px",
     fontWeight: "1 !important",
-    color: "#898989 !important",
+    color: "#a1a1a1 !important",
   },
   labelCompleted: {
-    fontSize: "22px",
+    fontSize: "20px",
     fontWeight: "1 !important",
     color: "white !important"
   },
   stepIconRoot: {
-    color: "#565656 !important"
+    color: "#545454 !important"
   },
   stepIconActive: {
     color: "#898989 !important"
@@ -42,7 +42,8 @@ const stepperStyle = {
     color: "green !important"
   },
   contentRoot: {
-    color: "white !important"
+    color: "white !important",
+    paddingRight: "0px"
   }
 };
 

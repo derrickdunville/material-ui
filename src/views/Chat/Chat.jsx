@@ -23,13 +23,33 @@ import StepLabel from 'components/Stepper/CustomStepLabel.jsx'
 import StepContent from 'components/Stepper/CustomStepContent.jsx'
 import Paper from '@material-ui/core/Paper'
 import logo from "assets/img/reactlogo.png";
+import SubscribeDialog from "components/Dialog/SubscribeDialog.jsx"
 
 import { loadMemberships } from 'actions'
+import {
+  toggleCreateSubscriptionOpen,
+  cancelSubscription,
+  toggleCancelSubscriptionOpen,
+  clearCancelSubscription,
+  resumeSubscription,
+  toggleResumeSubscriptionOpen,
+  clearResumeSubscription
+} from "actions/authActions"
+
 class Chat extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      openMembership: {},
+      cancelMembership: "",
+      resumeMembership: "",
+      checked: false
+    };
     this.getActiveStep = this.getActiveStep.bind(this)
     this.joinServer = this.joinServer.bind(this)
+    this.openSubscribe = this.openSubscribe.bind(this)
+    this.closeSubscribe = this.closeSubscribe.bind(this)
+    this.getOpenProduct = this.getOpenProduct.bind(this)
   }
 
   componentDidMount(){
@@ -40,12 +60,41 @@ class Chat extends Component {
       this.props.loadMemberships()
     }
   }
+  componentDidUpdate(prevProps, prevState){
+    // tries to get the discord_guild_member after connecting discord account
+    // this is an edge case for when a user is currently in the discord server before connecting
+    if(!prevProps.discordUsername && this.props.discordUsername != false){
+      this.props.getDiscordGuildMember()
+    }
+  }
 
   componentWillUnmount(){
 
   }
   joinServer(){
     this.props.joinDiscordServer()
+  }
+  closeSubscribe() {
+    this.props.toggleCreateSubscriptionOpen()
+  }
+  openSubscribe(event) {
+    console.log("name: ", event.target.name)
+    this.setState({ openMembership: this.getOpenProduct(event.target.name)}, () =>
+    this.props.toggleCreateSubscriptionOpen())
+  }
+  getOpenProduct(id){
+    console.log("getting open product")
+    console.log("memberships: ", this.props.memberships.docs.length)
+    for(let i = 0; i < this.props.memberships.docs.length; ++i){
+      console.dir(this.props.memberships.docs[i]._id)
+      if(this.props.memberships.docs[i]._id == id){
+        return this.props.memberships.docs[i]
+      }
+    }
+    return {}
+  }
+  handleSubscribe(){
+    console.log("handle subscribe")
   }
 
   head(){
@@ -55,6 +104,60 @@ class Chat extends Component {
         <meta property="og:title" content="Chat"/>
       </Helmet>
     )
+  }
+  renderAboutChat(){
+    return (
+      <div>
+        <div style={{
+            minHeight: "80px",
+            display: "flex",
+            alignItems: "center",
+            padding: "10px",
+            backgroundColor: "#7289da",
+            borderRadius: "4px",
+          }}>
+          <div
+            style={{
+              position: "relative",
+              bottom: "-0.12em",
+              fontSize: "1.7em",
+              letterSpacing: "0.06em",
+              fontStyle: "normal",
+              fontFamily: "Orbitron",
+              verticalAlign: "baseline",
+              lineHeight: "42px"
+            }}>
+            Discord Server Name
+          </div>
+        </div>
+        <div style={{padding: "10px", color: "#d7d7d7"}}>
+          We currently use Discord as our chat platform for its extensive customization
+          and reliablity. Not familiar with Discord? That's, ok it's very simple to use and
+          easy to learn. Take a minute to go check it out and create an account if you don't
+          have one yet.
+        </div>
+
+      </div>
+    )
+  }
+  getActiveStep(){
+    let active = 0
+    if(this.props.user){
+      active = 1
+    }
+    if(this.props.activeMembership){
+      active = 2
+    }
+    if(this.props.discordUsername){
+      active = 3
+    }
+    if(this.props.discord_guild_member){
+      active = 4
+    }
+    if(this.props.activeMembership == false){
+      active = 1
+    }
+    return active
   }
   renderAccount(){
     return (
@@ -93,46 +196,55 @@ class Chat extends Component {
       </div>
     )
   }
+  renderMemberships(){
+    return (
+      <div>
+      {this.props.memberships ? (
+        <div>
+          {this.props.memberships.docs.length == 0 && (
+            <div>Empty</div>
+          )}
+          {this.props.memberships.docs.map(membership => (
+            <div key={membership._id}
+              style={{
+                display: "flex",
+                height: "80px",
+                alignItems: "center",
+                backgroundColor: "#202225",
+                marginBottom: "10px",
+                borderRadius: "4px",
+                paddingLeft: "10px",
+                paddingRight: "10px"
+              }}>
+              <div style={{
+                  height: "60px",
+                  width: "60px",
+                  marginRight: "10px"
+                }}>
+                <img src={logo} style={{width: "60px", height: "60px"}}/>
+              </div>
+              <div style={{width: "100%"}}>
+                <div style={{fontSize: '18px', fontWeight: '1'}}>
+                {membership.name}
+                </div>
+                <div style={{fontSize: '15px'}}>
+                  ${(membership.amount/100).toFixed(2)} {membership.interval}
+                </div>
+              </div>
+              <div>
+                <Button variant="outlined" name={membership._id} color="primary" onClick={this.openSubscribe}>Subscribe</Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      ):(<div></div>)}
+      </div>
+    )
+  }
   renderDiscordOAuth(){
     return (
       <div>
         <Discord />
-      </div>
-    )
-  }
-  renderAboutChat(){
-    return (
-      <div>
-        <div style={{
-            fontSize: "36px",
-            height: "80px",
-            display: "flex",
-            alignItems: "center",
-            padding: "10px",
-            backgroundColor: "#7289da",
-            borderRadius: "4px"
-          }}>
-          Discord Server Name
-        </div>
-        <div style={{padding: "10px"}}>
-          We currently use Discord as our chat platform for its extensive customization
-          and reliablity. Not familiar with Discord? That's, ok it's very simple to use and
-          easy to learn. Take a minute to go check it out and create an account if you don't
-          have one yet.
-        </div>
-        <div style={{padding: "10px", paddingBottom: "20px"}}>
-          Before you can join our Discord server there are a few things we need you to do.
-        </div>
-      </div>
-    )
-  }
-  renderMemberships(){
-    return (
-      <div>
-        Looks like we need to list the membership options here. Im thinking we should
-         make the membership options have their own reducer, instead of using the
-         products reducer to load them. There is likely only going to be 2-3 active
-         membership options available at a time. This would help with not having to reload them.
       </div>
     )
   }
@@ -160,10 +272,10 @@ class Chat extends Component {
     return (
       <div>
         {this.props.discord_guild_member && (
-          <div>
-            <div>Success!</div>
-            <div>
-              You are currently in the server.
+          <div style={{padding: "10px"}}>
+            <div style={{fontSize: "22px", fontWeight: "1"}}>Success!</div>
+            <div style={{paddingTop: "10px", paddingBottom: "10px"}}>
+              You are currently in the discord server. Head on over there when you are ready to get to chatting with the team.
             </div>
             <div style={{display:"flex", alignItems: "center", borderRadius: "4px", backgroundColor: "#202225", padding: "10px"}}>
               <div style={{wdith: "50px", height: "50px", minWidth: "50px", marginRight: '10px'}}>
@@ -183,78 +295,93 @@ class Chat extends Component {
       </div>
     )
   }
-  getActiveStep(){
-    let active = 0;
-    if(this.props.user){
-      active = 1
-    }
-    if(this.props.activeMembership){
-      active = 2
-    }
-    if(this.props.discordUsername){
-      active = 3
-    }
-    if(this.props.discord_guild_member){
-      active = 4
-    }
-    console.log("active step: " + active)
-    return active
-  }
+
   render(){
     const { classes, title, route, ...rest } = this.props;
-    console.log("render Scripts")
+    console.log("render chat")
+    console.log("has active membership: ", this.props.activeMembership)
     return (
       <div className={`slide${route.zIndex}`}>
         {this.head()}
         <div className={classes.content}>
-          {this.renderAboutChat()}
-          <Stepper classes={{root: classes.stepperRoot}} activeStep={this.getActiveStep()} orientation="vertical">
-            <Step key={0}>
-              <StepLabel disabled={this.getActiveStep() < 1}>
-                Create An Account
-              </StepLabel>
-              <StepContent>
-                {this.renderAccount()}
-              </StepContent>
-            </Step>
-            <Step key={1}>
-              <StepLabel disabled={this.getActiveStep() < 2}>
-                Start A Membership
-              </StepLabel>
-              <StepContent>
-                <Typography style={{color: "white"}}>Start a membership.</Typography>
-                <div>
-                  {this.renderMemberships()}
+          <div style={{marginBottom: "10px"}}>
+            {this.renderAboutChat()}
+            <Paper style={{backgroundColor: "#383838", padding: "10px", marginBottom: "10px"}}>
+              {(!this.props.discord_guild_member || !this.props.activeMembership)  ? (
+                <div style={{padding: "10px"}}>
+                  <div style={{fontSize: "22px", fontWeight: "1"}}>Join Our Discord</div>
+                  <div style={{paddingTop: "10px", paddingBottom: "10px"}}>
+                    Before you can join our Discord server there are a few things we need you to do.
+                  </div>
+                  <Stepper activeStep={this.getActiveStep()} orientation="vertical">
+                    <Step key={0}>
+                      <StepLabel disabled={this.getActiveStep() < 1}>
+                        Create An Account
+                      </StepLabel>
+                      <StepContent>
+                        {this.renderAccount()}
+                      </StepContent>
+                    </Step>
+                    <Step key={1}>
+                      <StepLabel disabled={this.getActiveStep() < 2}>
+                        Start A Membership
+                      </StepLabel>
+                      <StepContent>
+                        <div>
+                          {this.renderMemberships()}
+                        </div>
+                      </StepContent>
+                    </Step>
+                    <Step key={2}>
+                      <StepLabel disabled={this.getActiveStep() < 3}>
+                        Connect Your Discord
+                      </StepLabel>
+                      <StepContent>
+                        <div>
+                          {this.renderDiscordOAuth()}
+                        </div>
+                      </StepContent>
+                    </Step>
+                    <Step key={3}>
+                      <StepLabel disabled={this.getActiveStep() < 4}>
+                        Join The Server
+                      </StepLabel>
+                      <StepContent>
+                        <div>
+                          {this.renderJoinServer()}
+                        </div>
+                      </StepContent>
+                    </Step>
+                  </Stepper>
                 </div>
-              </StepContent>
-            </Step>
-            <Step key={2}>
-              <StepLabel disabled={this.getActiveStep() < 3}>
-                Connect Your Discord
-              </StepLabel>
-              <StepContent>
-                <Typography style={{color: "white"}}>
-                  Now we'll need you to connect your Discord account with our application.
-                </Typography>
+              ):(
                 <div>
-                  {this.renderDiscordOAuth()}
+                  {this.renderGuildMemberhsip()}
                 </div>
-              </StepContent>
-            </Step>
-            <Step key={3}>
-              <StepLabel disabled={this.getActiveStep() < 4}>
-                Join The Server
-              </StepLabel>
-              <StepContent>
-                <Typography style={{color: "white"}}>Your so close! All thats left to do is join the server.</Typography>
-                <div>
-                  {this.renderJoinServer()}
-                </div>
-              </StepContent>
-            </Step>
-          </Stepper>
-          {this.renderGuildMemberhsip()}
+              )}
+            </Paper>
+          </div>
         </div>
+        <SubscribeDialog
+          loading={this.props.auth.creatingSubscription}
+          loadingMessage="Subscribing"
+          successMessage={this.props.auth.createSubscriptionSuccessMessage}
+          product={this.state.openMembership}
+          style={{width: "100%"}}
+          buttonText="Subscribe"
+          buttonColor="primary"
+          open={this.props.auth.createSubscriptionOpen}
+          title={`Subscribe to ${this.state.openMembership.name}`}
+          text={`Thank you for subscribing to ${this.state.openMembership.name}. You will not be charged until you click "Pay".`}
+          leftAction={this.closeSubscribe}
+          leftActionText="Cancel"
+          leftActionColor="default"
+          rightAction={this.handleSubscribe}
+          rightActionText="Pay"
+          rightActionColor="primary"
+          onClick={this.openSubscribe}
+          onClose={this.closeSubscribe}
+          />
       </div>
     )
   }
@@ -290,6 +417,7 @@ function loadData(store){
 }
 function mapStateToProps(state){
   return {
+    auth: state.auth,
     user: state.auth.user || false,
     activeMembership: getActiveMembership(state.auth.user.transactions || []),
     discord_guild_member: state.auth.discord_guild_member,
@@ -301,5 +429,16 @@ function mapStateToProps(state){
 
 export default {
   loadData,
-  component: connect(mapStateToProps, {getMyDiscordGuildMember, joinDiscordServer, loadMemberships})(withStyles(chatStyle)(Chat))
+  component: connect(mapStateToProps, {
+    getMyDiscordGuildMember,
+    joinDiscordServer,
+    loadMemberships,
+    toggleCreateSubscriptionOpen,
+    cancelSubscription,
+    toggleCancelSubscriptionOpen,
+    clearCancelSubscription,
+    resumeSubscription,
+    toggleResumeSubscriptionOpen,
+    clearResumeSubscription
+  })(withStyles(chatStyle)(Chat))
 }

@@ -11,9 +11,6 @@ function CustomStepContent({ ...props }) {
       classes={{
         root: classes.contentRoot
       }}
-      TransitionProps={{
-        in: true
-      }}
       {...rest}
       >
       {children}

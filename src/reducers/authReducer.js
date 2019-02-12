@@ -293,6 +293,11 @@ export default function(state = initialState, action) {
         gettingMyDiscordGuildMember: false,
         discord_guild_member: false
       }
+      case types.JOIN_DISCORD_SERVER_SUCCESS:
+        return {
+          ...state,
+          discord_guild_member: action.payload.data.discord_guild_member
+        }
     default:
       return state
   }
