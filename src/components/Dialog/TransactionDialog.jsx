@@ -1,13 +1,14 @@
-import React from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import React from 'react'
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import PaymentMethod from 'components/Stripe/PaymentMethod.jsx'
-import {injectStripe} from 'react-stripe-elements';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import {injectStripe} from 'react-stripe-elements'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import { clearCreateTransaction } from 'actions/authActions'
 
 class TransactionDialog extends React.Component {
   constructor(props){
@@ -19,7 +20,7 @@ class TransactionDialog extends React.Component {
     ev.preventDefault();
   }
   render() {
-    const { loading, loadingMessage, price, successMessage, name, style, open, onClick, onClose, buttonColor, buttonText, title, text} = this.props
+    const { loading, loadingMessage, price, successMessage, errorMessage, name, style, open, onClick, onClose, buttonColor, buttonText, title, text} = this.props
     return (
       <div name={name} style={{...style}}>
         <Dialog
@@ -49,7 +50,7 @@ class TransactionDialog extends React.Component {
           </div>
         ):(
           <div>
-            {!successMessage ? (
+            {(!successMessage && !errorMessage) ? (
               <div>
                 <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
                 <DialogContent style={{paddingBottom: "8px"}}>
@@ -71,17 +72,36 @@ class TransactionDialog extends React.Component {
               </div>
             ):(
               <div>
-                <DialogTitle id="alert-dialog-title">Welcome</DialogTitle>
-                <DialogContent>
-                  <DialogContentText id="alert-dialog-description">
-                    {successMessage}
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={onClose} color="primary">
-                    OK
-                  </Button>
-                </DialogActions>
+                {successMessage && (
+                  <div>
+                    <DialogTitle id="alert-dialog-title">Success!</DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        {successMessage}
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={onClose} color="primary">
+                        OK
+                      </Button>
+                    </DialogActions>
+                  </div>
+                )}
+                {errorMessage && (
+                  <div>
+                    <DialogTitle id="alert-dialog-title">Error!</DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        {errorMessage}
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={onClose} color="primary">
+                        OK
+                      </Button>
+                    </DialogActions>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -92,4 +112,4 @@ class TransactionDialog extends React.Component {
   }
 }
 
-export default TransactionDialog;
+export default TransactionDialog

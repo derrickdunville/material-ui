@@ -14,15 +14,13 @@ import Button from '@material-ui/core/Button'
 import { NavLink } from 'react-router-dom'
 import { withRouter } from "react-router-dom"
 import { getProduct, clearProduct, downloadProduct } from 'actions/productActions'
+import { toggleCreateTransactionOpen, clearCreateTransaction } from 'actions/authActions'
 import TransactionDialog from 'components/Dialog/TransactionDialog.jsx'
 import defaultProductImage from 'assets/img/sidebar-2.jpg'
 
 class Product extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      checkoutOpen: false
-    }
     this.handleCheckout = this.handleCheckout.bind(this)
     this.openCheckout = this.openCheckout.bind(this)
     this.closeCheckout = this.closeCheckout.bind(this)
@@ -37,10 +35,16 @@ class Product extends Component {
     console.log("handle checkout")
   }
   openCheckout(){
-    this.setState({ checkoutOpen: true})
+    this.props.toggleCreateTransactionOpen()
   }
   closeCheckout(){
-    this.setState({ checkoutOpen: false})
+    if(!this.props.auth.creatingTransaction){
+      this.props.toggleCreateTransactionOpen()
+      let pass = this.props
+      setTimeout(function () {
+        pass.clearCreateTransaction()
+      }, 200);
+    }
   }
 
   componentDidMount(){
@@ -102,14 +106,15 @@ class Product extends Component {
             <div style={{width: "100%",  fontSize: "14px", fontWeight: "1"}}>{product.description}</div>
           </div>
           <TransactionDialog
-            loading={false}
+            loading={this.props.auth.creatingTransaction}
             loadingMessage="Processing"
-            successMessage={false}
+            successMessage={this.props.auth.createTransactionSuccessMessage}
+            errorMessage={this.props.auth.createTransactionErrorMessage}
             product={product}
             style={{width: "100%"}}
             buttonText="Buy"
             buttonColor="primary"
-            open={this.state.checkoutOpen}
+            open={this.props.auth.createTransactionOpen}
             title={`${product.name}`}
             text={''}
             leftAction={this.closeCheckout}
@@ -184,10 +189,11 @@ function mapStateToProps(state){
   return {
     product: state.products.product || false,
     myProductIds: extractMyProducts(state.auth.user.transactions || []),
+    auth: state.auth
   }
 }
 
 export default {
   loadData,
-  component: connect(mapStateToProps, { getProduct, clearProduct, downloadProduct })(withStyles(dashboardStyle)(Product))
+  component: connect(mapStateToProps, { getProduct, clearProduct, downloadProduct, toggleCreateTransactionOpen, clearCreateTransaction })(withStyles(dashboardStyle)(Product))
 }

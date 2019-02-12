@@ -2,6 +2,8 @@ import * as types from '../constants/auth-action-types'
 const redirect = encodeURIComponent(process.env.DISCORD_CALLBACK)
 const discord_client_id = process.env.DISCORD_CLIENT_ID
 
+
+// AUTH ACTIONS
 export const fetchCurrentUser = () => async (dispatch, getState, api) => {
   const res = await api.get('/@me')
   dispatch({ type: types.FETCH_CURRENT_USER, payload: res })
@@ -26,6 +28,19 @@ export const loginUser = (history, username, password) => async (dispatch, getSt
       type: types.LOGIN_USER_FAIL,
        payload: error.response
      })
+  }
+}
+export const logout = () => async (dispatch, getState, api) => {
+  try {
+    console.log("logging out")
+    const res = await api.get(`logout`)
+    if(res.status == 200){
+      console.log("redirecting")
+      window.location.href = "/"
+    }
+  } catch (error) {
+    console.dir(error)
+    console.log("error logging out");
   }
 }
 export const signUpUser = (history, email, username, password, confirm_password) => async (dispatch, getState, api) => {
@@ -75,6 +90,7 @@ export const logoutUser = () => async (dispatch, getState, api) => {
   dispatch({ type: types.LOGOUT_USER, payload: res })
 }
 
+// SUBSCRIPTION ACTIONS
 export const toggleCreateSubscriptionOpen = () => async (dispatch, getState, api) => {
   dispatch({type: types.TOGGLE_CREATE_SUBSCRIPTION_OPEN})
 }
@@ -103,7 +119,6 @@ export const cancelSubscription = (subscription_id) => async (dispatch, getState
 export const clearCancelSubscription = () => async (dispatch, getState, api) => {
   dispatch({type: types.CLEAR_CANCEL_SUBSCRIPTION})
 }
-
 export const toggleResumeSubscriptionOpen = () => async (dispatch, getState, api) => {
   dispatch({type: types.TOGGLE_RESUME_SUBSCRIPTION_OPEN})
 }
@@ -120,6 +135,7 @@ export const clearResumeSubscription = () => async (dispatch, getState, api) => 
   dispatch({type: types.CLEAR_RESUME_SUBSCRIPTION})
 }
 
+// PAYMENT METHOD ACTIONS
 export const toggleUpdatePaymentMethodOpen = () => async (dispatch, getState, api) => {
   dispatch({ type: types.TOGGLE_UPDATE_PAYMENT_METHOD_OPEN})
 }
@@ -132,7 +148,6 @@ export const updatePaymentMethod = (token) => async (dispatch, getState, api) =>
     dispatch({ type: types.UPDATE_PAYMENT_METHOD_FAIL, payload: error.response })
   }
 }
-
 export const getPaymentMethod = () => async (dispatch, getState, api) => {
   dispatch({ type: types.GET_PAYMENT_METHOD })
   try {
@@ -142,6 +157,8 @@ export const getPaymentMethod = () => async (dispatch, getState, api) => {
     dispatch({ type: types.GET_PAYMENT_METHOD_FAIL, payload: error.response })
   }
 }
+
+// DISCORD OAUTH ACTIONS
 function openInNewTab(state) {
   console.log("opening new tab")
   var win = window.open(`https://discordapp.com/api/oauth2/authorize?client_id=${discord_client_id}&redirect_uri=${redirect}&state=${state}&response_type=code&scope=identify%20guilds.join`, '_blank')
@@ -171,20 +188,6 @@ export const discordOAuthRevoke = () => async (dispatch, getState, api) => {
     dispatch({ type: types.DISCORD_OAUTH_REVOKE_FAIL, payload: error.response })
   }
 }
-export const logout = () => async (dispatch, getState, api) => {
-  try {
-    console.log("logging out")
-    const res = await api.get(`logout`)
-    if(res.status == 200){
-      console.log("redirecting")
-      window.location.href = "/"
-    }
-  } catch (error) {
-    console.dir(error)
-    console.log("error logging out");
-  }
-}
-
 export const getMyDiscordGuildMember = () => async (dispatch, getState, api) => {
   dispatch({ type: types.GET_MY_DISCORD_GUILD_MEMBER })
   try {
@@ -194,7 +197,6 @@ export const getMyDiscordGuildMember = () => async (dispatch, getState, api) => 
     dispatch({ type: types.GET_MY_DISCORD_GUILD_MEMBER_FAIL, payload: error.response })
   }
 }
-
 export const joinDiscordServer = () => async (dispatch, getState, api) => {
   dispatch({ type: types.JOIN_DISCORD_SERVER })
   try {
@@ -203,4 +205,27 @@ export const joinDiscordServer = () => async (dispatch, getState, api) => {
   } catch (error) {
     dispatch({ type: types.JOIN_DISCORD_SERVER_FAIL, payload: error.response })
   }
+}
+
+// TRANSACTION ACTIONS (one-time products)
+export const toggleCreateTransactionOpen = () => async (dispatch, getState, api) => {
+  dispatch({type: types.TOGGLE_CREATE_TRANSACTION_OPEN})
+}
+export const createTransaction = (transaction) => async (dispatch, getState, api) => {
+  dispatch({ type: types.CREATE_TRANSACTION })
+  try {
+    const res = await api.post(`/transactions/`, transaction)
+    console.dir(res)
+    dispatch({ type: types.CREATE_TRANSACTION_SUCCESS, payload: res })
+  } catch (error) {
+    console.dir(error.response)
+    if(error.response.status == 500){
+      dispatch({ type: types.CREATE_TRANSACTION_FAIL, payload: {data: {err: {message: "Could not connect to server"} }} })
+    } else {
+      dispatch({ type: types.CREATE_TRANSACTION_FAIL, payload: error.response })
+    }
+  }
+}
+export const clearCreateTransaction = () => async (dispatch, getState, api) => {
+  dispatch({type: types.CLEAR_CREATE_TRANSACTION})
 }

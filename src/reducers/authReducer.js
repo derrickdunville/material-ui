@@ -26,7 +26,12 @@ const initialState = {
   resumingSubscriptionFailMessage: false,
 
   editPaymentMethodOpen: false,
-  updatingPaymentMethod: false
+  updatingPaymentMethod: false,
+
+  createTransactionOpen: false,
+  creatingTransaction: false,
+  createTransactionSuccessMessage: false,
+  createTransactionErrorMessage: false
 
 }
 export default function(state = initialState, action) {
@@ -293,17 +298,64 @@ export default function(state = initialState, action) {
         gettingMyDiscordGuildMember: false,
         discord_guild_member: false
       }
-      case types.JOIN_DISCORD_SERVER_SUCCESS:
-        return {
-          ...state,
-          discord_guild_member: action.payload.data.discord_guild_member
-        }
+    case types.JOIN_DISCORD_SERVER_SUCCESS:
+      return {
+        ...state,
+        discord_guild_member: action.payload.data.discord_guild_member
+      }
+    case types.CREATE_TRANSACTION:
+      return {
+        ...state,
+        creatingTransaction: true
+      }
+    case types.TOGGLE_CREATE_TRANSACTION_OPEN:
+      return {
+        ...state,
+        createTransactionOpen: !state.createTransactionOpen,
+      }
+    case types.CREATE_TRANSACTION_SUCCESS:
+      return {
+        ...state,
+        creatingTransaction: false,
+        user: {
+          ...state.user,
+          transactions: [...state.user.transactions, action.payload.data]
+        },
+        createTransactionSuccessMessage: "Transaction successful",
+        createTransactionErrorMessage: false
+      }
+    case types.CREATE_TRANSACTION_FAIL:
+      return {
+        ...state,
+        creatingTransaction: false,
+        createTransactionSuccessMessage: false,
+        createTransactionErrorMessage: action.payload.data.err.message,
+      }
+    case types.CLEAR_CREATE_TRANSACTION:
+      return {
+        ...state,
+        creatingTransaction: false,
+        createTransactionErrorMessage: false,
+        createTransactionSuccessMessage: false,
+      }
     default:
       return state
   }
 }
 
 
+function insertTransaction(transactions, action){
+  return [
+    ...transactions,
+    action.payload.data
+  ]
+}
+function insertSubscription(subscriptions, action){
+  return [
+    ...subscriptions,
+    action.payload.data
+  ]
+}
 function updateSubscription(subscriptions, action) {
     return subscriptions.map( (subscription, index) => {
         if(subscription._id !== action.payload.data._id) {

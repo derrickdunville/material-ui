@@ -6,7 +6,7 @@ import {StripeProvider} from 'react-stripe-elements'
 import { toggleUpdatePaymentMethodOpen } from 'actions/authActions'
 import CreditCardIcon from '@material-ui/icons/CreditCard'
 import Button from '@material-ui/core/Button';
-import { createSubscription } from 'actions/authActions'
+import { createSubscription, createTransaction } from 'actions/authActions'
 import { postTransaction } from 'actions/transactionActions'
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -30,7 +30,7 @@ class PaymentMethod extends Component {
       this.props.createSubscription({ product: this.props.product._id })
     }
     if(this.props.action === "transaction"){
-      this.props.postTransaction({ product: this.props.product._id })
+      this.props.createTransaction({ product: this.props.product._id })
     }
   }
 
@@ -184,4 +184,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { toggleUpdatePaymentMethodOpen, createSubscription, postTransaction })(PaymentMethod)
+export default connect(mapStateToProps, { toggleUpdatePaymentMethodOpen, createSubscription, createTransaction })(PaymentMethod)
