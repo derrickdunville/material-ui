@@ -31,7 +31,11 @@ const initialState = {
   createTransactionOpen: false,
   creatingTransaction: false,
   createTransactionSuccessMessage: false,
-  createTransactionErrorMessage: false
+  createTransactionErrorMessage: false,
+
+  updatingProfile: false,
+  updateProfileSuccessMessage: false,
+  updateProfileFailMessage: false
 
 }
 export default function(state = initialState, action) {
@@ -338,6 +342,33 @@ export default function(state = initialState, action) {
         createTransactionErrorMessage: false,
         createTransactionSuccessMessage: false,
       }
+    case types.UPDATE_PROFILE:
+      return {
+        ...state,
+        updatingProfile: true
+      }
+    case types.UPDATE_PROFILE_SUCCESS:
+      console.log("UPDATE_PROFILE_SUCCESS")
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          avatar: action.payload.data.avatar,
+          username: action.payload.data.username,
+          email: action.payload.data.email
+        },
+        updatingProfile: false,
+        updatingProfileSuccessMessage: "Successfully updated profile",
+        updatingProfileErrorMessage: false,
+      }
+    case types.UPDATE_PROFILE_FAIL:{
+      console.log("UPDATE_PROFILE_FAIL")
+      return {
+        ...state,
+        updatingProfile: false,
+        updatingProfileSuccessMessage: false,
+      }
+    }
     default:
       return state
   }

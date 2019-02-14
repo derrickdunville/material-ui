@@ -65,17 +65,19 @@ class ForgotPasswordPage extends Component {
           ):(
             <div className={classes.authRight}>
               <form onSubmit={this.handleSubmit}>
-                <CustomTextField
-                  id="email-input"
-                  labelText="Email"
-                  inputType="text"
-                  formControlProps={{fullWidth: true}}
-                  inputProps={{
-                    name: 'email',
-                    value: this.state.email,
-                    onChange: this.handleChange
-                  }}
-                />
+                <div style={{marginBottom: "10px"}}>
+                  <CustomTextField
+                    id="email-input"
+                    labelText="Email"
+                    inputType="text"
+                    formControlProps={{fullWidth: true}}
+                    inputProps={{
+                      name: 'email',
+                      value: this.state.email,
+                      onChange: this.handleChange
+                    }}
+                  />
+                </div>
                 {this.props.auth.error && (
                   <div>{this.props.auth.error}</div>
                 )}

@@ -82,6 +82,9 @@ class ProductForm extends Component {
       interval: this.state.interval.toLowerCase(),
       access: this.state.access.toLowerCase(),
     }
+    if(this.state.video_id != '' && this.state.category.toLowerCase() == 'class'){
+      product.video_id = this.state.video_id
+    }
     if(this.state.cover_image !== undefined){
       form_data.append('cover_image', this.state.cover_image)
     }

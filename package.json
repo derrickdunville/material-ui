@@ -50,6 +50,7 @@
     "react-stripe-elements": "^2.0.3",
     "react-swipeable-views": "0.12.15",
     "react-transition-group": "^2.5.2",
+    "react-vimeo": "^2.0.0",
     "redux": "4.0.0",
     "redux-thunk": "2.3.0",
     "save-dev": "2.0.0",

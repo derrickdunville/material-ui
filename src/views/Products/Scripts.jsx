@@ -12,6 +12,8 @@ import ArrowBack from '@material-ui/icons/ArrowBack'
 import { NavLink } from 'react-router-dom'
 import { withRouter } from "react-router-dom"
 import { getProducts, clearProducts } from 'actions/productActions'
+import defaultProductImage from 'assets/img/default_cover_image.jpg'
+
 
 class Scripts extends Component {
   constructor(props) {
@@ -41,7 +43,13 @@ class Scripts extends Component {
             <div key={product._id} style={{marginBottom: "6px"}}>
               <NavLink  to={`/app/scripts/${product._id}`}>
                 <div style={{display: "flex", alignItems: "center", backgroundColor: "#202225", borderRadius: "4px", padding: "10px"}}>
-                  <div style={{width: "60px" , height: "60px" , minWidth: "60px", backgroundColor: "#545454", marginRight: "10px", borderRadius: "4px"}}></div>
+                  <div style={{width: "120px", height: "60px" , minWidth: "100px", backgroundColor: "#545454", marginRight: "10px", borderRadius: "4px"}}>
+                    {product.cover_image != null ? (
+                     <img style={{ width: "100%", borderRadius: "4px", height:"auto"}} src={`https://s3.amazonaws.com/${product.cover_image.bucket}/${product.cover_image.key}`}/>
+                    ):(
+                      <img style={{ width: "100%", borderRadius: "4px", height:"auto"}} src={defaultProductImage}/>
+                    )}
+                  </div>
                   <div style={{width: "100%", marginRight:"10px"}}>{product.name}</div>
                   <div>${(product.amount/100).toFixed(2)}</div>
                 </div>

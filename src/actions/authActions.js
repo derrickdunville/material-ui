@@ -229,3 +229,22 @@ export const createTransaction = (transaction) => async (dispatch, getState, api
 export const clearCreateTransaction = () => async (dispatch, getState, api) => {
   dispatch({type: types.CLEAR_CREATE_TRANSACTION})
 }
+
+// PROFILE
+export const updateProfile = (id, user) => async (dispatch, getState, api) => {
+  dispatch({
+    type: types.UPDATE_PROFILE
+  })
+  try {
+    const res = await api.put(`/users/${id}`, user)
+    dispatch({
+      type: types.UPDATE_PROFILE_SUCCESS,
+      payload: res
+    })
+  } catch (error) {
+    dispatch({
+      type: types.UPDATE_PROFILE_FAIL,
+       payload: error.response
+     })
+  }
+}

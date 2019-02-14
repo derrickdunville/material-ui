@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
-import withStyles from "@material-ui/core/styles/withStyles"
-import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx"
-import Paper from "@material-ui/core/Paper"
-import { parseDate } from "utils/DateUtils"
-import { loadMemberships } from "actions"
+import withStyles from '@material-ui/core/styles/withStyles'
+import dashboardStyle from 'assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx'
+import Paper from '@material-ui/core/Paper'
+import { parseDate } from 'utils/DateUtils'
+import { getActiveMemberships } from 'utils/UserUtils'
+import { loadMemberships } from 'actions'
 import {
   toggleCreateSubscriptionOpen,
   cancelSubscription,
@@ -13,11 +14,14 @@ import {
   clearCancelSubscription,
   resumeSubscription,
   toggleResumeSubscriptionOpen,
-  clearResumeSubscription
-} from "actions/authActions"
-import defaultPic from "assets/img/faces/marc.jpg"
-import AlertDialog from "components/Dialog/AlertDialog.jsx"
-import SubscribeDialog from "components/Dialog/SubscribeDialog.jsx"
+  clearResumeSubscription,
+  toggleCreateTransactionOpen,
+} from 'actions/authActions'
+import defaultPic from 'assets/img/faces/marc.jpg'
+import AlertDialog from 'components/Dialog/AlertDialog.jsx'
+import SubscribeDialog from 'components/Dialog/SubscribeDialog.jsx'
+import TransactionDialog from 'components/Dialog/TransactionDialog.jsx'
+
 import { Elements } from 'react-stripe-elements'
 import Button from '@material-ui/core/Button'
 import PaymentMethod from 'components/Stripe/PaymentMethod.jsx'
@@ -26,7 +30,6 @@ class Billing extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mobileOpen: false,
       openMembership: {},
       cancelMembership: "",
       resumeMembership: "",
@@ -42,6 +45,11 @@ class Billing extends Component {
     this.openResume = this.openResume.bind(this)
     this.closeResume = this.closeResume.bind(this)
     this.handleResume = this.handleResume.bind(this)
+
+    this.openTransaction = this.openTransaction.bind(this)
+    this.closeTransaction = this.closeTransaction.bind(this)
+    this.handleTransaction = this.handleTransaction.bind(this)
+
     this.getOpenProduct = this.getOpenProduct.bind(this)
   }
   componentDidMount() {
@@ -50,6 +58,13 @@ class Billing extends Component {
   }
   componentWillUnmount() {
     this.setState(state => ({ checked: !state.checked }));
+  }
+  openTransaction(event) {
+    this.setState({ openMembership: this.getOpenProduct(event.target.name)}, () =>
+    this.props.toggleCreateTransactionOpen())
+  }
+  closeTransaction() {
+    this.props.toggleCreateTransactionOpen()
   }
   closeSubscribe() {
     this.props.toggleCreateSubscriptionOpen()
@@ -88,6 +103,9 @@ class Billing extends Component {
   handleSubscribe(){
     console.log("handle subscribe")
   }
+  handleTransaction(){
+    console.log("handle transaction")
+  }
   head(){
     return (
       <Helmet>
@@ -96,11 +114,18 @@ class Billing extends Component {
       </Helmet>
     )
   }
-
-  renderSubscriptions(){
+  getOpenProduct(id){
+    for(let i = 0; i < this.props.products.length; ++i){
+      if(this.props.products[i]._id == id){
+        return this.props.products[i]
+      }
+    }
+    return {}
+  }
+  renderActiveMemberships(){
     return (
       <Paper style={{backgroundColor: "#383838", padding: "10px", marginBottom: "10px"}}>
-        {this.props.subscriptions.length == 0 && (
+        {this.props.activeMemberships.length == 0 && (
           <div>No Active Memberships</div>
         )}
         {this.props.subscriptions.map(subscription => (
@@ -109,7 +134,7 @@ class Billing extends Component {
               display: "flex",
               alignItems: "center"
             }}>
-            <div style={{ borderRadius:"4px", height: "70px", minWidth:"70px", width: "60px", backgroundColor: "white", marginRight: "10px"}}></div>
+            <div style={{ borderRadius:"4px", height: "70px", minWidth:"70px", width: "60px", backgroundColor: "#202225", marginRight: "10px"}}></div>
             <div style={{ width: "100%", paddingRight: "10px" }}>
               <div style={{fontSize: "18px", fontWeight: '1'}}>{subscription.product.name}</div>
               {subscription.cancel_at_period_end ? (
@@ -164,6 +189,27 @@ class Billing extends Component {
             </div>
           </div>
         ))}
+        {this.props.activeMemberships.map(transaction => (
+          <div>
+            {transaction.product.interval == "one-time" && (
+              <div key={transaction._id}
+                style={{
+                  display: "flex",
+                  alignItems: "center"
+                }}>
+                <div style={{ borderRadius:"4px", height: "70px", minWidth:"70px", width: "60px", backgroundColor: "#202225", marginRight: "10px"}}></div>
+                <div style={{ width: "100%", paddingRight: "10px" }}>
+                  <div style={{fontSize: "18px", fontWeight: '1'}}>{transaction.product.name}</div>
+                  {transaction.expires_at ? (
+                    <div style={{fontSize: "14px", fontWeight: '1'}}>Expires on {parseDate(transaction.expires_at)}</div>
+                  ):(
+                    <div style={{fontSize: "14px", fontWeight: '1'}}>We are stuck together, forever!</div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
       </Paper>
     )
   }
@@ -204,7 +250,11 @@ class Billing extends Component {
                 </div>
               </div>
               <div>
-                <Button variant="outlined" name={product._id} color="primary" onClick={this.openSubscribe}>Subscribe</Button>
+                {(product.interval == 'month' || product.interval == 'year') ? (
+                  <Button variant="outlined" name={product._id} color="primary" onClick={this.openSubscribe}>Subscribe</Button>
+                ):(
+                  <Button variant="outlined" name={product._id} color="primary" onClick={this.openTransaction}>Buy</Button>
+                )}
               </div>
             </div>
           ))}
@@ -292,23 +342,16 @@ class Billing extends Component {
       </Paper>
     )
   }
-
-  getOpenProduct(id){
-    for(let i = 0; i < this.props.products.length; ++i){
-      if(this.props.products[i]._id == id){
-        return this.props.products[i]
-      }
-    }
-    return {}
-  }
   render(){
+    console.log("activeMemberships: ")
+    console.dir(this.props.activeMemberships)
     const { classes, route, ...rest } = this.props;
     return (
       <div className={`slide${route.zIndex}`}>
         {this.head()}
         <div className={classes.route} ref="mainPanel">
           <div className={classes.content}>
-            {this.renderSubscriptions()}
+            {this.renderActiveMemberships()}
             {this.renderMemberships()}
             {this.renderPaymentMethod()}
             {this.renderTransactions()}
@@ -332,6 +375,27 @@ class Billing extends Component {
               onClick={this.openSubscribe}
               onClose={this.closeSubscribe}
               />
+            <TransactionDialog
+                loading={this.props.auth.creatingTransaction}
+                loadingMessage="Processing..."
+                successMessage={this.props.auth.createTransactionSuccessMessage}
+                errorMessage={this.props.auth.createTransactionErrorMessage}
+                product={this.state.openMembership}
+                style={{width: "100%"}}
+                buttonText="Subscribe"
+                buttonColor="primary"
+                open={this.props.auth.createTransactionOpen}
+                title={`Purchase ${this.state.openMembership.name}`}
+                text={`Thank you for purchasing ${this.state.openMembership.name}. You will not be charged until you click "Pay".`}
+                leftAction={this.closeTransaction}
+                leftActionText="Cancel"
+                leftActionColor="default"
+                rightAction={this.handleTransaction}
+                rightActionText="Pay"
+                rightActionColor="primary"
+                onClick={this.openTransaction}
+                onClose={this.closeTransaction}
+                />
           </div>
         </div>
       </div>
@@ -339,15 +403,16 @@ class Billing extends Component {
   }
 }
 
-function excludeSubscribedToProducts(products, subscriptions){
+
+function excludeActiveProducts(products, transactions){
   let filteredProducts = []
-  if(subscriptions.length > 0){
+  if(transactions.length > 0){
     for(let i = 0; i < products.length; ++i){
       let product = products[i]
       let found = false
-      for(let j = 0; j < subscriptions.length; ++j){
-        let subscription = subscriptions[j]
-        if(product._id == subscription.product._id){
+      for(let j = 0; j < transactions.length; ++j){
+        let transaction = transactions[j]
+        if(product._id == transaction.product._id){
           found = true
           break
         }
@@ -360,10 +425,11 @@ function excludeSubscribedToProducts(products, subscriptions){
 
 function mapStateToProps(state) {
   return {
+    activeMemberships: getActiveMemberships(state.auth.user.transactions),
     cancelOpen: state.subscriptions.cancelOpen,
     transactions: state.auth.user.transactions || [],
     subscriptions: state.auth.user.subscriptions || [],
-    products: excludeSubscribedToProducts(state.app.memberships.docs || [], (state.auth.user.subscriptions || [])) || [],
+    products: excludeActiveProducts(state.app.memberships.docs || [], (state.auth.user.transactions || [])) || [],
     auth: state.auth
   }
 }
@@ -377,6 +443,7 @@ export default {
     clearCancelSubscription,
     resumeSubscription,
     toggleResumeSubscriptionOpen,
-    clearResumeSubscription
+    clearResumeSubscription,
+    toggleCreateTransactionOpen
    })(withStyles(dashboardStyle)(Billing))
 }

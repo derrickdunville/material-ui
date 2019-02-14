@@ -64,50 +64,58 @@ class SignUpPage extends Component {
           <div className={classes.authRight}>
           {this.head()}
           <form onSubmit={this.handleSubmit}>
-            <CustomTextField
-              id="email-input"
-              labelText="Email"
-              inputType="text"
-              formControlProps={{fullWidth: true}}
-              inputProps={{
-                name: 'email',
-                value: this.state.email,
-                onChange: this.handleChange
-              }}
-            />
-            <CustomTextField
-              id="username-input"
-              labelText="Username"
-              inputType="text"
-              formControlProps={{fullWidth: true}}
-              inputProps={{
-                name: 'username',
-                value: this.state.username,
-                onChange: this.handleChange
-              }}
-            />
-            <CustomTextField
-              id="password-input"
-              labelText="Password"
-              inputType="password"
-              formControlProps={{fullWidth: true}}
-              inputProps={{
-                name: 'password',
-                value: this.state.password,
-                onChange: this.handleChange
-              }}
-            />
-            <CustomTextField
-              id="confirm-password-input"
-              labelText="Confirm Password"
-              inputType="password"
-              formControlProps={{fullWidth: true}}
-              inputProps={{
-                name: 'confirm_password',
-                value: this.state.confirm_password,
-                onChange: this.handleChange
-              }}
-            />
+            <div style={{marginBottom: "10px"}}>
+              <CustomTextField
+                id="email-input"
+                labelText="Email"
+                inputType="text"
+                formControlProps={{fullWidth: true}}
+                inputProps={{
+                  name: 'email',
+                  value: this.state.email,
+                  onChange: this.handleChange
+                }}
+              />
+            </div>
+            <div style={{marginBottom: "10px"}}>
+              <CustomTextField
+                id="username-input"
+                labelText="Username"
+                inputType="text"
+                formControlProps={{fullWidth: true}}
+                inputProps={{
+                  name: 'username',
+                  value: this.state.username,
+                  onChange: this.handleChange
+                }}
+              />
+            </div>
+            <div style={{marginBottom: "10px"}}>
+              <CustomTextField
+                id="password-input"
+                labelText="Password"
+                inputType="password"
+                formControlProps={{fullWidth: true}}
+                inputProps={{
+                  name: 'password',
+                  value: this.state.password,
+                  onChange: this.handleChange
+                }}
+              />
+            </div>
+            <div style={{marginBottom: "10px"}}>
+              <CustomTextField
+                id="confirm-password-input"
+                labelText="Confirm Password"
+                inputType="password"
+                formControlProps={{fullWidth: true}}
+                inputProps={{
+                  name: 'confirm_password',
+                  value: this.state.confirm_password,
+                  onChange: this.handleChange
+                }}
+              />
+            </div>
             {this.props.auth.error && (
               <div>{this.props.auth.error}</div>
             )}

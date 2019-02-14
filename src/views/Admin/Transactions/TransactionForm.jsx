@@ -202,7 +202,7 @@ class TransactionForm extends Component {
               name="status"
               renderValue={value => `${value}`}
               input={<CustomOutlinedInput labelWidth={48} name="filter"/>}
-              items={["Complete", "Pending", "Failed", "Refunded"]}
+              items={["Succeeded", "Pending", "Failed", "Refunded"]}
               >
             </CustomSelect>
           </FormControl>

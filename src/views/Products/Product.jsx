@@ -16,7 +16,8 @@ import { withRouter } from "react-router-dom"
 import { getProduct, clearProduct, downloadProduct } from 'actions/productActions'
 import { toggleCreateTransactionOpen, clearCreateTransaction } from 'actions/authActions'
 import TransactionDialog from 'components/Dialog/TransactionDialog.jsx'
-import defaultProductImage from 'assets/img/sidebar-2.jpg'
+import defaultProductImage from 'assets/img/default_cover_image.jpg'
+import Vimeo from 'react-vimeo'
 
 class Product extends Component {
   constructor(props) {
@@ -73,12 +74,37 @@ class Product extends Component {
     return (
       <div>
       {product != false ? (
-        <Paper style={{backgroundColor: "#383838", borderRadius: "4px", padding: "10px", marginBottom: "10px"}}>
+        <Paper style={{backgroundColor: "#383838", borderRadius: "4px", padding: "10px", marginBottom: "10px", maxWidth: "1200px"}}>
           <div style={{width: "100%", borderRadius: "4px"}}>
-            {product.cover_image != null ? (
-             <img style={{ width: "100%", borderRadius: "4px", height:"auto"}} src={`https://s3.amazonaws.com/${product.cover_image.bucket}/${product.cover_image.key}`}/>
+            {(product.category == 'class' && product.video_id) ? (
+              <div style={{width: "100%", paddingBottom: "56.25%", position: "relative"}}>
+                <iframe
+                  style={{
+                    position: "absolute",
+                    top: "0",
+                    bottom: "0",
+                    left:"0",
+                    right:"0"
+                  }}
+                   frameBorder="0"
+                   width="100%"
+                   height="100%"
+                   src={"https://player.vimeo.com/video/"+`${product.video_id}`+"?transparent=0"}
+                   allowFullScreen="true"
+                   webkitallowfullscreen="true"
+                   mozallowfullscreen="true"
+                   borderTopRightRadius="3px"
+                   borderTopLeftRadius="3px"
+                 />
+              </div>
             ):(
-              <img style={{ width: "100%", borderRadius: "4px", height:"auto"}} src={defaultProductImage}/>
+              <div style={{width: "100%"}}>
+                {product.cover_image != null ? (
+                 <img style={{ width: "100%", borderRadius: "4px", height:"auto"}} src={`https://s3.amazonaws.com/${product.cover_image.bucket}/${product.cover_image.key}`}/>
+                ):(
+                  <img style={{ width: "100%", borderRadius: "4px", height:"auto"}} src={defaultProductImage}/>
+                )}
+              </div>
             )}
           </div>
           <div style={{paddingTop: "10px", fontSize: "20px"}}>
@@ -88,7 +114,7 @@ class Product extends Component {
             <div style={{display: "flex", alignItems: "center", height: '37px'}}>
               <div style={{width: "100%", fontSize: "14px", fontWeight: "1"}}>Purchased</div>
               {product.category == "class" ? (
-                <div style={{width: "100px", textAlign: "right", fontSize: "14px", fontWeight: "1",padding:"10px"}}>Watch Above</div>
+                <div style={{minWidth: "86px", textAlign: "right", fontSize: "14px", fontWeight: "1",padding:"10px"}}>Watch Above</div>
               ):(
                 <div>
                   <Button variant="outlined" style={{float: "right"}} color="default" onClick={this.handleDownload}>Download</Button>
@@ -175,6 +201,15 @@ function loadData(store, match){
   return store.dispatch(getProduct(match.params.id))
 }
 
+function extractMyProduct(product, transactions){
+  for(let i = 0; i < transactions.length; ++i){
+    if(transactions[i].status == 'succeeded' && transactions[i].product._id == product._id){
+      return transactions[i].product
+    }
+  }
+  return product
+}
+
 function extractMyProducts(transactions){
   let myProducts = []
   for(let i = 0; i < transactions.length; ++i){
@@ -187,7 +222,7 @@ function extractMyProducts(transactions){
 
 function mapStateToProps(state){
   return {
-    product: state.products.product || false,
+    product: extractMyProduct(state.products.product || false, state.auth.user.transactions || []),
     myProductIds: extractMyProducts(state.auth.user.transactions || []),
     auth: state.auth
   }

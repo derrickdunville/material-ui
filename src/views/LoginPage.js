@@ -71,30 +71,34 @@ class LoginPage extends Component {
           <div className={classes.authRight}>
             {this.head()}
             <form onSubmit={this.handleSubmit}>
-              <CustomTextField
-                id="outlined-username-input"
-                labelText="Username"
-                inputType="text"
-                formControlProps={{fullWidth: true}}
-                inputRef={this.username}
-                inputProps={{
-                  name: 'username',
-                  value: this.state.username,
-                  onChange: this.handleChange
-                }}
-              />
-              <CustomTextField
-                id="outlined-password-input"
-                labelText="Password"
-                inputType="password"
-                formControlProps={{fullWidth: true}}
-                inputProps={{
-                  name: 'password',
-                  type: "password",
-                  value: this.state.password,
-                  onChange: this.handleChange
-                }}
-              />
+              <div style={{marginBottom: "10px"}}>
+                <CustomTextField
+                  id="outlined-username-input"
+                  labelText="Username"
+                  inputType="text"
+                  formControlProps={{fullWidth: true}}
+                  inputRef={this.username}
+                  inputProps={{
+                    name: 'username',
+                    value: this.state.username,
+                    onChange: this.handleChange
+                  }}
+                />
+              </div>
+              <div style={{marginBottom: "10px"}}>
+                <CustomTextField
+                  id="outlined-password-input"
+                  labelText="Password"
+                  inputType="password"
+                  formControlProps={{fullWidth: true}}
+                  inputProps={{
+                    name: 'password',
+                    type: "password",
+                    value: this.state.password,
+                    onChange: this.handleChange
+                  }}
+                />
+              </div>
               {this.props.auth.error && (
                 <div>{this.props.auth.error}</div>
               )}

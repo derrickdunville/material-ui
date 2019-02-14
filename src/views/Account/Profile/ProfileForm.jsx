@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { putUser } from 'actions/userActions'
+import { updateProfile } from 'actions/authActions'
 import Button from "components/CustomButtons/Button.jsx";
 import Paper from "@material-ui/core/Paper"
 import CustomTextField from 'components/CustomTextField/CustomTextField.jsx'
@@ -41,7 +41,7 @@ class ProfileForm extends Component {
     this.setState({ avatar: file, removeAvatar: false })
   }
   handleRemoveAvatar(){
-    this.setState({ removeAvatar: true })
+    this.setState({ avatar: null, removeAvatar: true })
   }
   handleSubmit(event){
     event.preventDefault()
@@ -59,7 +59,7 @@ class ProfileForm extends Component {
       form_data.append('avatar', this.state.avatar)
     }
     form_data.append('user', JSON.stringify(user))
-    this.props.putUser(this.state.id, form_data)
+    this.props.updateProfile(this.state.id, form_data)
   }
 
   render(){
@@ -154,4 +154,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { putUser })(withStyles(formStyle)(ProfileForm))
+export default connect(mapStateToProps, { updateProfile })(withStyles(formStyle)(ProfileForm))

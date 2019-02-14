@@ -32,7 +32,9 @@ class Discord extends Component {
            padding: "10px",
            height: "60px"
          }}>
-        <img style={{width: "50px", height:"50px", marginRight: "10px"}} src={discord_icon}/>
+         <div style={{minWidth: "60px", height: "60px", marginLeft: "-3px", marginRight: '10px'}}>
+           <img style={{width: "60px", height:"60px"}} src={discord_icon}/>
+        </div>
         <div style={{width: "100%"}}>
           {this.props.discordUsername != null ? (
             <div>{this.props.discordUsername}#{this.props.discordDiscriminator}</div>

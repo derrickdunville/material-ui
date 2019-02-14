@@ -16,7 +16,7 @@ import { getMyDiscordGuildMember, joinDiscordServer } from 'actions/authActions'
 import Discord from 'views/Account/Connections/Discord.jsx'
 import Button from '@material-ui/core/Button'
 import { parseDate } from 'utils/DateUtils'
-
+import { getActiveMemberships } from 'utils/UserUtils'
 import Stepper from 'components/Stepper/CustomStepper.jsx'
 import Step from 'components/Stepper/CustomStep.jsx'
 import StepLabel from 'components/Stepper/CustomStepLabel.jsx'
@@ -24,16 +24,12 @@ import StepContent from 'components/Stepper/CustomStepContent.jsx'
 import Paper from '@material-ui/core/Paper'
 import logo from "assets/img/reactlogo.png";
 import SubscribeDialog from "components/Dialog/SubscribeDialog.jsx"
+import TransactionDialog from 'components/Dialog/TransactionDialog.jsx'
 
 import { loadMemberships } from 'actions'
 import {
   toggleCreateSubscriptionOpen,
-  cancelSubscription,
-  toggleCancelSubscriptionOpen,
-  clearCancelSubscription,
-  resumeSubscription,
-  toggleResumeSubscriptionOpen,
-  clearResumeSubscription
+  toggleCreateTransactionOpen,
 } from "actions/authActions"
 
 class Chat extends Component {
@@ -50,6 +46,11 @@ class Chat extends Component {
     this.openSubscribe = this.openSubscribe.bind(this)
     this.closeSubscribe = this.closeSubscribe.bind(this)
     this.getOpenProduct = this.getOpenProduct.bind(this)
+    this.goToChat = this.goToChat.bind(this)
+    this.openTransaction = this.openTransaction.bind(this)
+    this.closeTransaction = this.closeTransaction.bind(this)
+    this.handleTransaction = this.handleTransaction.bind(this)
+
   }
 
   componentDidMount(){
@@ -64,12 +65,16 @@ class Chat extends Component {
     // tries to get the discord_guild_member after connecting discord account
     // this is an edge case for when a user is currently in the discord server before connecting
     if(!prevProps.discordUsername && this.props.discordUsername != false){
-      this.props.getDiscordGuildMember()
+      this.props.getMyDiscordGuildMember()
     }
   }
 
   componentWillUnmount(){
 
+  }
+  goToChat(){
+    let url = `https://discordapp.com/channels/${process.env.DISCORD_GUILD_ID}/${process.env.DISCORD_WELCOME_CHANNEL_ID}`
+    window.open(url,'_blank');
   }
   joinServer(){
     this.props.joinDiscordServer()
@@ -81,6 +86,16 @@ class Chat extends Component {
     console.log("name: ", event.target.name)
     this.setState({ openMembership: this.getOpenProduct(event.target.name)}, () =>
     this.props.toggleCreateSubscriptionOpen())
+  }
+  openTransaction(event) {
+    this.setState({ openMembership: this.getOpenProduct(event.target.name)}, () =>
+    this.props.toggleCreateTransactionOpen())
+  }
+  closeTransaction() {
+    this.props.toggleCreateTransactionOpen()
+  }
+  handleTransaction(){
+    console.log("handle transaction")
   }
   getOpenProduct(id){
     console.log("getting open product")
@@ -104,6 +119,25 @@ class Chat extends Component {
         <meta property="og:title" content="Chat"/>
       </Helmet>
     )
+  }
+  getActiveStep(){
+    let active = 0
+    if(this.props.user){
+      active = 1
+    }
+    if(this.props.activeMemberships.length > 0){
+      active = 2
+    }
+    if(this.props.discordUsername){
+      active = 3
+    }
+    if(this.props.discord_guild_member){
+      active = 4
+    }
+    if(this.props.activeMemberships.length == 0){
+      active = 1
+    }
+    return active
   }
   renderAboutChat(){
     return (
@@ -139,25 +173,6 @@ class Chat extends Component {
 
       </div>
     )
-  }
-  getActiveStep(){
-    let active = 0
-    if(this.props.user){
-      active = 1
-    }
-    if(this.props.activeMembership){
-      active = 2
-    }
-    if(this.props.discordUsername){
-      active = 3
-    }
-    if(this.props.discord_guild_member){
-      active = 4
-    }
-    if(this.props.activeMembership == false){
-      active = 1
-    }
-    return active
   }
   renderAccount(){
     return (
@@ -232,7 +247,11 @@ class Chat extends Component {
                 </div>
               </div>
               <div>
-                <Button variant="outlined" name={membership._id} color="primary" onClick={this.openSubscribe}>Subscribe</Button>
+                {(membership.interval == 'month' || membership.interval == 'year') ? (
+                  <Button variant="outlined" name={membership._id} color="primary" onClick={this.openSubscribe}>Subscribe</Button>
+                ):(
+                  <Button variant="outlined" name={membership._id} color="primary" onClick={this.openTransaction}>Buy</Button>
+                )}
               </div>
             </div>
           ))}
@@ -285,9 +304,7 @@ class Chat extends Component {
                 <div style={{fontSize: "14px", fontWeight: "1"}}>Joined {parseDate(this.props.discord_guild_member.joined_at)}</div>
               </div>
               <div style={{minWidth: "120px"}}>
-                <Button variant="outlined" color="primary">
-                  Go To Chat
-                </Button>
+                <Button color="primary" variant="outlined" onClick={this.goToChat}>Go To Chat</Button>
               </div>
             </div>
           </div>
@@ -299,7 +316,7 @@ class Chat extends Component {
   render(){
     const { classes, title, route, ...rest } = this.props;
     console.log("render chat")
-    console.log("has active membership: ", this.props.activeMembership)
+    console.log("has active membership: ", this.props.activeMemberships)
     return (
       <div className={`slide${route.zIndex}`}>
         {this.head()}
@@ -307,7 +324,7 @@ class Chat extends Component {
           <div style={{marginBottom: "10px"}}>
             {this.renderAboutChat()}
             <Paper style={{backgroundColor: "#383838", padding: "10px", marginBottom: "10px"}}>
-              {(!this.props.discord_guild_member || !this.props.activeMembership)  ? (
+              {(!this.props.discord_guild_member || this.props.activeMemberships.length == 0)  ? (
                 <div style={{padding: "10px"}}>
                   <div style={{fontSize: "22px", fontWeight: "1"}}>Join Our Discord</div>
                   <div style={{paddingTop: "10px", paddingBottom: "10px"}}>
@@ -382,44 +399,43 @@ class Chat extends Component {
           onClick={this.openSubscribe}
           onClose={this.closeSubscribe}
           />
+        <TransactionDialog
+            loading={this.props.auth.creatingTransaction}
+            loadingMessage="Processing..."
+            successMessage={this.props.auth.createTransactionSuccessMessage}
+            errorMessage={this.props.auth.createTransactionErrorMessage}
+            product={this.state.openMembership}
+            style={{width: "100%"}}
+            buttonText="Subscribe"
+            buttonColor="primary"
+            open={this.props.auth.createTransactionOpen}
+            title={`Purchase ${this.state.openMembership.name}`}
+            text={`Thank you for purchasing ${this.state.openMembership.name}. You will not be charged until you click "Pay".`}
+            leftAction={this.closeTransaction}
+            leftActionText="Cancel"
+            leftActionColor="default"
+            rightAction={this.handleTransaction}
+            rightActionText="Pay"
+            rightActionColor="primary"
+            onClick={this.openTransaction}
+            onClose={this.closeTransaction}
+            />
       </div>
     )
   }
 }
 
-function getActiveMembership(transactions){
-  for(let i = 0; i < transactions.length; ++i){
-    let transaction = transactions[i]
-    if(transaction.product.category == 'membership' && transaction.status == 'succeeded'){
-      console.dir(transaction)
-      if(transaction.expires_at == null){
-        return transaction
-      } else {
-        //check the expiration date
-        let expires = new Date(transaction.expires_at)
-        console.log("expires at: ", expires)
-        let now = new Date()
-        console.log("now: ", now)
-        if(expires > now){
-          console.log("not expired")
-          return transaction
-        } else {
-          console.log("expired")
-        }
-      }
-    }
-  }
-  return false
-}
+
 function loadData(store){
   return store.dispatch(getMyDiscordGuildMember()).
     then(()=>store.dispatch(loadMemberships()))
 }
+
 function mapStateToProps(state){
   return {
     auth: state.auth,
     user: state.auth.user || false,
-    activeMembership: getActiveMembership(state.auth.user.transactions || []),
+    activeMemberships: getActiveMemberships(state.auth.user.transactions || []),
     discord_guild_member: state.auth.discord_guild_member,
     discordUsername: state.auth.user.discordUsername || false,
     discordDiscriminator: state.auth.user.discordDiscriminator || false,
@@ -434,11 +450,6 @@ export default {
     joinDiscordServer,
     loadMemberships,
     toggleCreateSubscriptionOpen,
-    cancelSubscription,
-    toggleCancelSubscriptionOpen,
-    clearCancelSubscription,
-    resumeSubscription,
-    toggleResumeSubscriptionOpen,
-    clearResumeSubscription
+    toggleCreateTransactionOpen
   })(withStyles(chatStyle)(Chat))
 }

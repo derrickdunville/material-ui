@@ -63,7 +63,7 @@ class Avatar extends Component {
   handleRemove(event) {
     this.setState({
       file: '',
-      image_url: getImageUrl(this.props.current)
+      image_url: null
     })
     this.props.onRemove()
   }

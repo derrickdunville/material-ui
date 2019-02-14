@@ -8,17 +8,17 @@ import ProfileForm from './Profile/ProfileForm.jsx'
 class Profile extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      mobileOpen: false
-    };
   }
 
   head(){
     return (
-      <Helmet>
-        <title>{`Profile`}</title>
-        <meta property="og:title" content="Profile"/>
-      </Helmet>
+      <Helmet key={this.props.location}
+        title={"Profile"}
+        meta={[
+          {
+            name: "Profile"
+          }
+        ]}/>
     )
   }
 

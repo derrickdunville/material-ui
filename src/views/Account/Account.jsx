@@ -21,10 +21,13 @@ class Account extends Component {
   }
   head(){
     return (
-      <Helmet>
-        <title>{`Account`}</title>
-        <meta property="og:title" content="Account"/>
-      </Helmet>
+      <Helmet key={this.props.location}
+        title={"Account"}
+        meta={[
+          {
+            name: "Account"
+          }
+        ]}/>
     )
   }
 
@@ -69,7 +72,10 @@ class Account extends Component {
   }
 }
 function mapStateToProps(state){
-  return {}
+  return {
+    username: state.auth.user.username,
+    avatar: state.auth.user.avatar || null
+  }
 }
 
 export default {

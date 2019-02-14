@@ -20,10 +20,13 @@ class AppPage extends Component {
   }
   head(){
     return (
-      <Helmet>
-        <title>WTF</title>
-        <meta property="og:title" content='wtf'/>
-      </Helmet>
+      <Helmet
+        title={"App Page"}
+        meta={[
+          {
+            name: "App Page"
+          }
+        ]}/>
     )
   }
   render(){

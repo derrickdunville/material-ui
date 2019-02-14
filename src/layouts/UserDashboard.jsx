@@ -44,6 +44,7 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 import requireAuth from 'components/hocs/requireAuth'
 import MobileSidebar from 'components/Sidebar/MobileSidebar.jsx'
+import Avatar from 'components/Avatar/Avatar.jsx'
 
 function getPathDepth (location) {
   // console.log("pathDepth: ", (location || {} ).pathname.split('/').length)
@@ -55,7 +56,6 @@ class UserDashboard extends React.Component {
     super(props);
     this.state = {
       left: false,
-      mobile: true,
       prevDepth: getPathDepth(props.location),
       prevPath: props.location.pathname,
     }
@@ -63,7 +63,6 @@ class UserDashboard extends React.Component {
     this.handleOpenNav = this.handleOpenNav.bind(this)
     this.handleSidebar = this.handleSidebar.bind(this)
     this.getClassName = this.getClassName.bind(this)
-    this.resizeFunction = this.resizeFunction.bind(this)
     this.getTransitionTimeout = this.getTransitionTimeout.bind(this)
     this.sidebar = React.createRef()
     this.wrapper = React.createRef()
@@ -77,29 +76,14 @@ class UserDashboard extends React.Component {
     } else {
       this.props.history.replace(`${this.props.location.pathname}`)
     }
-    // this causes a render immediatly which helps the sidebar get into its correct parent component
-    if(window.innerWidth >= 960){
-      this.setState({ mobile: false})
-    } else {
-      this.setState({ mobile: true})
-    }
-     window.addEventListener("resize", this.resizeFunction);
   }
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.resizeFunction);
-  }
+
   componentWillReceiveProps () {
     window.previousLocation = this.props.location
     this.setState({ prevDepth: getPathDepth(this.props.location) })
     this.setState({ prevPath: this.props.location.pathname })
   }
-  resizeFunction() {
-    if (window.innerWidth >= 960 && this.state.mobile) {
-      this.setState({ mobile: false })
-    } else if(window.innerWidth < 960 && !this.state.mobile) {
-      this.setState({ mobile: true})
-    }
-  }
+
   handleSidebar(){
     return
   }
@@ -137,7 +121,7 @@ class UserDashboard extends React.Component {
 
   render() {
     const { classes, route, ...rest } = this.props;
-    console.log("render UserDashboard")
+    console.log("render UserDashboard 1")
     const switchRoutes = (
       <Switch location={this.props.location}>
         {this.props.route.routes.map((prop, key) => {
@@ -185,22 +169,14 @@ class UserDashboard extends React.Component {
             className={classes.logoLink}
             activeClassName="active"
             style={{width: "100%"}}>
-            <div className={classes.logoImage} style={{color: "#FFFFFF", display: 'flex', alignItems: "center", padding:"10px", height: "56px" }}>
-              {this.props.user.avatar != null ? (
-                <img src={`https://s3.amazonaws.com/${this.props.user.avatar.bucket}/${this.props.user.avatar.key}`} className={classes.img} style={{width: "50px", height: "50px", borderRadius: "4px"}}/>
-              ):(
-                <img src={logo} className={classes.img} style={{width: "50px", height: "50px", borderRadius: "4px"}}/>
-              )}
-
-              <div style={{marginLeft: "10px", paddingRight: "10px", flex: '1'}}>{this.props.user.username}</div>
-            </div>
+            <Avatar />
           </NavLink>
           <NavLink to={'/app/account/'}
             className={classes.logoLink}
             style={{alignItems: "center", display: "flex", color: "#FFFFFF"}}>
             <SettingsIcon style={{float: 'right', padding: '10px'}}/>
           </NavLink>
-          {this.props.user.roles.includes("admin") && (
+          {this.props.roles.includes("admin") && (
             <NavLink to={'/admin/'} style={{alignItems: "center", display: "flex", color: "#FFFFFF"}}>
               <GavelIcon style={{float: 'right', padding: '10px'}} />
             </NavLink>
@@ -261,7 +237,7 @@ UserDashboard.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    user: state.auth.user
+    roles: state.auth.user.roles || []
   }
 }
 export default {

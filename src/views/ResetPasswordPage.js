@@ -64,17 +64,19 @@ class ResetPasswordPage extends Component {
               ):(
                 <div className={classes.authRight}>
                   <form onSubmit={this.handleSubmit}>
-                    <CustomTextField
-                      id="new-password-input"
-                      labelText="New Password"
-                      inputType="password"
-                      formControlProps={{fullWidth: true}}
-                      inputProps={{
-                        name: 'new_password',
-                        value: this.state.new_password,
-                        onChange: this.handleChange
-                      }}
-                    />
+                    <div style={{marginBottom: "10px"}}>
+                      <CustomTextField
+                        id="new-password-input"
+                        labelText="New Password"
+                        inputType="password"
+                        formControlProps={{fullWidth: true}}
+                        inputProps={{
+                          name: 'new_password',
+                          value: this.state.new_password,
+                          onChange: this.handleChange
+                        }}
+                      />
+                    </div>
                     <Button style={{width: '100%', height: '50px'}} color="primary" type="submit" onClick={this.handleSubmit}>Submit</Button>
                   </form>
                 </div>
