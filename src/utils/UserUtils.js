@@ -16,6 +16,5 @@ export function getActiveMemberships(transactions){
       }
     }
   }
-  console.log("seess shoulda be wida sum syze homie", activeMemberships.length)
   return activeMemberships
 }

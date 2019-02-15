@@ -20,13 +20,13 @@ class Socket extends Component {
     const { dispatch } = this.props;
     if(this.props.user){
       console.log("Signed in... joining my socket")
-      // socket.emit("JOIN_ME", this.props.user._id)
-      // socket.on("ME_UPDATED", user => {
-      //   console.log("ME_UPDATED")
-      //   console.dir(user)
-      //   // this just relogs in the user, so the entire auth.user is reloaded
-      //   dispatch(authActions.loadAuth())
-      // })
+      socket.emit("JOIN_ME", this.props.user._id)
+      socket.on("ME_UPDATED", user => {
+        console.log("ME_UPDATED")
+        console.dir(user)
+        // this just relogs in the user, so the entire auth.user is reloaded
+        dispatch(authActions.fetchCurrentUser())
+      })
     }
   }
 
@@ -37,9 +37,6 @@ class Socket extends Component {
     if(prevProps.user && !this.props.user){
       socket.emit("LEAVE_ME", prevProps.user._id)
     }
-
-    console.log("prevProps: ", prevProps.user)
-    console.log("props: ", this.props.user)
     if(!prevProps.user && this.props.user){
       console.log("Signed in... joining my socket")
       socket.emit("JOIN_ME", this.props.user._id)

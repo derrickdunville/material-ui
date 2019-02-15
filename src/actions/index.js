@@ -64,7 +64,7 @@ export const closeAdminNav = () => async (dispatch, getState, api) => {
 export const LOAD_MEMBERSHIPS = "LOAD_MEMBERSHIPS"
 export const LOAD_MEMBERSHIPS_SUCCESS = "LOAD_MEMBERSHIPS_SUCCESS"
 export const LOAD_MEMBERSHIPS_FAIL = "LOAD_MEMBERSHIPS_FAIL"
-export const loadMemberships = (order="asc", orderBy="name") => async (dispatch, getState, api) => {
+export const loadMemberships = (order="asc", orderBy="amount") => async (dispatch, getState, api) => {
   dispatch({
     type: LOAD_MEMBERSHIPS
   })

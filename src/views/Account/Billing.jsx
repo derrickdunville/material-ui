@@ -16,6 +16,7 @@ import {
   toggleResumeSubscriptionOpen,
   clearResumeSubscription,
   toggleCreateTransactionOpen,
+  clearCreateTransaction,
 } from 'actions/authActions'
 import defaultPic from 'assets/img/faces/marc.jpg'
 import AlertDialog from 'components/Dialog/AlertDialog.jsx'
@@ -64,7 +65,11 @@ class Billing extends Component {
     this.props.toggleCreateTransactionOpen())
   }
   closeTransaction() {
-    this.props.toggleCreateTransactionOpen()
+    this.setState({ openMembership: "" }, () => this.props.toggleCreateTransactionOpen())
+    let props2 = this.props
+    setTimeout(function () {
+      props2.clearCreateTransaction()
+    }, 250);
   }
   closeSubscribe() {
     this.props.toggleCreateSubscriptionOpen()
@@ -125,7 +130,7 @@ class Billing extends Component {
   renderActiveMemberships(){
     return (
       <Paper style={{backgroundColor: "#383838", padding: "10px", marginBottom: "10px"}}>
-        {this.props.activeMemberships.length == 0 && (
+        {(this.props.activeMemberships.length == 0 && this.props.subscriptions.lnegth == 0) && (
           <div>No Active Memberships</div>
         )}
         {this.props.subscriptions.map(subscription => (
@@ -216,7 +221,7 @@ class Billing extends Component {
   renderMemberships(){
     return (
       <div>
-      {this.props.products.length != 0 ? (
+      {this.props.products.length != 0 && !hasMembershipWithNoExpiration(this.props.activeMemberships) ? (
         <Paper style={{backgroundColor: "#383838", padding: "10px", marginBottom: "10px"}}>
           <div style={{marginBottom: "10px"}}>Memberships</div>
           {this.props.products.length == 0 && (
@@ -253,7 +258,13 @@ class Billing extends Component {
                 {(product.interval == 'month' || product.interval == 'year') ? (
                   <Button variant="outlined" name={product._id} color="primary" onClick={this.openSubscribe}>Subscribe</Button>
                 ):(
-                  <Button variant="outlined" name={product._id} color="primary" onClick={this.openTransaction}>Buy</Button>
+                  <div>
+                    {product.amount == 0 ? (
+                      <Button variant="outlined" name={product._id} color="primary" onClick={this.openTransaction}>Use</Button>
+                    ):(
+                      <Button variant="outlined" name={product._id} color="primary" onClick={this.openTransaction}>Buy</Button>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
@@ -343,8 +354,6 @@ class Billing extends Component {
     )
   }
   render(){
-    console.log("activeMemberships: ")
-    console.dir(this.props.activeMemberships)
     const { classes, route, ...rest } = this.props;
     return (
       <div className={`slide${route.zIndex}`}>
@@ -422,7 +431,14 @@ function excludeActiveProducts(products, transactions){
   } else {return products}
   return filteredProducts
 }
-
+function hasMembershipWithNoExpiration(activeMemberships){
+  for(let i = 0; i < activeMemberships.length; ++i){
+    if(activeMemberships[i].expires_at == null){
+      return true
+    }
+  }
+  return false
+}
 function mapStateToProps(state) {
   return {
     activeMemberships: getActiveMemberships(state.auth.user.transactions),
@@ -444,6 +460,7 @@ export default {
     resumeSubscription,
     toggleResumeSubscriptionOpen,
     clearResumeSubscription,
-    toggleCreateTransactionOpen
+    toggleCreateTransactionOpen,
+    clearCreateTransaction
    })(withStyles(dashboardStyle)(Billing))
 }
