@@ -212,6 +212,7 @@ class Chat extends Component {
     )
   }
   renderMemberships(){
+    const { classes } = this.props
     return (
       <div>
       {this.props.memberships ? (
@@ -221,36 +222,26 @@ class Chat extends Component {
           )}
           {this.props.memberships.docs.map(membership => (
             <div key={membership._id}
-              style={{
-                display: "flex",
-                height: "80px",
-                alignItems: "center",
-                backgroundColor: "#202225",
-                marginBottom: "10px",
-                borderRadius: "4px",
-                paddingLeft: "10px",
-                paddingRight: "10px"
-              }}>
-              <div style={{
-                  height: "60px",
-                  width: "60px",
-                  marginRight: "10px"
-                }}>
-                <img src={logo} style={{width: "60px", height: "60px"}}/>
-              </div>
-              <div style={{width: "100%"}}>
-                <div style={{fontSize: '18px', fontWeight: '1'}}>
-                {membership.name}
+              className={classes.membershipContainer}
+              >
+              <div className={classes.membershipDetails}>
+                <div className={classes.membershipIcon}>
+                  <img src={logo} style={{width: "60px", height: "60px"}}/>
                 </div>
-                <div style={{fontSize: '15px'}}>
-                  ${(membership.amount/100).toFixed(2)} {membership.interval}
+                <div  className={classes.membershipName}>
+                  <div style={{fontSize: '18px', fontWeight: '1'}}>
+                  {membership.name}
+                  </div>
+                  <div style={{fontSize: '15px'}}>
+                    ${(membership.amount/100).toFixed(2)} {membership.interval}
+                  </div>
                 </div>
               </div>
-              <div>
+              <div className={classes.membershipButtonContainer}>
                 {(membership.interval == 'month' || membership.interval == 'year') ? (
-                  <Button variant="outlined" name={membership._id} color="primary" onClick={this.openSubscribe}>Subscribe</Button>
+                  <Button className={classes.membershipButton} variant="outlined" name={membership._id} color="primary" onClick={this.openSubscribe}>Subscribe</Button>
                 ):(
-                  <Button variant="outlined" name={membership._id} color="primary" onClick={this.openTransaction}>Buy</Button>
+                  <Button className={classes.membershipButton} variant="outlined" name={membership._id} color="primary" onClick={this.openTransaction}>Buy</Button>
                 )}
               </div>
             </div>
@@ -288,23 +279,27 @@ class Chat extends Component {
     )
   }
   renderGuildMemberhsip(){
+    const { classes } = this.props
     return (
       <div>
         {this.props.discord_guild_member && (
-          <div style={{padding: "10px"}}>
+          <div style={{padding: "10px", paddingBottom: "0px"}}>
             <div style={{fontSize: "22px", fontWeight: "1"}}>Success!</div>
             <div style={{paddingTop: "10px", paddingBottom: "10px"}}>
               You are currently in the discord server. Head on over there when you are ready to get to chatting with the team.
             </div>
-            <div style={{display:"flex", alignItems: "center", borderRadius: "4px", backgroundColor: "#202225", padding: "10px"}}>
-              <div style={{wdith: "50px", height: "50px", minWidth: "50px", marginRight: '10px'}}>
+            <div className={classes.membershipContainer}>
+              <div className={classes.membershipDetails}>
+                <div className={classes.membershipIcon}>
+                  <img className={classes.discordAvatar} src={`https://cdn.discordapp.com/avatars/${this.props.discord_guild_member.user.id}/${this.props.discord_guild_member.user.avatar}.png`}/>
+                </div>
+                <div style={{width: "100%", lineHeight: "1.2", marginRight: "10px"}}>
+                  <div>{this.props.discord_guild_member.user.username}#{this.props.discord_guild_member.user.discriminator}</div>
+                  <div style={{fontSize: "14px", fontWeight: "1"}}>Joined {parseDate(this.props.discord_guild_member.joined_at)}</div>
+                </div>
               </div>
-              <div style={{width: "100%", lineHeight: "1.2", marginRight: "10px"}}>
-                <div>{this.props.discord_guild_member.user.username}#{this.props.discord_guild_member.user.discriminator}</div>
-                <div style={{fontSize: "14px", fontWeight: "1"}}>Joined {parseDate(this.props.discord_guild_member.joined_at)}</div>
-              </div>
-              <div style={{minWidth: "120px"}}>
-                <Button color="primary" variant="outlined" onClick={this.goToChat}>Go To Chat</Button>
+              <div className={classes.membershipButtonContainer}>
+                <Button className={classes.membershipButton} color="primary" variant="outlined" onClick={this.goToChat}>Go To Chat</Button>
               </div>
             </div>
           </div>

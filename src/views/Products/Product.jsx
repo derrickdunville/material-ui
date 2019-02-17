@@ -70,7 +70,7 @@ class Product extends Component {
 
 
   renderProduct(){
-    const { product } = this.props
+    const { product, classes } = this.props
     return (
       <div>
       {product != false ? (
@@ -98,21 +98,21 @@ class Product extends Component {
                  />
               </div>
             ):(
-              <div style={{width: "100%"}}>
+              <div className={classes.productCoverImage}>
                 {product.cover_image != null ? (
-                 <img style={{ width: "100%", borderRadius: "4px", height:"auto"}} src={`https://s3.amazonaws.com/${product.cover_image.bucket}/${product.cover_image.key}`}/>
+                 <img className={classes.productCoverImage} src={`https://s3.amazonaws.com/${product.cover_image.bucket}/${product.cover_image.key}`}/>
                 ):(
-                  <img style={{ width: "100%", borderRadius: "4px", height:"auto"}} src={defaultProductImage}/>
+                  <img className={classes.productCoverImage} src={defaultProductImage}/>
                 )}
               </div>
             )}
           </div>
-          <div style={{paddingTop: "10px", fontSize: "20px"}}>
+          <div style={{paddingTop: "10px", paddingBottom: "10px", fontSize: "20px"}}>
             {product.name}
           </div>
           {this.props.myProductIds.includes(product._id) ? (
-            <div style={{display: "flex", alignItems: "center", height: '37px'}}>
-              <div style={{width: "100%", fontSize: "14px", fontWeight: "1"}}>Purchased</div>
+            <div className="hello" style={{display: "flex", alignItems: "center", height: '37px'}}>
+              <div style={{width: "100%", fontSize: "16px", fontWeight: "1"}}>Purchased</div>
               {product.category == "class" ? (
                 <div style={{minWidth: "86px", textAlign: "right", fontSize: "14px", fontWeight: "1",padding:"10px"}}>Watch Above</div>
               ):(
@@ -123,12 +123,12 @@ class Product extends Component {
             </div>
           ):(
             <div style={{display: "flex", alignItems: "center"}}>
-              <div style={{width: "100%", fontSize: "14px", fontWeight: "1"}}>${(product.amount/100).toFixed(2)}</div>
+              <div style={{width: "100%", fontSize: "16px", fontWeight: "1"}}>${(product.amount/100).toFixed(2)}</div>
               <Button variant="outlined" style={{float: "right"}} color="default" onClick={this.openCheckout}>Buy</Button>
             </div>
           )}
-          <div>
-            <div style={{width: "100%",  fontSize: "16px", fontWeight: "1"}}>Description</div>
+          <div style={{marginTop: "10px"}}>
+            <div style={{width: "100%",  fontSize: "18px", fontWeight: "1"}}>Description</div>
             <div style={{width: "100%",  fontSize: "14px", fontWeight: "1"}}>{product.description}</div>
           </div>
           <TransactionDialog
@@ -176,7 +176,7 @@ class Product extends Component {
               <ArrowBack />
             </IconButton>
           </NavLink>
-          <Typography variant="title" color="inherit">
+          <Typography style={{whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} variant="title" color="inherit">
             {this.props.product.name}
           </Typography>
         </Toolbar>
@@ -184,11 +184,13 @@ class Product extends Component {
     )
     console.log("render Product")
     return (
-      <div className={`admin-slide${route.zIndex}`}>
+      <div>
         {this.head()}
         {appBar}
-        <div className={classes.content}>
-          {this.renderProduct()}
+        <div className={`slide${route.zIndex}`}>
+          <div className={classes.content}>
+            {this.renderProduct()}
+          </div>
         </div>
       </div>
     )

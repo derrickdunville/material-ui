@@ -13,6 +13,7 @@ import { NavLink } from 'react-router-dom'
 import { withRouter } from "react-router-dom"
 import { getProducts, clearProducts } from 'actions/productActions'
 import defaultProductImage from 'assets/img/default_cover_image.jpg'
+import Paper from '@material-ui/core/Paper'
 
 class Scanners extends Component {
   constructor(props) {
@@ -35,6 +36,7 @@ class Scanners extends Component {
     )
   }
   renderScanners(){
+    const { classes } = this.props
     return (
       <div>
         {this.props.products.length == 0 && (
@@ -42,21 +44,23 @@ class Scanners extends Component {
         )}
         {this.props.products.map(product => {
           return (
-            <div key={product._id} style={{marginBottom: "6px"}}>
-              <NavLink  to={`/app/scanners/${product._id}`}>
-                <div style={{display: "flex", alignItems: "center", backgroundColor: "#202225", borderRadius: "4px", padding: "10px"}}>
-                  <div style={{width: "60px" , height: "60px" , minWidth: "60px", backgroundColor: "#545454", marginRight: "10px", borderRadius: "4px"}}>
-                    {product.cover_image != null ? (
-                     <img style={{ width: "100%", borderRadius: "4px", height:"auto"}} src={`https://s3.amazonaws.com/${product.cover_image.bucket}/${product.cover_image.key}`}/>
-                    ):(
-                      <img style={{ width: "100%", borderRadius: "4px", height:"auto"}} src={defaultProductImage}/>
-                    )}
+            <NavLink key={product._id} to={`/app/classes/${product._id}`} style={{marginBottom: "6px"}}>
+              <Paper className={classes.productContainer}>
+                {product.cover_image != null ? (
+                 <img className={classes.productImage} src={`https://s3.amazonaws.com/${product.cover_image.bucket}/${product.cover_image.key}`}/>
+                ):(
+                  <img className={classes.productImage} src={defaultProductImage}/>
+                )}
+                <div className={classes.productDetails}>
+                  <div style={{width: "100%", fontSize: "20px", marginRight: "10px"}}>
+                    {product.name}
                   </div>
-                  <div style={{width: "100%", marginRight:"10px"}}>{product.name}</div>
-                  <div>${(product.amount/100).toFixed(2)}</div>
+                  <div style={{fontSize: "20px"}}>
+                    ${(product.amount/100).toFixed(2)}
+                  </div>
                 </div>
-              </NavLink>
-            </div>
+              </Paper>
+            </NavLink>
           )
         })}
       </div>

@@ -130,7 +130,7 @@ class Billing extends Component {
   renderActiveMemberships(){
     return (
       <Paper style={{backgroundColor: "#383838", padding: "10px", marginBottom: "10px"}}>
-        {(this.props.activeMemberships.length == 0 && this.props.subscriptions.lnegth == 0) && (
+        {(this.props.activeMemberships.length == 0 && this.props.subscriptions.length == 0) && (
           <div>No Active Memberships</div>
         )}
         {this.props.subscriptions.map(subscription => (
@@ -195,9 +195,9 @@ class Billing extends Component {
           </div>
         ))}
         {this.props.activeMemberships.map(transaction => (
-          <div>
+          <div key={transaction._id}>
             {transaction.product.interval == "one-time" && (
-              <div key={transaction._id}
+              <div
                 style={{
                   display: "flex",
                   alignItems: "center"
@@ -421,19 +421,21 @@ function excludeActiveProducts(products, transactions){
       let found = false
       for(let j = 0; j < transactions.length; ++j){
         let transaction = transactions[j]
-        if(product._id == transaction.product._id){
+        if(transaction.product.category == "membership" && (product._id == transaction.product._id || transaction.product.membership_level > product.membership_level)){
           found = true
           break
         }
       }
       if(!found){filteredProducts.push(product)}
     }
-  } else {return products}
+  } else {
+    return products
+  }
   return filteredProducts
 }
 function hasMembershipWithNoExpiration(activeMemberships){
   for(let i = 0; i < activeMemberships.length; ++i){
-    if(activeMemberships[i].expires_at == null){
+    if(activeMemberships[i].expires_at == null && activeMemberships[i].product.category == "membership"){
       return true
     }
   }

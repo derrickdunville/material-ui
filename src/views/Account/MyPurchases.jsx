@@ -7,6 +7,8 @@ import withStyles from "@material-ui/core/styles/withStyles"
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx"
 import ProfileForm from './Profile/ProfileForm.jsx'
 import { downloadProduct } from 'actions/productActions'
+import GetApp from '@material-ui/icons/GetApp'
+import PlayArrow from '@material-ui/icons/PlayArrow'
 
 class MyPurchases extends Component {
   constructor(props) {
@@ -38,13 +40,13 @@ class MyPurchases extends Component {
               </div>
               {(product.category=="script" || product.category == "scanner") && (
                 <Button name={product._id} onClick={this.handleDownload} variant="outlined" color="primary">
-                  Download
+                  <GetApp/>
                 </Button>
               )}
               {product.category=='class' && (
                 <NavLink to={`/app/classes/${product._id}`}>
                   <Button variant="outlined" color="primary">
-                    Watch
+                    <PlayArrow/>
                   </Button>
                 </NavLink>
               )}

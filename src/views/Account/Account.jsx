@@ -13,6 +13,13 @@ import { NavLink } from 'react-router-dom'
 import { withRouter } from "react-router-dom"
 import { logout } from "actions/authActions"
 import Button from '@material-ui/core/Button'
+import logo from "assets/img/faces/marc.jpg"
+import { parseDate } from 'utils/DateUtils'
+import AccountBox from '@material-ui/icons/AccountBox'
+import AttachMoney from '@material-ui/icons/AttachMoney'
+import Power from '@material-ui/icons/Power'
+import GetApp from '@material-ui/icons/GetApp'
+import Paper from '@material-ui/core/Paper'
 
 class Account extends Component {
   constructor(props) {
@@ -41,30 +48,54 @@ class Account extends Component {
         {this.head()}
         <div className={classes.route} ref="mainPanel">
           <div className={classes.content}>
-            Account Details Stuff
-            <div style={{width: '100%'}}>
-              <NavLink style={{width: '100%'}} to={"/app/account/profile/"}>
-                Profile
-              </NavLink>
+            <div style={{width: "100%", display: "flex", alignItems: "center", justifyContent: "center", marginTop: "20px", marginBottom: "20px"}}>
+              {this.props.avatar != null ? (
+                <div>
+                  <img src={`https://s3.amazonaws.com/${this.props.avatar.bucket}/${this.props.avatar.key}`} className={classes.img} style={{width: "150px", height: "150px", borderRadius: "4px"}}/>
+                  <div style={{width: "100%", textAlign: "center", fontSize: "24px"}}>{this.props.username}</div>
+                  <div style={{width: "100%", textAlign: "center", fontSize: "16px", fontWeight: "1"}}>{parseDate(this.props.created_at)}</div>
+                </div>
+              ):(
+                <div>
+                  <img src={logo} className={classes.img} style={{width: "150px", height: "150px", borderRadius: "4px"}}/>
+                  <div style={{width: "100%", textAlign: "center", fontSize: "24px"}}>{this.props.username}</div>
+                  <div style={{width: "100%", textAlign: "center", fontSize: "16px", fontWeight: "1"}}>{parseDate(this.props.created_at)}</div>
+                </div>
+              )}
             </div>
-            <div style={{width: '100%'}}>
-              <NavLink to={"/app/account/billing/"} style={{width: '100%'}}>
-                Billing
-              </NavLink>
-            </div>
-            <div style={{width: '100%'}}>
-              <NavLink to={"/app/account/connections/"} style={{width: '100%'}}>
-                Connections
-              </NavLink>
-            </div>
-            <div style={{width: '100%'}}>
-              <NavLink to={"/app/account/purchases/"} style={{width: '100%'}}>
-                My Purchases
-              </NavLink>
-            </div>
-            <div style={{width: '100%'}}>
-                <Button onClick={this.logout}>Logout</Button>
-            </div>
+            <Paper style={{backgroundColor: "#383838", padding: "10px", marginBottom: "10px"}}>
+              <div style={{width: '100%'}}>
+                <NavLink style={{width: '100%'}} to={"/app/account/profile/"}>
+                  <div style={{width:"100%", height: "40px", display: "flex", alignItems: "center"}}>
+                    <AccountBox style={{marginRight: "10px"}}/> Profile
+                  </div>
+                </NavLink>
+              </div>
+              <div style={{width: '100%'}}>
+                <NavLink to={"/app/account/billing/"} style={{width: '100%'}}>
+                  <div style={{width:"100%", height: "40px", display: "flex", alignItems: "center"}}>
+                    <AttachMoney style={{marginRight: "10px"}}/>Billing
+                  </div>
+                </NavLink>
+              </div>
+              <div style={{width: '100%'}}>
+                <NavLink to={"/app/account/connections/"} style={{width: '100%'}}>
+                  <div style={{width:"100%", height: "40px", display: "flex", alignItems: "center"}}>
+                    <Power style={{marginRight: "10px"}}/> Connections
+                  </div>
+                </NavLink>
+              </div>
+              <div style={{width: '100%', marginBottom: "10px"}}>
+                <NavLink to={"/app/account/purchases/"} style={{width: '100%'}}>
+                  <div style={{width:"100%", height: "40px", display: "flex", alignItems: "center"}}>
+                    <GetApp  style={{marginRight: "10px"}}/> My Purchases
+                  </div>
+                </NavLink>
+              </div>
+              <div style={{width: '100%'}}>
+                <Button style={{width: "100%", textAlign: "left"}} variant="outlined" color="secondary" onClick={this.logout}>Logout</Button>
+              </div>
+            </Paper>
           </div>
         </div>
       </div>
@@ -74,7 +105,8 @@ class Account extends Component {
 function mapStateToProps(state){
   return {
     username: state.auth.user.username,
-    avatar: state.auth.user.avatar || null
+    avatar: state.auth.user.avatar || null,
+    created_at: state.auth.user.created_at|| null,
   }
 }
 

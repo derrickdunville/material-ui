@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from "prop-types";
 import { renderRoutes } from 'react-router-config'
-import { fetchCurrentUser, getPaymentMethod } from 'actions/authActions'
+import { loadMemberships } from 'actions'
+import { fetchCurrentUser, getPaymentMethod, getMyDiscordGuildMember } from 'actions/authActions'
 import dashboardStyle from 'assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx'
 import withStyles from '@material-ui/core/styles/withStyles'
 import Socket from 'utils/Socket.jsx'
@@ -12,6 +13,17 @@ class App extends Component {
     super(props);
     if(!this.props.user){
       this.props.fetchCurrentUser()
+      this.props.getPaymentMethod()
+    }
+  }
+  componentDidMount(){
+    if(!this.props.memberships){
+      this.props.loadMemberships()
+    }
+  }
+  componentDidUpdate(prevProps, prevState){
+    if(!prevProps.user && this.props.user){
+      this.props.getMyDiscordGuildMember()
       this.props.getPaymentMethod()
     }
   }
@@ -28,6 +40,7 @@ class App extends Component {
 
 function mapStateToProps(state){
   return {
+    memberships: state.app.memberships || false,
     user: state.auth.user || false
   }
 }
@@ -37,10 +50,13 @@ App.propTypes = {
 };
 
 function loadData(store){
-  return store.dispatch(fetchCurrentUser()).then(() => store.dispatch(getPaymentMethod()))
+  return store.dispatch(fetchCurrentUser())
+  .then(() => store.dispatch(getPaymentMethod()))
+  .then(() => store.dispatch(getMyDiscordGuildMember()))
+  .then(() => store.dispatch(loadMemberships()))
 }
 
 export default {
-  component: connect(mapStateToProps, { fetchCurrentUser, getPaymentMethod })(withStyles(dashboardStyle)(App)),
+  component: connect(mapStateToProps, { fetchCurrentUser, getPaymentMethod, getMyDiscordGuildMember, loadMemberships })(withStyles(dashboardStyle)(App)),
   loadData
 }

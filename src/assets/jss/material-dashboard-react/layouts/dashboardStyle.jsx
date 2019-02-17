@@ -103,8 +103,8 @@ const appStyle = theme => ({
     overflowX: "hidden",
     overflowY: "auto",
     marginTop: "0px",
-    padding: "30px 15px",
-    height: "calc(100vh - 124px)",
+    padding: "15px 15px",
+    height: "calc(100vh - 94px)",
     backgroundColor: defaultBackgroundColor,
     width: "calc(100% - 30px)",
     webkitBoxShadow: "-3px 0px 5px -3px rgba(0,0,0,0.75)",
@@ -134,6 +134,44 @@ const appStyle = theme => ({
     [theme.breakpoints.up("md")]: {
       display: "none"
     },
+  },
+  productContainer: {
+    [theme.breakpoints.up("sm")]: {
+      display: "flex",
+      maxHeight: "100px"
+    },
+    backgroundColor: "#383838",
+    borderRadius: "4px",
+    padding: "10px",
+    marginBottom: "10px"
+  },
+  productImage: {
+    [theme.breakpoints.up("sm")]: {
+      height: "100px",
+      width: "calc(100px * 1.5625)",
+      minWidth: "calc(100px * 1.5625)",
+      marginRight: "10px"
+    },
+    width:"100%",
+    height: "calc((100vw - 50px) * .5625)",
+    borderRadius: "4px",
+    backgroundColor: "#202225"
+  },
+  productDetails: {
+    [theme.breakpoints.up("sm")]: {
+      width: "100%"
+    },
+    display: "flex",
+    alignItems: "center",
+    borderRadius: "4px",
+    paddingTop: "3px",
+    paddingBottom: "10px"
+  },
+  productCoverImage: {
+    width: "calc(100vw - 50px)",
+    height: "calc((100vw - 50px) * .5625)",
+    borderRadius: "4px",
+    backgroundColor: "#202225"
   }
 });
 

@@ -124,21 +124,24 @@ class ProfileForm extends Component {
             />
           )}
           <FormControl fullWidth={true}>
-            <div style={{width: "100%"}}>
-              <Button
-                style={{width: '100px', height: '50px', float: "right"}}
-                color="primary"
-                type="submit"
-                onClick={this.handleSubmit}>
-                Save
-              </Button>
-              {!this.state.changePassword && (
+            <div style={{display: "flex", width: "100%"}}>
+              <div style={{width: "100%"}}></div>
+              <div style={{display: "flex"}}>
+                {!this.state.changePassword && (
+                  <Button
+                    style={{boxShadow: "none", width: '140px', height: '50px', backgroundColor: "transparent"}}
+                    onClick={this.handleChangePassword}>
+                    Change Password?
+                  </Button>
+                )}
                 <Button
-                  style={{width: '140px', height: '50px', float: "right", backgroundColor: "transparent"}}
-                  onClick={this.handleChangePassword}>
-                  Change Password?
+                  style={{width: '100px', height: '50px'}}
+                  color="primary"
+                  type="submit"
+                  onClick={this.handleSubmit}>
+                  Save
                 </Button>
-              )}
+              </div>
             </div>
           </FormControl>
           </form>

@@ -6,6 +6,9 @@ import dashboardStyle from 'assets/jss/material-dashboard-react/layouts/dashboar
 import { withRouter } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import discord_icon from 'assets/img/discord_icon.png'
+import Add from '@material-ui/icons/Add'
+import Close from '@material-ui/icons/Close'
+
 import { discordOAuthStateLoad, discordOAuthRevoke } from 'actions/authActions'
 
 class Discord extends Component {
@@ -35,18 +38,18 @@ class Discord extends Component {
          <div style={{minWidth: "60px", height: "60px", marginLeft: "-3px", marginRight: '10px'}}>
            <img style={{width: "60px", height:"60px"}} src={discord_icon}/>
         </div>
-        <div style={{width: "100%"}}>
+        <div style={{width: "100%", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis"}}>
           {this.props.discordUsername != null ? (
             <div>{this.props.discordUsername}#{this.props.discordDiscriminator}</div>
           ):(
             <div>Not Connected</div>
           )}
         </div>
-        <div>
+        <div style={{display: "flex", alignItems: "center"}}>
           {this.props.discordUsername != null ? (
-            <Button variant="outlined" onClick={this.revokeDiscord}>Remove</Button>
+            <Close style={{cursor: "pointer"}} onClick={this.revokeDiscord}/>
           ):(
-            <Button variant="outlined" onClick={this.connectDiscord}>Add</Button>
+            <Add style={{cursor: "pointer"}}  onClick={this.connectDiscord}/>
           )}
         </div>
       </div>
