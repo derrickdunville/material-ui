@@ -10,7 +10,7 @@ const chatStyle = theme => ({
     padding: "15px 15px",
     height: "calc(100vh - 94px)",
     backgroundColor: defaultBackgroundColor,
-    width: "calc(100vw - 30px)",
+    width: "calc(100%-30px)",
     webkitBoxShadow: "-3px 0px 5px -3px rgba(0,0,0,0.75)",
     mozBoxShadow: "-3px 0px 5px -3px rgba(0,0,0,0.75)",
     boxShadow: "-3px 0px 5px -3px rgba(0,0,0,0.75)"

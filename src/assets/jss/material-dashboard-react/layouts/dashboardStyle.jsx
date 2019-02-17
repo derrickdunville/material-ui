@@ -168,6 +168,10 @@ const appStyle = theme => ({
     paddingBottom: "10px"
   },
   productCoverImage: {
+    [theme.breakpoints.up("md")]: {
+      width: "100%",
+      height: "auto",
+    },
     width: "calc(100vw - 50px)",
     height: "calc((100vw - 50px) * .5625)",
     borderRadius: "4px",

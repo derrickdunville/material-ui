@@ -104,8 +104,11 @@ export const createSubscription = (subscription) => async (dispatch, getState, a
     dispatch({ type: types.CREATE_SUBSCRIPTION_FAIL, payload: error.response })
   }
 }
+export const clearCreateSubscription = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.CLEAR_CREATE_SUBSCRIPTION })
+}
 export const toggleCancelSubscriptionOpen = () => async (dispatch, getState, api) => {
-  dispatch({type: types.TOGGLE_CANCEL_SUBSCRIPTION_OPEN})
+  dispatch({ type: types.TOGGLE_CANCEL_SUBSCRIPTION_OPEN })
 }
 export const cancelSubscription = (subscription_id) => async (dispatch, getState, api) => {
   dispatch({ type: types.CANCEL_SUBSCRIPTION })
@@ -147,6 +150,9 @@ export const updatePaymentMethod = (token) => async (dispatch, getState, api) =>
   } catch (error) {
     dispatch({ type: types.UPDATE_PAYMENT_METHOD_FAIL, payload: error.response })
   }
+}
+export const clearUpdatePaymentMethod = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.CLEAR_UPDATE_PAYMENT_METHOD})
 }
 export const getPaymentMethod = () => async (dispatch, getState, api) => {
   dispatch({ type: types.GET_PAYMENT_METHOD })

@@ -19,7 +19,7 @@ class SubscribeDialog extends React.Component {
     ev.preventDefault();
   }
   render() {
-    const { loading, loadingMessage, successMessage, name, style, open, onClick, onClose, buttonColor, buttonText, title, text} = this.props
+    const { loading, loadingMessage, successMessage, errorMessage, name, style, open, onClick, onClose, buttonColor, buttonText, title, text} = this.props
     return (
       <div name={name} style={{...style}}>
         <Dialog
@@ -49,12 +49,17 @@ class SubscribeDialog extends React.Component {
           </div>
         ):(
           <div>
-            {!successMessage ? (
+            {(!successMessage && !errorMessage) ? (
               <div>
                 <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
                 <DialogContent style={{paddingBottom: "8px"}}>
                   <DialogContentText id="alert-dialog-description">
                     {text}
+                  </DialogContentText>
+                  <DialogContentText id="alert-dialog-description">
+                    <div style={{paddingTop: "10px", fontSize: "36px", fontWeight: "1", width: "100%", textAlign:"center"}}>
+                      ${(this.props.product.amount/100).toFixed(2)}
+                    </div>
                   </DialogContentText>
                 </DialogContent>
                 <div style={{paddingBottom: "8px", paddingRight: "8px",paddingLeft:"24px"}}>
@@ -66,17 +71,36 @@ class SubscribeDialog extends React.Component {
               </div>
             ):(
               <div>
-                <DialogTitle id="alert-dialog-title">Welcome</DialogTitle>
-                <DialogContent>
-                  <DialogContentText id="alert-dialog-description">
-                    {successMessage}
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={onClose} color="primary">
-                    OK
-                  </Button>
-                </DialogActions>
+                {successMessage && (
+                  <div>
+                    <DialogTitle id="alert-dialog-title">Success!</DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        {successMessage}
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={onClose} color="primary">
+                        OK
+                      </Button>
+                    </DialogActions>
+                  </div>
+                )}
+                {errorMessage && (
+                  <div>
+                    <DialogTitle id="alert-dialog-title">Error!</DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        {errorMessage}
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={onClose} color="primary">
+                        OK
+                      </Button>
+                    </DialogActions>
+                  </div>
+                )}
               </div>
             )}
           </div>

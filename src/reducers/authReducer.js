@@ -250,7 +250,14 @@ export default function(state = initialState, action) {
         ...state,
         creatingSubscription: false,
         createSubscriptionSuccessMessage: false,
-        createSubscriptionFailMessage: ""
+        createSubscriptionFailMessage: action.payload.data.err.message
+      }
+    case types.CLEAR_CREATE_SUBSCRIPTION:
+      return {
+        ...state,
+        creatingTransaction: false,
+        createSubscriptionSuccessMessage: false,
+        createSubscriptionFailMessage: false
       }
     case types.TOGGLE_CREATE_SUBSCRIPTION_OPEN:
       return {
@@ -268,12 +275,19 @@ export default function(state = initialState, action) {
         payment_method: action.payload.data,
         editPaymentMethodOpen: false,
         updatingPaymentMethod: false,
+        updatePaymentMethodErrorMessage: false
       }
     case types.UPDATE_PAYMENT_METHOD_FAIL:
       return {
         ...state,
-        payment_method: false,
         updatingPaymentMethod: false,
+        updatePaymentMethodErrorMessage: action.payload.data.err.message
+      }
+    case types.CLEAR_UPDATE_PAYMENT_METHOD:
+      return {
+        ...state,
+        updatePaymentMethodErrorMessage: false,
+        updatingPaymentMethod: false
       }
     case types.GET_PAYMENT_METHOD_SUCCESS:
       return {
@@ -283,6 +297,7 @@ export default function(state = initialState, action) {
     case types.TOGGLE_UPDATE_PAYMENT_METHOD_OPEN:
       return {
         ...state,
+        updatePaymentMethodErrorMessage: false,
         editPaymentMethodOpen: !state.editPaymentMethodOpen
       }
     case types.GET_MY_DISCORD_GUILD_MEMBER:

@@ -9,6 +9,7 @@ import { getActiveMemberships } from 'utils/UserUtils'
 import { loadMemberships } from 'actions'
 import {
   toggleCreateSubscriptionOpen,
+  clearCreateSubscription,
   cancelSubscription,
   toggleCancelSubscriptionOpen,
   clearCancelSubscription,
@@ -65,14 +66,18 @@ class Billing extends Component {
     this.props.toggleCreateTransactionOpen())
   }
   closeTransaction() {
-    this.setState({ openMembership: "" }, () => this.props.toggleCreateTransactionOpen())
-    let props2 = this.props
+    this.props.toggleCreateTransactionOpen()
+    let this2 = this
     setTimeout(function () {
-      props2.clearCreateTransaction()
-    }, 250);
+      this2.props.clearCreateTransaction()
+    }, 200);
   }
   closeSubscribe() {
     this.props.toggleCreateSubscriptionOpen()
+    let this2 = this
+    setTimeout(function () {
+      this2.props.clearCreateSubscription()
+    }, 200);
   }
   openSubscribe(event) {
     this.setState({ openMembership: this.getOpenProduct(event.target.name)}, () =>
@@ -368,6 +373,7 @@ class Billing extends Component {
               loading={this.props.auth.creatingSubscription}
               loadingMessage="Subscribing"
               successMessage={this.props.auth.createSubscriptionSuccessMessage}
+              errorMessage={this.props.auth.createSubscriptionFailMessage}
               product={this.state.openMembership}
               style={{width: "100%"}}
               buttonText="Subscribe"
@@ -456,6 +462,7 @@ export default {
   component: connect(mapStateToProps, {
     loadMemberships,
     toggleCreateSubscriptionOpen,
+    clearCreateSubscription,
     cancelSubscription,
     toggleCancelSubscriptionOpen,
     clearCancelSubscription,

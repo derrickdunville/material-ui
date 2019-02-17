@@ -48,6 +48,7 @@ class PaymentMethod extends Component {
                 <Elements>
                   <CreditCard
                     action="update"
+                    errorMessage={this.props.updatePaymentMethodErrorMessage}
                     onClose={this.props.toggleUpdatePaymentMethodOpen}/>
                 </Elements>
               </div>
@@ -180,7 +181,8 @@ function mapStateToProps(state) {
   return {
     payment_method: state.auth.payment_method,
     editPaymentMethodOpen: state.auth.editPaymentMethodOpen,
-    updatingPaymentMethod: state.auth.updatingPaymentMethod
+    updatingPaymentMethod: state.auth.updatingPaymentMethod,
+    updatePaymentMethodErrorMessage: state.auth.updatePaymentMethodErrorMessage
   }
 }
 
