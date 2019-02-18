@@ -195,7 +195,7 @@ class AdminDashboard extends React.Component {
     )
     const mobileSideBar = (
       <SwipeableDrawer
-        open={this.props.app.adminNavOpen}
+        open={this.props.adminNavOpen}
         onClose={this.handleCloseNav}
         onOpen={this.handleOpenNav}
         ModalProps={{
@@ -261,7 +261,7 @@ AdminDashboard.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    app: state.app
+    adminNavOpen: state.app.adminNavOpen || false
   }
 }
 export default {

@@ -105,7 +105,8 @@ export default (state=initialState, action) => {
       return {
         ...state,
         puttingSubscription: false,
-        cancelSuccessMessage: "Membership successfully canceled"
+        subscription: action.payload.data.subscription,
+        putSubscriptionSuccessMessage: action.payload.data.message
       }
     case PUT_SUBSCRIPTION_FAIL:
       return {

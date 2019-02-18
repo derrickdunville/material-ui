@@ -14,7 +14,8 @@ import {
   DELETE_TRANSACTION,
   DELETE_TRANSACTION_SUCCESS,
   DELETE_TRANSACTION_FAIL,
-  CLEAR_TRANSACTION
+  CLEAR_TRANSACTION,
+  CLEAR_UPDATE_TRANSACTION
 } from '../constants/transaction-action-types'
 
 const initialState = {
@@ -36,7 +37,8 @@ const initialState = {
   postingTransaction: false,
   postingTransactionError: false,
   puttingTransaction: false,
-  puttingTransactionError: false,
+  putTransactionSuccessMessage: false,
+  putTransactionErrorMessage: false,
   deletingTransaction: false,
   deletingTransactionError: false
 }
@@ -103,12 +105,16 @@ export default (state=initialState, action) => {
       return {
         ...state,
         puttingTransaction: false,
+        transaction: action.payload.data.transaction,
+        putTransactionSuccessMessage: action.payload.data.message,
+        putTransactionErrorMessage: false
       }
     case PUT_TRANSACTION_FAIL:
       return {
         ...state,
         puttingTransaction: false,
-        puttingTransactionError: action.payload.data.err.message
+        putTransactionSuccessMessage: false,
+        putTransactionErrorMessage: action.payload.data.err.message
       }
     case DELETE_TRANSACTION:
       return {
@@ -131,6 +137,12 @@ export default (state=initialState, action) => {
         ...state,
         transaction: false,
         gettingTransactionError: false
+      }
+    case CLEAR_UPDATE_TRANSACTION:
+      return {
+        ...state,
+        putTransactionErrorMessage: false,
+        putTransactionSuccessMessage: false
       }
     default:
       return state

@@ -96,7 +96,16 @@ export const deleteUser = (user_id) => async (dispatch, getState, api) => {
      })
   }
 }
-
 export const clearUser = () => async (dispatch, getState, api) => {
   dispatch({ type: types.CLEAR_USER })
+}
+
+export const userCreated = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.USER_CREATED})
+}
+export const userUpdated = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.USER_UPDATED})
+}
+export const userDeleted = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.USER_DELETED})
 }

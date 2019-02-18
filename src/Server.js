@@ -7,14 +7,17 @@ import indexRoutes from "routes/index.jsx";
 import { StaticRouter, Router, Route, Switch } from "react-router-dom";
 import Routes from './routes/app'
 import { renderRoutes } from 'react-router-config'
+import { MuiPickersUtilsProvider } from 'material-ui-pickers';
+import DateFnsUtils from '@date-io/date-fns';
 
 class Server extends Component {
 
   render(){
-    console.log("Location: ", this.props.location)
     return (
       <StaticRouter location={this.props.location} context={this.props.context}>
-        <div>{renderRoutes(Routes)}</div>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <div>{renderRoutes(Routes)}</div>
+        </MuiPickersUtilsProvider>
       </StaticRouter>
     )
   }

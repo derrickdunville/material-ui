@@ -9,7 +9,7 @@ import Product from "../views/Admin/Products/Product.jsx"
 import Transactions from "../views/Admin/Transactions/Transactions.jsx"
 import Transaction from "../views/Admin/Transactions/Transaction.jsx"
 import Subscriptions from "../views/Admin/Subscriptions/Subscriptions.jsx"
-
+import Subscription from "../views/Admin/Subscriptions/Subscription.jsx"
 
 export default [
   {
@@ -97,11 +97,29 @@ export default [
         ]
       },
       {
-        ...Subscriptions,
+        ...RouteContainer,
         path: '/admin/subscriptions',
         title: "Subscriptions",
-        zIndex: 1
-      }
+        zIndex: 1,
+        routes: [
+          {
+            ...Subscriptions,
+            path: '/admin/subscriptions',
+            backPath: '/admin/',
+            exact: true,
+            title: "Subscriptions",
+            zIndex: 1
+          },
+          {
+            ...Subscription,
+            path: '/admin/subscriptions/:id',
+            backPath: '/admin/subscriptions',
+            exact: true,
+            title: "Subscription",
+            zIndex: 2
+          },
+        ]
+      },
     ]
   }
 ]

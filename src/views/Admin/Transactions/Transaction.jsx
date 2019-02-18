@@ -2,7 +2,13 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { NavLink, Switch, Route, Redirect, withRouter } from "react-router-dom"
 import { Helmet } from 'react-helmet'
-import { getTransaction, deleteTransaction, clearTransaction } from 'actions/transactionActions'
+import {
+  getTransaction,
+  deleteTransaction,
+  putTransaction,
+  clearTransaction,
+  clearUpdateTransaction
+} from 'actions/transactionActions'
 import TransactionForm from './TransactionForm.jsx'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -16,6 +22,7 @@ import Edit from '@material-ui/icons/Edit'
 import withStyles from "@material-ui/core/styles/withStyles"
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx"
 import AlertDialog from "components/Dialog/AlertDialog.jsx"
+import RefundDialog from "components/Dialog/RefundDialog.jsx"
 
 class Transaction extends Component {
   constructor(props) {
@@ -32,6 +39,7 @@ class Transaction extends Component {
     this.closeDelete = this.closeDelete.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
     this.handleRefund = this.handleRefund.bind(this)
+    this.closeRefund = this.closeRefund.bind(this)
   }
   toggleEdit(){
     this.setState({editOpen: !this.state.editOpen})
@@ -53,10 +61,24 @@ class Transaction extends Component {
   }
   handleRefund(){
     console.log("handle refund")
+    this.props.putTransaction(
+      {
+        _id: this.props.transaction._id,
+        status: "refunded"
+      })
+  }
+  closeRefund(){
+    this.setState({refundOpen: false})
+    let this2 = this
+    setTimeout(function () {
+      this2.props.clearUpdateTransaction()
+    }, 200);
   }
   componentDidMount(){
     console.log("Transaction componentDidMount")
-    this.props.getTransaction(this.props.match.params.id)
+    if(!this.props.transaction){
+      this.props.getTransaction(this.props.match.params.id)
+    }
   }
   componentWillUnmount(){
     this.props.clearTransaction();
@@ -72,7 +94,8 @@ class Transaction extends Component {
   }
 
   render(){
-    const { classes, route, ...rest } = this.props;
+    console.log("render transaction")
+    const { transaction, classes, route, ...rest } = this.props;
     const appBar = (
       <AppBar
         position="static"
@@ -87,7 +110,7 @@ class Transaction extends Component {
             </IconButton>
           </NavLink>
           <Typography variant="title" color="inherit">
-            Transaction  >  {this.props.transaction._id}
+            Transaction  >  {transaction._id}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -98,27 +121,19 @@ class Transaction extends Component {
         {appBar}
         <div className={classes.route} ref="mainPanel">
           <div className={classes.content}>
-            {this.props.transaction ? (
+            {transaction ? (
               <div>
                 <div style={{display: "flex", marginBottom: "10px"}}>
                   <Button style={{width: "100%", marginRight: "10px"}} variant="outlined" color="default" onClick={this.toggleEdit}>
                     {this.state.editOpen ? "Cancel" : "Edit"}
                   </Button>
-                  <AlertDialog
-                    style={{marginRight: "10px", width: "100%"}}
-                    buttonText="Refund"
-                    buttonColor="default"
+                  <Button disabled={transaction.status == 'refunded' ? true : false} style={{width: "100%", marginRight: "10px"}} variant="outlined" color="default" onClick={this.toggleRefund}>
+                    {transaction.status == 'refunded' ? "Refunded" : "Refund"}
+                  </Button>
+                  <RefundDialog
+                    transaction={transaction}
                     open={this.state.refundOpen}
-                    title="Refund Transaction?"
-                    text="Are you sure you would like to refund this transaction? This will result in this transaction being refunded. The user will be notified by email of the refund."
-                    leftAction={this.toggleRefund}
-                    leftActionText="Cancel"
-                    leftActionColor="default"
-                    rightAction={this.handleRefund}
-                    rightActionText="Refund"
-                    rightActionColor="secondary"
-                    onClick={this.toggleRefund}
-                    onClose={this.toggleRefund}
+                    onClose={this.closeRefund}
                     />
                   <AlertDialog
                     style={{width: "100%"}}
@@ -138,7 +153,7 @@ class Transaction extends Component {
                     />
                 </div>
                 <div>
-                  <TransactionForm editing={true} disabled={!this.state.editOpen}/>
+                  <TransactionForm transaction={this.props.transaction} editing={true} disabled={!this.state.editOpen}/>
                 </div>
               </div>
             ):(
@@ -154,6 +169,7 @@ class Transaction extends Component {
 
 function mapStateToProps(state) {
   return {
+    transactions: state.transactions,
     transaction: state.transactions.transaction
   }
 }
@@ -166,5 +182,13 @@ function loadData(store, match){
 
 export default {
   loadData,
-  component: withRouter(connect(mapStateToProps, {getTransaction, clearTransaction, deleteTransaction})(withStyles(dashboardStyle)(Transaction)))
+  component: withRouter(connect(mapStateToProps,
+    {
+      getTransaction,
+      clearTransaction,
+      deleteTransaction,
+      putTransaction,
+      clearUpdateTransaction
+    }
+  )(withStyles(dashboardStyle)(Transaction)))
 }

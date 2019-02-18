@@ -37,6 +37,8 @@ import CustomTableSortLabel from "components/TableSortLabel/CustomTableSortLabel
 import CustomMenuItem from "components/MenuItem/CustomMenuItem.jsx"
 import CustomSelect from "components/Select/CustomSelect.jsx"
 
+import { parseDate } from "utils/DateUtils"
+
 class Subscriptions extends Component {
   constructor(props) {
     super(props);
@@ -118,13 +120,19 @@ class Subscriptions extends Component {
     const emptyRows = limit - Math.min(limit, total - page * limit);
     const tableColumns = [
       {id:"_id", label:"ID", numeric: false, disablePadding: false},
-      {id:"username", label:"Username", numeric: false, disablePadding: false},
+      {id:"subscription_id", label:"Subscription", numeric: false, disablePadding: false},
+      {id:"status", label:"Status", numeric: false, disablePadding: false},
+      {id:"cancel_at_period_end", label: "Rebill", numeric: false, disablePadding: false},
       {id:"product", label:"Product", numeric: false, disablePadding: false},
-      {id:"amount", label:"Amount", numeric: false, disablePadding: false}
-
+      {id:"amount", label:"Amount", numeric: false, disablePadding: false},
+      {id:"interval", label:"Interval", numeric: false, disablePadding: false},
+      {id:"username", label:"Username", numeric: false, disablePadding: false},
+      {id:"transactions", label:"Transactions", numeric: false, disablePadding: false},
+      {id:"created_at", label:"Created At", numeric: false, disablePadding: false},
+      {id:"current_period_end", label:"Period End", numeric: false, disablePadding: false}
     ]
     return (
-      <Paper style={{width: "100%", backgroundColor: "#454545"}}>
+      <Paper style={{width: "100%", backgroundColor: "#454545", overflowX: "auto"}}>
         <Table style={{color: "white"}}>
           <EnhancedTableHead
             columns={tableColumns}
@@ -135,7 +143,7 @@ class Subscriptions extends Component {
           <TableBody>
             {this.props.subscriptions.docs.map(subscription => (
               <TableRow key={subscription._id}>
-                <CustomTableCell component="th" scope="row">
+                <CustomTableCell>
                   <NavLink
                     to={`/admin/subscriptions/${subscription._id}`}
                     key={subscription._id}
@@ -143,9 +151,16 @@ class Subscriptions extends Component {
                     {subscription._id}
                   </NavLink>
                 </CustomTableCell>
-                <CustomTableCell align="right">{subscription.user.username}</CustomTableCell>
-                <CustomTableCell align="right">{subscription.product.name}</CustomTableCell>
-                <CustomTableCell align="right">{subscription.product.amount}</CustomTableCell>
+                <CustomTableCell>{subscription.subscription_id}</CustomTableCell>
+                <CustomTableCell>{subscription.status}</CustomTableCell>
+                <CustomTableCell>{subscription.cancel_at_period_end ? "Stopped" : "Enabled"}</CustomTableCell>
+                <CustomTableCell>{subscription.product.name}</CustomTableCell>
+                <CustomTableCell align="right">${(subscription.product.amount/100).toFixed(2)}</CustomTableCell>
+                <CustomTableCell>{subscription.product.interval}</CustomTableCell>
+                <CustomTableCell>{subscription.user.username}</CustomTableCell>
+                <CustomTableCell>{subscription.transactions.length}</CustomTableCell>
+                <CustomTableCell>{parseDate(subscription.created_at)}</CustomTableCell>
+                <CustomTableCell>{parseDate(subscription.current_period_end)}</CustomTableCell>
               </TableRow>
             ))}
             {emptyRows > 0 && (

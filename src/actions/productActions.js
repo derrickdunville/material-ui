@@ -143,3 +143,13 @@ export const downloadProduct = (product_id) => async (dispatch, getState, api) =
      })
   }
 }
+
+export const productCreated = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.PRODUCT_CREATED})
+}
+export const productUpdated = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.PRODUCT_UPDATED})
+}
+export const productDeleted = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.PRODUCT_DELETED})
+}

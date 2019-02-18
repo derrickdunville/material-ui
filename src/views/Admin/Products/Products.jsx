@@ -128,13 +128,14 @@ class Products extends Component {
     const { total, limit, page } = this.props.products;
     const emptyRows = limit - Math.min(limit, total - page * limit);
     const tableColumns = [
+      {id:"_id", label:"ID", numeric: false, disablePadding: false},
       {id:"name", label:"Name", numeric: false, disablePadding: false},
       {id:"amount", label:"Amount", numeric: false, disablePadding: false},
       {id:"interval", label:"Interval", numeric: false, disablePadding: false}
     ]
 
     return (
-      <Paper style={{width: "100%", backgroundColor: "#454545"}}>
+      <Paper style={{width: "100%", backgroundColor: "#454545", overflowX: 'auto'}}>
         <Table style={{color: "white"}}>
           <EnhancedTableHead
             columns={tableColumns}
@@ -150,9 +151,10 @@ class Products extends Component {
                     to={`/admin/products/${product._id}`}
                     key={product._id}
                     >
-                    {product.name}
+                    {product._id}
                   </NavLink>
                 </CustomTableCell>
+                <CustomTableCell>{product.name}</CustomTableCell>
                 <CustomTableCell>{product.amount}</CustomTableCell>
                 <CustomTableCell>{product.interval}</CustomTableCell>
               </TableRow>
@@ -245,7 +247,7 @@ class Products extends Component {
           ):(
             <div className={classes.content}>
               <div style={{display: "flex", alignItems: "center"}}>
-                <div style={{minWidth: "130px"}}>
+                <div style={{minWidth: "150px"}}>
                   {this.props.products.total} Products
                   <IconButton onClick={this.openNewProduct} color="inherit" aria-label="Menu">
                     <Add />

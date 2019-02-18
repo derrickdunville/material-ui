@@ -11,14 +11,15 @@ import Socket from 'utils/Socket.jsx'
 class App extends Component {
   constructor(props) {
     super(props);
-    if(!this.props.user){
-      this.props.fetchCurrentUser()
-      this.props.getPaymentMethod()
-    }
   }
   componentDidMount(){
     if(!this.props.memberships){
       this.props.loadMemberships()
+    }
+    if(!this.props.user){
+      this.props.fetchCurrentUser()
+    } else {
+      this.props.getPaymentMethod()
     }
   }
   componentDidUpdate(prevProps, prevState){

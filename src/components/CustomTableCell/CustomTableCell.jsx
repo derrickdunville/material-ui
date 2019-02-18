@@ -2,9 +2,13 @@ import React from "react";
 import TableCell from "@material-ui/core/TableCell"
 import withStyles from "@material-ui/core/styles/withStyles";
 
-const style = {
+const styles = {
   root: {
-    border: "none"
+    border: "none",
+    padding: "10px",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis"
   },
   head: {
     backgroundColor: "#232323",
@@ -19,10 +23,10 @@ const style = {
 function CustomTableCell({ ...props }) {
   const { classes, children, ...rest } = props;
   return (
-    <TableCell {...rest} classes={style}>
+    <TableCell {...rest} classes={styles}>
       {children}
     </TableCell>
   );
 }
 
-export default withStyles(style)(TableCell);
+export default withStyles(styles)(TableCell);

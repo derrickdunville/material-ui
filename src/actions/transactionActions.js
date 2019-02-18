@@ -95,3 +95,16 @@ export const deleteTransaction = (transaction_id) => async (dispatch, getState, 
 export const clearTransaction = () => async (dispatch, getState, api) => {
   dispatch({ type: types.CLEAR_TRANSACTION })
 }
+
+export const clearUpdateTransaction = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.CLEAR_UPDATE_TRANSACTION })
+}
+export const transactionCreated = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.TRANSACTION_CREATED})
+}
+export const transactionUpdated = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.TRANSACTION_UPDATED})
+}
+export const transactionDeleted = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.TRANSACTION_DELETED})
+}

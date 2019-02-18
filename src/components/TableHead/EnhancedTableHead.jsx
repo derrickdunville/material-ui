@@ -11,7 +11,11 @@ import withStyles from "@material-ui/core/styles/withStyles"
 
 const CustomTableCell = withStyles(theme => ({
   root: {
-    border: "none"
+    border: "none",
+    padding: "10px",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis"
   },
   head: {
     backgroundColor: "#232323",
@@ -22,6 +26,7 @@ const CustomTableCell = withStyles(theme => ({
     color: "white"
   }
 }))(TableCell)
+
 const CustomTableSortLabel = withStyles({
   root: {
     "&:hover": {

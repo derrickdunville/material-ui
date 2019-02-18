@@ -20,3 +20,8 @@ export const DELETE_USER_FAIL = "DELETE_USER_FAIL"
 
 export const CLEAR_POST_USER = "CLEAR_POST_USER"
 export const CLEAR_USER = "CLEAR_USER"
+
+// for socket.io events
+export const USER_CREATED = "USER_CREATED"
+export const USER_UPDATED = "USER_UPDATED"
+export const USER_DELETED = "USER_DELETED"

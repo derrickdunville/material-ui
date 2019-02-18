@@ -38,6 +38,8 @@ import CustomTableSortLabel from "components/TableSortLabel/CustomTableSortLabel
 import CustomMenuItem from "components/MenuItem/CustomMenuItem.jsx"
 import CustomSelect from "components/Select/CustomSelect.jsx"
 
+import { parseDate } from 'utils/DateUtils'
+
 class Users extends Component {
   constructor(props) {
     super(props);
@@ -127,11 +129,14 @@ class Users extends Component {
     const { total, limit, page } = this.props.users;
     const emptyRows = limit - Math.min(limit, total - page * limit);
     const tableColumns = [
+      {id:"_id", label:"ID", numeric: false, disablePadding: false},
       {id:"username", label:"Username", numeric: false, disablePadding: false},
-      {id:"email", label:"Email", numeric: false, disablePadding: false}
+      {id:"email", label:"Email", numeric: false, disablePadding: false},
+      {id:"created_at", label:"Created At", numeric: false, disablePadding: false}
+
     ]
     return (
-      <Paper style={{width: "100%", backgroundColor: "#454545"}}>
+      <Paper style={{width: "100%", backgroundColor: "#454545", overflowX: "auto"}}>
         <Table style={{color: "white"}}>
           <EnhancedTableHead
             columns={tableColumns}
@@ -142,7 +147,8 @@ class Users extends Component {
           <TableBody>
             {this.props.users.docs.map(user => (
               <TableRow key={user._id}>
-                <CustomTableCell component="th" scope="row">
+                <CustomTableCell>{user._id}</CustomTableCell>
+                <CustomTableCell>
                   <NavLink
                     to={`/admin/users/${user.username}`}
                     key={user._id}
@@ -150,7 +156,8 @@ class Users extends Component {
                     {user.username}
                   </NavLink>
                 </CustomTableCell>
-                <CustomTableCell align="right">{user.email}</CustomTableCell>
+                <CustomTableCell>{user.email}</CustomTableCell>
+                <CustomTableCell>{parseDate(user.created_at)}</CustomTableCell>
               </TableRow>
             ))}
             {emptyRows > 0 && (

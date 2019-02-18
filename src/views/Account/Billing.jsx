@@ -17,7 +17,7 @@ import {
   toggleResumeSubscriptionOpen,
   clearResumeSubscription,
   toggleCreateTransactionOpen,
-  clearCreateTransaction,
+  clearCreateTransaction
 } from 'actions/authActions'
 import defaultPic from 'assets/img/faces/marc.jpg'
 import AlertDialog from 'components/Dialog/AlertDialog.jsx'

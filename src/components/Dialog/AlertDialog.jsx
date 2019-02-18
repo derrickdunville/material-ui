@@ -12,7 +12,7 @@ class AlertDialog extends React.Component {
     this.props.onClose(ev)
   }
   render() {
-    const { hidden, message, loading, loadingMessage, name, style, open, onClick, onClose, buttonColor, buttonText, title, text, leftAction, leftActionText, leftActionColor, rightAction, rightActionText, rightActionColor} = this.props
+    const { hidden, successMessage, errorMessage, loading, loadingMessage, name, style, open, onClick, onClose, buttonColor, buttonText, title, text, leftAction, leftActionText, leftActionColor, rightAction, rightActionText, rightActionColor} = this.props
     let buttonStyle= { width: "100%"}
     if(hidden) buttonStyle.display = "none"
     return (
@@ -42,7 +42,7 @@ class AlertDialog extends React.Component {
           </div>
         ):(
           <div>
-            {!message ? (
+            {(!successMessage && !errorMessage) ? (
               <div>
                 <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
                 <DialogContent>
@@ -61,23 +61,40 @@ class AlertDialog extends React.Component {
               </div>
             ):(
               <div>
-                <DialogTitle id="alert-dialog-title">Success</DialogTitle>
-                <DialogContent>
-                  <DialogContentText id="alert-dialog-description">
-                    {message}
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={leftAction} color={leftActionColor || "primary"}>
-                    OK
-                  </Button>
-                </DialogActions>
+              {successMessage && (
+                <div>
+                  <DialogTitle id="alert-dialog-title">Success</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      {successMessage}
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={leftAction} color={leftActionColor || "primary"}>
+                      OK
+                    </Button>
+                  </DialogActions>
+                </div>
+              )}
+              {errorMessage && (
+                <div>
+                  <DialogTitle id="alert-dialog-title">Error!</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      {errorMessage}
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={leftAction} color={leftActionColor || "primary"}>
+                      OK
+                    </Button>
+                  </DialogActions>
+                </div>
+              )}
               </div>
             )}
           </div>
-
         )}
-
         </Dialog>
       </div>
     );

@@ -38,6 +38,8 @@ import CustomTableSortLabel from "components/TableSortLabel/CustomTableSortLabel
 import CustomMenuItem from "components/MenuItem/CustomMenuItem.jsx"
 import CustomSelect from "components/Select/CustomSelect.jsx"
 
+import { parseDate } from 'utils/DateUtils'
+
 class Transactions extends Component {
   constructor(props) {
     super(props);
@@ -128,10 +130,16 @@ class Transactions extends Component {
     const emptyRows = limit - Math.min(limit, total - page * limit);
     const tableColumns = [
       {id:"id", label:"ID", numeric: false, disablePadding: false},
-      {id:"username", label:"Username", numeric: false, disablePadding: false}
+      {id:"trans_num", label:"Trans Num", numeric: false, disablePadding: false},
+      {id:"status", label:"Status", numeric: false, disablePadding: false},
+      {id:"product", label:"Product", numeric: false, disablePadding: false},
+      {id:"total", label:"Total", numeric: false, disablePadding: false},
+      {id:"username", label:"Username", numeric: false, disablePadding: false},
+      {id:"created_at", label:"Created At", numeric: false, disablePadding: false},
+      {id:"expires_at", label:"Expires At", numeric: false, disablePadding: false}
     ]
     return (
-      <Paper style={{width: "100%", backgroundColor: "#454545"}}>
+      <Paper style={{width: "100%", backgroundColor: "#454545", overflowX: "auto"}}>
         <Table style={{color: "white"}}>
           <EnhancedTableHead
             columns={tableColumns}
@@ -142,15 +150,21 @@ class Transactions extends Component {
           <TableBody>
             {this.props.transactions.docs.map(transaction => (
               <TableRow key={transaction._id}>
-                <CustomTableCell component="th" scope="row">
+                <CustomTableCell>
                   <NavLink
                     to={`/admin/transactions/${transaction._id}`}
                     key={transaction._id}
                     >
-                    {transaction.trans_num}
+                    {transaction._id}
                   </NavLink>
                 </CustomTableCell>
-                <CustomTableCell align="right">{transaction.user.username}</CustomTableCell>
+                <CustomTableCell>{transaction.trans_num}</CustomTableCell>
+                <CustomTableCell>{transaction.status}</CustomTableCell>
+                <CustomTableCell>{transaction.product.name}</CustomTableCell>
+                <CustomTableCell align={"right"}>${(transaction.total/100).toFixed(2)}</CustomTableCell>
+                <CustomTableCell>{transaction.user.username}</CustomTableCell>
+                <CustomTableCell>{parseDate(transaction.created_at)}</CustomTableCell>
+                <CustomTableCell>{parseDate(transaction.expires_at)}</CustomTableCell>
               </TableRow>
             ))}
             {emptyRows > 0 && (

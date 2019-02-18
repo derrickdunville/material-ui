@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { postTransaction, putTransaction } from 'actions/transactionActions'
+import { putSubscription } from 'actions/subscriptionActions'
 import Button from "components/CustomButtons/Button.jsx";
 import CustomTextField from 'components/CustomTextField/CustomTextField.jsx'
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -14,14 +14,15 @@ import InputLabel from '@material-ui/core/InputLabel'
 import CustomOutlinedInput from 'components/OutlinedInput/CustomOutlinedInput.jsx'
 import CustomDatePicker from 'components/DatePicker/CustomDatePicker.jsx'
 
-class TransactionForm extends Component {
+class SubscriptionForm extends Component {
   constructor(props) {
     super(props);
     if(props.editing){
       this.state = {
-        ...this.props.transaction,
-        user: {value: this.props.transaction.user._id, label: this.props.transaction.user.username},
-        product: {value: this.props.transaction.product._id, label: this.props.transaction.product.name}
+        ...this.props.subscription,
+        user: {value: this.props.subscription.user._id, label: this.props.subscription.user.username},
+        product: {value: this.props.subscription.product._id, label: this.props.subscription.product.name},
+        interval: this.props.subscription.product.interval
       }
     } else {
       this.state = {
@@ -48,16 +49,6 @@ class TransactionForm extends Component {
     this.handleProductChange = this.handleProductChange.bind(this)
     this.handleSubscriptionChange = this.handleSubscriptionChange.bind(this)
   }
-  componentDidUpdate(prevProps, prevState){
-    console.log("component did update")
-    if(this.props.transaction.status !== prevState.status){
-      this.setState({
-        ...this.props.transaction,
-        user: {value: this.props.transaction.user._id, label: this.props.transaction.user.username},
-        product: {value: this.props.transaction.product._id, label: this.props.transaction.product.name}
-      })
-    }
-  }
   handleChange(event){
     this.setState({ [event.target.name]: event.target.value })
   }
@@ -80,28 +71,28 @@ class TransactionForm extends Component {
   }
   handleSubmit(event){
     event.preventDefault()
-    if(!this.props.disabled){
-      let transaction = {
-        trans_num: this.state.trans_num,
-        user: this.state.user.value,
-        product: this.state.product.value,
-        amount: this.state.amount,
-        total: this.state.sub_total,
-        gateway: this.state.gateway.toLowerCase(),
-        status: this.state.status.toLowerCase(),
-        created_at: this.state.created_at,
-        expires_at: this.state.expires_at
-      }
-      if(this.state.tax_amount != '') transaction.tax_amount = this.state.tax_amount
-      if(this.state.tax_rate !== '') transaction.tax_rate = this.state.tax_rate
-      if(this.state.subscriptions != null) transaction.subscription = this.state.subscription.value
-      if(this.props.editing) {
-        transaction._id = this.props.transaction._id
-        this.props.putTransaction(transaction)
-      } else {
-        this.props.postTransaction(transaction)
-      }
-    }
+    // if(!this.props.disabled){
+    //   let transaction = {
+    //     trans_num: this.state.trans_num,
+    //     user: this.state.user.value,
+    //     product: this.state.product.value,
+    //     amount: this.state.amount,
+    //     total: this.state.sub_total,
+    //     gateway: this.state.gateway.toLowerCase(),
+    //     status: this.state.status.toLowerCase(),
+    //     created_at: this.state.created_at,
+    //     expires_at: this.state.expires_at
+    //   }
+    //   if(this.state.tax_amount != '') transaction.tax_amount = this.state.tax_amount
+    //   if(this.state.tax_rate !== '') transaction.tax_rate = this.state.tax_rate
+    //   if(this.state.subscriptions != null) transaction.subscription = this.state.subscription.value
+    //   if(this.props.editing) {
+    //     transaction._id = this.props.transaction._id
+    //     this.props.putTransaction(transaction)
+    //   } else {
+    //     this.props.postTransaction(transaction)
+    //   }
+    // }
   }
 
   render(){
@@ -123,12 +114,12 @@ class TransactionForm extends Component {
             />
           )}
           <CustomTextField
-            labelText="Transaction Number"
+            labelText="Subscription ID"
             inputType="text"
             formControlProps={{classes: { root: classes.formControl}, fullWidth: true}}
             inputProps={{
-              name: 'trans_num',
-              value: this.state.trans_num,
+              name: 'subscription_id',
+              value: this.state.subscription_id,
               onChange: this.handleChange,
               disabled: this.props.disabled
             }}
@@ -143,50 +134,29 @@ class TransactionForm extends Component {
             value={this.state.product}
             onChange={this.handleProductChange}
             />
-            <CustomTextField
-              labelText="Amount"
-              inputType="text"
-              formControlProps={{classes: { root: classes.formControl}, fullWidth: true}}
-              inputProps={{
-                name: 'amount',
-                type: "text",
-                value: this.state.amount,
-                onChange: this.handleChange,
-                disabled: this.props.disabled
-              }}
-            />
+          <FormControl classes={{root: classes.formControl}} variant="outlined" style={{width: "100%", backgroundColor: "#202225", borderRadius: "4px"}}>
+            <InputLabel style={{color: "white"}}>
+              Interval
+            </InputLabel>
+            <CustomSelect
+              disabled={this.props.disabled}
+              value={this.state.interval}
+              onChange={this.handleChange}
+              name="interval"
+              renderValue={value => `${value}`}
+              input={<CustomOutlinedInput labelWidth={61} name="filter"/>}
+              items={["One-time", "Day", "Week", "Month", "Year"]}
+              >
+            </CustomSelect>
+          </FormControl>
           <CustomTextField
-            labelText="Sub-Total"
+            labelText="Price"
             inputType="text"
             formControlProps={{classes: { root: classes.formControl}, fullWidth: true}}
             inputProps={{
-              name: 'sub_total',
+              name: 'amount',
               type: "text",
-              value: this.state.sub_total,
-              onChange: this.handleChange,
-              disabled: this.props.disabled
-            }}
-          />
-          <CustomTextField
-            labelText="Tax Amount"
-            inputType="text"
-            formControlProps={{classes: { root: classes.formControl}, fullWidth: true}}
-            inputProps={{
-              name: 'tax_amount',
-              type: "text",
-              value: this.state.tax_amount,
-              onChange: this.handleChange,
-              disabled: this.props.disabled
-            }}
-          />
-          <CustomTextField
-            labelText="Tax Rate"
-            inputType="text"
-            formControlProps={{classes: { root: classes.formControl}, fullWidth: true}}
-            inputProps={{
-              name: 'tax_rate',
-              type: "text",
-              value: this.state.tax_rate,
+              value: this.state.price,
               onChange: this.handleChange,
               disabled: this.props.disabled
             }}
@@ -202,7 +172,7 @@ class TransactionForm extends Component {
               name="status"
               renderValue={value => `${value}`}
               input={<CustomOutlinedInput labelWidth={48} name="filter"/>}
-              items={["Succeeded", "Pending", "Failed", "Refunded"]}
+              items={["Trialing", "Active", "Past-due", "canceled"]}
               >
             </CustomSelect>
           </FormControl>
@@ -221,11 +191,6 @@ class TransactionForm extends Component {
               >
             </CustomSelect>
           </FormControl>
-          <SubscriptionAutoComplete
-            disabled={this.props.disabled}
-            value={this.state.subscription}
-            onChange={this.handleSubscriptionChange}
-            />
           <CustomDatePicker
             keyboard
             clearable
@@ -238,33 +203,62 @@ class TransactionForm extends Component {
             onChange={this.handleCreateDateChange}
             mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
           />
-        <CustomDatePicker
-            keyboard
-            clearable
-            variant="outlined"
-            label="Expires"
-            name="expires_at"
-            format="MM/dd/yyyy"
-            disabled={this.props.disabled}
-            value={this.state.expires_at}
-            onChange={this.handleExpireDateChange}
-            mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
-          />
-        {!this.props.disabled && (
-          <div>
-            <Button
-              style={{width: '100px', height: '50px', float: "right"}}
-              color="primary"
-              type="submit"
-              onClick={this.handleSubmit}>
-              {this.props.editing ? "Save" : "Create"}
-            </Button>
-          </div>
-        )}
+          <CustomDatePicker
+              keyboard
+              clearable
+              variant="outlined"
+              label="Canceled At"
+              name="canceled_at"
+              format="MM/dd/yyyy"
+              disabled={this.props.disabled}
+              value={this.state.canceled_at}
+              onChange={this.handleCreateDateChange}
+              mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
+            />
+          <CustomDatePicker
+              keyboard
+              clearable
+              variant="outlined"
+              label="Current Period Start"
+              name="current_period_end"
+              format="MM/dd/yyyy"
+              disabled={this.props.disabled}
+              value={this.state.current_period_start}
+              onChange={this.handleCreateDateChange}
+              mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
+            />
+          <CustomDatePicker
+              keyboard
+              clearable
+              variant="outlined"
+              label="Current Period End"
+              name="current_period_start"
+              format="MM/dd/yyyy"
+              disabled={this.props.disabled}
+              value={this.state.current_period_end}
+              onChange={this.handleCreateDateChange}
+              mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
+            />
+          {!this.props.disabled && (
+            <div>
+              <Button
+                style={{width: '100px', height: '50px', float: "right"}}
+                color="primary"
+                type="submit"
+                onClick={this.handleSubmit}>
+                {this.props.editing ? "Save" : "Create"}
+              </Button>
+            </div>
+          )}
         </form>
       </div>
     )
   }
 }
+function mapStateToProps(state) {
+  return {
+    subscription: state.subscriptions.subscription
+  }
+}
 
-export default withStyles(formStyle)(TransactionForm)
+export default connect(mapStateToProps, { putSubscription })(withStyles(formStyle)(SubscriptionForm))
