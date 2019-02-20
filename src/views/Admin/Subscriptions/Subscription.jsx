@@ -2,7 +2,12 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { NavLink, Switch, Route, Redirect, withRouter } from "react-router-dom"
 import { Helmet } from 'react-helmet'
-import { getSubscription, deleteSubscription, putSubscription } from 'actions/subscriptionActions'
+import {
+  getSubscription,
+  deleteSubscription,
+  putSubscription,
+  clearPutSubscription
+} from 'actions/subscriptionActions'
 
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -33,6 +38,11 @@ class Subscription extends Component {
     this.closeDelete = this.closeDelete.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
     this.handleStop = this.handleStop.bind(this)
+    this.closeStop = this.closeStop.bind(this)
+
+    this.toggleCancel = this.toggleCancel.bind(this)
+    this.closeCancel = this.closeCancel.bind(this)
+    this.handleCancel = this.handleCancel.bind(this)
   }
   toggleEdit(){
     this.setState({editOpen: !this.state.editOpen})
@@ -40,6 +50,7 @@ class Subscription extends Component {
   closeEdit(){
     this.setState({editOpen: false})
   }
+
   openDelete(){
     this.setState({deleteOpen: true})
   }
@@ -49,8 +60,16 @@ class Subscription extends Component {
   handleDelete(){
     this.props.deleteSubscription(this.props.subscription._id)
   }
+
   toggleStop(){
     this.setState({stopOpen: !this.state.stopOpen})
+  }
+  closeStop(){
+    this.setState({stopOpen: false})
+    let this2 = this
+    setTimeout(function () {
+      this2.props.clearPutSubscription()
+    }, 200);
   }
   handleStop(){
     console.log("handle stop")
@@ -60,6 +79,26 @@ class Subscription extends Component {
         cancel_at_period_end: true
       })
   }
+
+  toggleCancel(){
+    this.setState({cancelOpen: true})
+  }
+  closeCancel(){
+    this.setState({cancelOpen: false})
+    let this2 = this
+    setTimeout(function () {
+      this2.props.clearPutSubscription()
+    }, 200);
+  }
+  handleCancel(){
+    console.log("handle cancel")
+    this.props.putSubscription(
+      {
+        _id: this.props.subscription._id,
+        cancel: true
+      })
+  }
+
   componentDidMount(){
     console.log("Subscription componentDidMount")
     this.props.getSubscription(this.props.match.params.id)
@@ -110,8 +149,14 @@ class Subscription extends Component {
                   <Button style={{width: "100%", marginRight: "10px"}} variant="outlined" color="default" onClick={this.toggleEdit}>
                     {this.state.editOpen ? "Cancel" : "Edit"}
                   </Button>
+                  <Button disabled={subscription.canceled_at != null} style={{width: "100%", marginRight: "10px"}} variant="outlined" color="default" onClick={this.toggleCancel}>
+                    {subscription.canceled_at != null ? "Canceled": "Cancel"}
+                  </Button>
+                  <Button disabled={subscription.cancel_at_period_end} style={{width: "100%", marginRight: "10px"}} variant="outlined" color="default" onClick={this.toggleStop}>
+                    {subscription.cancel_at_period_end ? "Stopped": "Stop"}
+                  </Button>
                   <AlertDialog
-                    style={{marginRight: "10px", width: "100%"}}
+                    hidden={true}
                     buttonText="Stop"
                     buttonColor="default"
                     loading={this.props.subscriptions.puttingSubscription}
@@ -121,14 +166,34 @@ class Subscription extends Component {
                     open={this.state.stopOpen}
                     title="Stop Subscription?"
                     text="Are you sure you would like to stop this subscription? This will end the users billing cycle. The user will be notified by email of the cancellation."
-                    leftAction={this.toggleCancel}
+                    leftAction={this.closeStop}
                     leftActionText="Cancel"
                     leftActionColor="default"
                     rightAction={this.handleStop}
                     rightActionText="Stop"
                     rightActionColor="secondary"
                     onClick={this.toggleStop}
-                    onClose={this.toggleStop}
+                    onClose={this.closeStop}
+                    />
+                  <AlertDialog
+                    hidden={true}
+                    buttonText="Cancel"
+                    buttonColor="default"
+                    loading={this.props.subscriptions.puttingSubscription}
+                    loadingMessage={"Stopping..."}
+                    successMessage={this.props.subscriptions.putSubscriptionSuccessMessage}
+                    errorMessage={this.props.subscriptions.putSubscriptionErrorMessage}
+                    open={this.state.cancelOpen}
+                    title="Cancel Subscription?"
+                    text="Are you sure you would like to cancel this subscription? This will expire the membership immediatly and end the users billing cycle. The user will be notified by email of the cancellation."
+                    leftAction={this.closeCancel}
+                    leftActionText="Nevermind"
+                    leftActionColor="default"
+                    rightAction={this.handleCancel}
+                    rightActionText="Cancel"
+                    rightActionColor="secondary"
+                    onClick={this.toggleCancel}
+                    onClose={this.closeCancel}
                     />
                   <AlertDialog
                     style={{width: "100%"}}
@@ -181,7 +246,8 @@ export default {
     {
       getSubscription,
       deleteSubscription,
-      putSubscription
+      putSubscription,
+      clearPutSubscription
     }
   )(withStyles(dashboardStyle)(Subscription)))
 }

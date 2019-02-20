@@ -166,10 +166,10 @@ export default function(state = initialState, action) {
         ...state,
         user: {
           ...state.user,
-          subscriptions: updateSubscription(state.user.subscriptions, action)
+          subscriptions: updateSubscription(state.user.subscriptions, action.payload.data.subscription)
         },
         cancelingSubscription: false,
-        cancelingSubscriptionSuccessMessage: "Subscription successfully canceled.",
+        cancelingSubscriptionSuccessMessage: action.payload.data.message,
         cancelingSubscriptionFailMessage: false
       }
     case types.CANCEL_SUBSCRIPTION_FAIL:
@@ -202,7 +202,7 @@ export default function(state = initialState, action) {
         ...state,
         user: {
           ...state.user,
-          subscriptions: updateSubscription(state.user.subscriptions, action)
+          subscriptions: updateSubscription(state.user.subscriptions, action.payload.data.subscription)
         },
         resumingSubscription: false,
         resumingSubscriptionSuccessMessage: "Subscription successfully resumed.",
@@ -402,16 +402,17 @@ function insertSubscription(subscriptions, action){
     action.payload.data
   ]
 }
-function updateSubscription(subscriptions, action) {
+function updateSubscription(subscriptions, updated_subscription) {
     return subscriptions.map( (subscription, index) => {
-        if(subscription._id !== action.payload.data._id) {
+      console.log(subscription.cancel_at_period_end)
+        if(subscription._id !== updated_subscription._id) {
             // This isn't the item we care about - keep it as-is
             return subscription;
         }
         // Otherwise, this is the one we want - return an updated value
         return {
             ...subscription,
-            ...action.payload.data
+            ...updated_subscription
         };
     });
 }

@@ -83,12 +83,12 @@ class Chat extends Component {
     this.props.toggleCreateSubscriptionOpen()
   }
   openSubscribe(event) {
-    console.log("name: ", event.target.name)
-    this.setState({ openMembership: this.getOpenProduct(event.target.name)}, () =>
+    console.log("name: ", event.currentTarget.name)
+    this.setState({ openMembership: this.getOpenProduct(event.currentTarget.name)}, () =>
     this.props.toggleCreateSubscriptionOpen())
   }
   openTransaction(event) {
-    this.setState({ openMembership: this.getOpenProduct(event.target.name)}, () =>
+    this.setState({ openMembership: this.getOpenProduct(event.currentTarget.name)}, () =>
     this.props.toggleCreateTransactionOpen())
   }
   closeTransaction() {

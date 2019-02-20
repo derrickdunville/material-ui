@@ -6,14 +6,18 @@ import CustomTextField from 'components/CustomTextField/CustomTextField.jsx'
 import withStyles from "@material-ui/core/styles/withStyles";
 import formStyle from "assets/jss/material-dashboard-react/views/formStyle.jsx"
 
+import CustomSelect from 'components/Select/CustomSelect.jsx'
+import FormControl from '@material-ui/core/FormControl'
+import InputLabel from '@material-ui/core/InputLabel'
+import CustomOutlinedInput from 'components/OutlinedInput/CustomOutlinedInput.jsx'
+import CustomDatePicker from 'components/DatePicker/CustomDatePicker.jsx'
+
 class EditUserForm extends Component {
   constructor(props) {
     super(props);
+    if(this.props.user)
     this.state = {
-      id: this.props.user._id,
-      username: this.props.user.username,
-      email: this.props.user.email,
-      password: '',
+      ...this.props.user
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -27,6 +31,9 @@ class EditUserForm extends Component {
     }
     if(event.target.name === 'password'){
       this.setState({ password: event.target.value })
+    }
+    if(event.target.name === 'role'){
+      this.setState({ roles: [event.target.value] })
     }
   }
   handleSubmit(event){
@@ -51,7 +58,7 @@ class EditUserForm extends Component {
           <CustomTextField
             labelText="Username"
             inputType="text"
-            formControlProps={{fullWidth: true}}
+            formControlProps={{classes: { root: classes.formControl}, fullWidth: true}}
             inputProps={{
               name: 'username',
               value: this.state.username,
@@ -61,7 +68,7 @@ class EditUserForm extends Component {
           <CustomTextField
             labelText="Email"
             inputType="text"
-            formControlProps={{fullWidth: true}}
+            formControlProps={{classes: { root: classes.formControl}, fullWidth: true}}
             inputProps={{
               name: 'email',
               value: this.state.email,
@@ -71,7 +78,7 @@ class EditUserForm extends Component {
           <CustomTextField
             labelText="Password"
             inputType="password"
-            formControlProps={{fullWidth: true}}
+            formControlProps={{classes: { root: classes.formControl}, fullWidth: true}}
             inputProps={{
               name: 'password',
               type: "password",
@@ -79,6 +86,21 @@ class EditUserForm extends Component {
               onChange: this.handleChange
             }}
           />
+          <FormControl classes={{root: classes.formControl}} variant="outlined" style={{width: "100%", backgroundColor: "#202225", borderRadius: "4px"}}>
+            <InputLabel style={{color: "white"}}>
+              Role
+            </InputLabel>
+            <CustomSelect
+              disabled={this.props.disabled}
+              value={this.state.roles[0]}
+              onChange={this.handleChange}
+              name="role"
+              renderValue={value => `${value}`}
+              input={<CustomOutlinedInput labelWidth={25} name="filter"/>}
+              items={["Everyone", "Admin", "Member"]}
+              >
+            </CustomSelect>
+          </FormControl>
         <Button
           style={{width: '100px', height: '50px', float: "right"}}
           color="primary"

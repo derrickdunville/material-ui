@@ -62,7 +62,8 @@ class Billing extends Component {
     this.setState(state => ({ checked: !state.checked }));
   }
   openTransaction(event) {
-    this.setState({ openMembership: this.getOpenProduct(event.target.name)}, () =>
+    console.log("openTransactions: ", event.currentTarget.name)
+    this.setState({ openMembership: this.getOpenProduct(event.currentTarget.name)}, () =>
     this.props.toggleCreateTransactionOpen())
   }
   closeTransaction() {
@@ -80,11 +81,12 @@ class Billing extends Component {
     }, 200);
   }
   openSubscribe(event) {
-    this.setState({ openMembership: this.getOpenProduct(event.target.name)}, () =>
+    console.log("openSubscribe: ", event.currentTarget.name)
+    this.setState({ openMembership: this.getOpenProduct(event.currentTarget.name)}, () =>
     this.props.toggleCreateSubscriptionOpen())
   }
   openCancel(event){
-    this.setState({ cancelMembership: event.target.name }, () =>
+    this.setState({ cancelMembership: event.currentTarget.name }, () =>
     this.props.toggleCancelSubscriptionOpen())
   }
   closeCancel(){
@@ -98,7 +100,7 @@ class Billing extends Component {
     this.props.cancelSubscription(this.state.cancelMembership)
   }
   openResume(event){
-    this.setState({ resumeMembership: event.target.name }, () => this.props.toggleResumeSubscriptionOpen())
+    this.setState({ resumeMembership: event.currentTarget.name }, () => this.props.toggleResumeSubscriptionOpen())
   }
   closeResume(){
     this.setState({ resumeMembership: "" }, () => this.props.toggleResumeSubscriptionOpen())
@@ -125,8 +127,10 @@ class Billing extends Component {
     )
   }
   getOpenProduct(id){
+    console.log("getOpenProduct: ", id)
     for(let i = 0; i < this.props.products.length; ++i){
-      if(this.props.products[i]._id == id){
+      if(this.props.products[i]._id === id){
+        console.log("open product is: ", this.props.products[i])
         return this.props.products[i]
       }
     }
@@ -160,7 +164,8 @@ class Billing extends Component {
                 style={{width: "100%"}}
                 buttonText="Resume"
                 buttonColor="primary"
-                message={this.props.auth.resumingSubscriptionSuccessMessage}
+                successMessage={this.props.auth.resumingSubscriptionSuccessMessage}
+                errorMessage={this.props.auth.resumingSubscriptionFailMessage}
                 loading={this.props.auth.resumingSubscription}
                 loadingMessage="Resuming..."
                 open={this.props.auth.resumeSubscriptionOpen && this.state.resumeMembership == subscription._id}
@@ -181,9 +186,10 @@ class Billing extends Component {
                 style={{width: "100%"}}
                 buttonText="Cancel"
                 buttonColor="secondary"
-                message={this.props.auth.cancelingSubscriptionSuccessMessage}
+                successMessage={this.props.auth.cancelingSubscriptionSuccessMessage}
+                errorMessage={this.props.auth.cancelingSubscriptionFailMessage}
                 loading={this.props.auth.cancelingSubscription}
-                loadingMessage="Cancelling..."
+                loadingMessage="Canceling..."
                 open={this.props.auth.cancelSubscriptionOpen && this.state.cancelMembership == subscription._id}
                 title={`Cancel ${subscription.product.name} Membership?`}
                 text={`Are you sure you would like to cancel your ${subscription.product.name} Membership? This will stop future recurring charges of the subscription associated with this memebership. Your memberhsip will expire on ${parseDate(subscription.current_period_end)}. You will still have access until then.`}
@@ -420,24 +426,38 @@ class Billing extends Component {
 
 
 function excludeActiveProducts(products, transactions){
-  let filteredProducts = []
-  if(transactions.length > 0){
-    for(let i = 0; i < products.length; ++i){
-      let product = products[i]
-      let found = false
-      for(let j = 0; j < transactions.length; ++j){
-        let transaction = transactions[j]
-        if(transaction.product.category == "membership" && (product._id == transaction.product._id || transaction.product.membership_level > product.membership_level)){
-          found = true
-          break
+  // get all active membership product ids
+  let activeMembershipProductIds = new Set()
+  for(let i = 0; i < transactions.length; ++i){
+    let current = transactions[i]
+    if(current.product.category == "membership"){
+      // check the expires_at
+      if(current.expires_at){
+        let expires = new Date(current.expires_at)
+        let now = new Date()
+        if(expires > now){
+          // membership has not expired yet
+          activeMembershipProductIds.add(current.product._id)
         }
+      } else {
+        // no expiration date
+        activeMembershipProductIds.add(current.product._id)
       }
-      if(!found){filteredProducts.push(product)}
     }
+  }
+
+  // if a product id exists in active memberships exluce it
+  if(activeMembershipProductIds.size > 0){
+    let filteredProducts = []
+    for(let i = 0; i < products.length; ++i){
+      if(!activeMembershipProductIds.has(products[i]._id)){
+        filteredProducts.push(products[i])
+      }
+    }
+    return filteredProducts
   } else {
     return products
   }
-  return filteredProducts
 }
 function hasMembershipWithNoExpiration(activeMemberships){
   for(let i = 0; i < activeMemberships.length; ++i){
@@ -449,7 +469,7 @@ function hasMembershipWithNoExpiration(activeMemberships){
 }
 function mapStateToProps(state) {
   return {
-    activeMemberships: getActiveMemberships(state.auth.user.transactions),
+    activeMemberships: getActiveMemberships(state.auth.user.transactions || []),
     cancelOpen: state.subscriptions.cancelOpen,
     transactions: state.auth.user.transactions || [],
     subscriptions: state.auth.user.subscriptions || [],

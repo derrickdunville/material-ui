@@ -17,7 +17,7 @@ class MyPurchases extends Component {
   }
 
   handleDownload(event){
-    this.props.downloadProduct(event.target.name)
+    this.props.downloadProduct(event.currentTarget.name)
   }
   head(){
     return (

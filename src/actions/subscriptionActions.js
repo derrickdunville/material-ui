@@ -104,6 +104,10 @@ export const clearCancelSuccessMessage = () => async (dispatch, getState, api) =
   dispatch({ type: types.CLEAR_CANCEL_SUCCESS_MESSAGE })
 }
 
+export const clearPutSubscription = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.CLEAR_PUT_SUBSCRIPTION })
+}
+
 export const subscriptionCreated = () => async (dispatch, getState, api) => {
   dispatch({ type: types.SUBSCRIPTION_CREATED})
 }

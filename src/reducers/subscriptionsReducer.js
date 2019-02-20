@@ -16,7 +16,8 @@ import {
   DELETE_SUBSCRIPTION_FAIL,
   CLEAR_SUBSCRIPTION,
   TOGGLE_CANCEL_SUBSCRIPTION,
-  CLEAR_CANCEL_SUCCESS_MESSAGE
+  CLEAR_CANCEL_SUCCESS_MESSAGE,
+  CLEAR_PUT_SUBSCRIPTION
 } from '../constants/subscription-action-types'
 
 const initialState = {
@@ -106,13 +107,20 @@ export default (state=initialState, action) => {
         ...state,
         puttingSubscription: false,
         subscription: action.payload.data.subscription,
-        putSubscriptionSuccessMessage: action.payload.data.message
+        putSubscriptionSuccessMessage: action.payload.data.message,
+        putSubscriptionError: false
       }
     case PUT_SUBSCRIPTION_FAIL:
       return {
         ...state,
         puttingSubscription: false,
-        puttingSubscriptionError: action.payload.data.err.message
+        putSubscriptionError: action.payload.data.err.message
+      }
+    case CLEAR_PUT_SUBSCRIPTION:
+      return {
+        ...state,
+        putSubscriptionSuccessMessage: false,
+        putSubscriptionError: false
       }
     case DELETE_SUBSCRIPTION:
       return {
