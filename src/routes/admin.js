@@ -2,6 +2,8 @@ import AdminDashboard from "../layouts/AdminDashboard.jsx"
 import AppPage from "../views/App/AppPage.jsx"
 
 import RouteContainer from "../containers/RouteContainer.jsx"
+
+import Dashboard from 'views/Admin/Dashboard/Dashboard.jsx'
 import Users from "../views/Admin/Users/Users.jsx"
 import User from "../views/Admin/Users/User.jsx"
 import Products from "../views/Admin/Products/Products.jsx"
@@ -18,7 +20,7 @@ export default [
     title: "Admin",
     routes: [
       {
-        ...AppPage,
+        ...Dashboard,
         path: '/admin/',
         exact: true,
         title: "Dashboard",

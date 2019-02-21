@@ -1,13 +1,31 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import * as transactionActions from '../actions/transactionActions'
-import * as subscriptionActions from '../actions/subscriptionActions'
-import * as productActions from '../actions/productActions'
-import * as userActions from '../actions/userActions'
-import * as authActions from '../actions/authActions'
+import {
+  transactionCreated,
+  transactionUpdated,
+  transactionDeleted
+} from 'actions/transactionActions'
+import {
+  subscriptionCreated,
+  subscriptionUpdated,
+  subscriptionDeleted
+} from 'actions/subscriptionActions'
+import {
+  productCreated,
+  productUpdated,
+  productDeleted
+} from 'actions/productActions'
+import {
+  userCreated,
+  userUpdated,
+  userDeleted
+} from 'actions/userActions'
+import {
+  fetchCurrentUser
+} from 'actions/authActions'
 
 import io from 'socket.io-client'
-const socket = io('http://api.ascendtrading.ngrok.io', { path: '/ws' })
+const socket = io('https://api.ascendtrading.ngrok.io', { path: '/ws' })
 
 class Socket extends Component {
 
@@ -25,54 +43,55 @@ class Socket extends Component {
 
     socket.on("ADMIN_USER_CREATED", user => {
       console.log("ADMIN_USER_CREATED heard: ", user.username)
-      userActions.userCreated(user)
+      this.props.userCreated(user)
     })
     socket.on("ADMIN_USER_UPDATED", user => {
       console.log("ADMIN_USER_UPDATED heard: ", user.username)
-      userActions.userUpdated(user)
+      this.props.userUpdated(user)
     })
     socket.on("ADMIN_USER_DELETED", user_id => {
       console.log("ADMIN_USER_DELETED heard: ", user_id)
-      userActions.userDeleted(user_id)
+      this.props.userDeleted(user_id)
     })
 
     socket.on("ADMIN_PRODUCT_CREATED", product => {
       console.log("ADMIN_PRODUCT_CREATED heard: ", product.name)
-      productActions.productCreated(product)
+      this.props.productCreated(product)
     })
     socket.on("ADMIN_PRODUCT_UPDATED", product => {
       console.log("ADMIN_PRODUCT_UPDATED heard: ", product.name)
-      productActions.productUpdated(product)
+      this.props.productUpdated(product)
     })
     socket.on("ADMIN_PRODUCT_DELETED", product_id => {
       console.log("ADMIN_PRODUCT_DELETED heard: ", product_id)
-      productActions.productDeleted(product)
+      this.props.productDeleted(product)
     })
 
     socket.on("ADMIN_SUBSCRIPTION_CREATED", subscription => {
       console.log("ADMIN_SUBSCRIPTION_CREATED heard: ", subscription._id)
-      subscriptionActions.subscriptionCreated(subscription)
+      this.props.subscriptionCreated(subscription)
     })
     socket.on("ADMIN_SUBSCRIPTION_UPDATED", subscription => {
       console.log("ADMIN_SUBSCRIPTION_UPDATED heard: ", subscription._id)
-      subscriptionActions.subscriptionUpdated(subscription)
+      this.props.subscriptionUpdated(subscription)
     })
     socket.on("ADMIN_SUBSCRIPTION_DELETED", subscription_id => {
       console.log("ADMIN_SUBSCRIPTION_DELETED heard: ", subscription_id)
-      subscriptionActions.subscriptionDeleted(subscription_id)
+      this.props.subscriptionDeleted(subscription_id)
     })
 
     socket.on("ADMIN_TRANSACTION_CREATED", transaction => {
       console.log("ADMIN_TRANSACTION_CREATED heard: ", transaction._id)
-      transactionActions.transactionCreated(transaction)
+      console.dir(transaction)
+      this.props.transactionCreated(transaction)
     })
     socket.on("ADMIN_TRANSACTION_UPDATED", transaction => {
       console.log("ADMIN_TRANSACTION_UPDATED heard: ", transaction._id)
-      transactionActions.transactionUpdated(transaction)
+      this.props.transactionUpdated(transaction)
     })
     socket.on("ADMIN_TRANSACTION_DELETED", transaction_id => {
       console.log("ADMIN_TRANSACTION_DELETED heard: ", transaction_id)
-      transactionActions.transactionDeleted(transaction_id)
+      this.props.transactionDeleted(transaction_id)
     })
   }
   leaveAdmin(){
@@ -87,7 +106,7 @@ class Socket extends Component {
       console.log("ME_UPDATED")
       console.dir(user)
       // this just relogs in the user, so the entire auth.user is reloaded
-      dispatch(authActions.fetchCurrentUser())
+      this.props.fetchCurrentUser()
     })
   }
   leaveMe(){
@@ -136,4 +155,18 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(Socket)
+export default connect(mapStateToProps, {
+  fetchCurrentUser,
+  transactionCreated,
+  transactionUpdated,
+  transactionDeleted,
+  subscriptionCreated,
+  subscriptionUpdated,
+  subscriptionDeleted,
+  productCreated,
+  productUpdated,
+  productDeleted,
+  userCreated,
+  userUpdated,
+  userDeleted
+})(Socket)

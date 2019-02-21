@@ -15,7 +15,10 @@ import {
   DELETE_TRANSACTION_SUCCESS,
   DELETE_TRANSACTION_FAIL,
   CLEAR_TRANSACTION,
-  CLEAR_UPDATE_TRANSACTION
+  CLEAR_UPDATE_TRANSACTION,
+  TRANSACTION_CREATED,
+  TRANSACTION_UPDATED,
+  TRANSACTION_DELETED
 } from '../constants/transaction-action-types'
 
 const initialState = {
@@ -144,7 +147,73 @@ export default (state=initialState, action) => {
         putTransactionErrorMessage: false,
         putTransactionSuccessMessage: false
       }
+    case TRANSACTION_CREATED:
+      console.log("TRANSACTION_CREATED")
+      return {
+        ...state,
+        docs: [action.payload, ...state.docs],
+        total: state.total + 1
+      }
+    case TRANSACTION_UPDATED:
+      console.log("TRANSACTION_UPDATED")
+      return {
+        ...state,
+        transaction: updateTransaction(state.transaction, action.payload),
+        docs: updateTransactionInList(state.docs, action.payload)
+      }
+    case TRANSACTION_DELETED:
+      console.log("TRANSACTION_DELETED")
+      return {
+        ...state,
+        transaction: updateTransaction(state.transaction, action.payload),
+      }
     default:
       return state
+  }
+}
+
+function updateTransaction(transaction, payload){
+  if(transaction._id == payload._id){
+    return payload
+  }
+  return transaction
+}
+function updateTransactionInList(transactions, payload){
+
+  console.log("transactions: ", transactions.length)
+  return transactions.map( (transaction, index) => {
+    if(transaction._id !== payload._id) {
+      // This isn't the item we care about - keep it as-is
+      return transaction;
+    }
+    // Otherwise, this is the one we want - return an updated value
+    return {
+      ...transaction,
+      ...payload
+    }
+  })
+}
+
+function deleteTransactionInList(transactions, payload){
+  let target_index = -1
+  for(let i = 0; i < transactions.length; ++i){
+    if(transactions[i]._id == payload.json._id){
+      target_index = i
+      break
+    }
+  }
+  if(target_index < -1){
+    return {
+      ...state,
+      data: [
+        ...state.data.slice(0, target_index),
+        ...state.data.slice(target_index + 1)
+      ],
+      total: state.total - 1
+    }
+  } else {
+    return {
+      state
+    }
   }
 }
