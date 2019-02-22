@@ -109,9 +109,7 @@ class Products extends Component {
     this.setState({ searchColumn: event.target.value }, () => this.load());
   }
   componentDidMount(){
-    if(!this.props.products.loaded){
-      // this.props.getProducts()
-    }
+    this.props.getProducts()
     this.setState({
      labelWidth: ReactDOM.findDOMNode(this.InputLabelRef).offsetWidth,
    })
@@ -207,8 +205,9 @@ class Products extends Component {
       />
     )
     const searchColumn = (
-      <FormControl  variant="outlined" style={{float: "right", color: "white"}}>
+      <FormControl variant="outlined" style={{width: "100%", backgroundColor: "#202225", borderRadius: "4px"}}>
         <InputLabel
+          shrink={true}
           style={{color: "white"}}
             ref={ref => {
               this.InputLabelRef = ref;

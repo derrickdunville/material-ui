@@ -4,15 +4,17 @@ export const getTransactions = (filter=undefined, page=0, limit=10, order="asc",
   dispatch({
     type: types.GET_TRANSACTIONS
   })
-  let url = "/transaction?page=" + page +"&limit=" + limit + "&sort="+orderBy+":"+order+""
+  let url = "/transactions?page=" + page +"&limit=" + limit + "&sort="+orderBy+":"+order+""
 
-  if(filter !== undefined){
-    if(filter.id !== undefined){
-      url += "&id=" + filter.id
-    }
+  if(filter){
+    if(filter.id){url += "&id=" + filter.id}
+    if(filter.username){url += "&username=" + filter.username}
+    if(filter.trans_num){url += "&trans_num=" + filter.trans_num}
+    if(filter.subscription){url += "&subscription=" + filter.subscription}
+    if(filter.email){url += "&email=" + filter.email}
   }
   try {
-    const res = await api.get('/transactions')
+    const res = await api.get(url)
     dispatch({
       type: types.GET_TRANSACTIONS_SUCCESS,
       payload: res

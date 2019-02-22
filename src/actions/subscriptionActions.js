@@ -5,13 +5,11 @@ export const getSubscriptions = (filter=undefined, page=0, limit=10, order="asc"
     type: types.GET_SUBSCRIPTIONS
   })
   let url = "/subscriptions?page=" + page +"&limit=" + limit + "&sort="+orderBy+":"+order+""
-  if(filter !== undefined){
-    if(filter.id !== undefined){
-      url += "&id=" + filter.id
-    }
-    if(filter.username !== undefined){
-      url += "&username=" + filter.username
-    }
+  if(filter){
+    if(filter._id){ url += "&_id=" + filter._id }
+    if(filter.username){ url += "&username=" + filter.username }
+    if(filter.email){ url += "&email=" + filter.email }
+    if(filter.subscription){ url += "&subscription=" + filter.subscription}
   }
   try {
     const res = await api.get(url)

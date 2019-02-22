@@ -28,7 +28,6 @@ import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Input from '@material-ui/core/Input';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputLabel from '@material-ui/core/InputLabel';
 
 import EnhancedTableHead from "components/TableHead/EnhancedTableHead.jsx"
@@ -37,6 +36,7 @@ import CustomTableCell from "components/CustomTableCell/CustomTableCell.jsx"
 import CustomTableSortLabel from "components/TableSortLabel/CustomTableSortLabel.jsx"
 import CustomMenuItem from "components/MenuItem/CustomMenuItem.jsx"
 import CustomSelect from "components/Select/CustomSelect.jsx"
+import CustomOutlinedInput from 'components/OutlinedInput/CustomOutlinedInput.jsx'
 
 import { parseDate } from 'utils/DateUtils'
 
@@ -60,7 +60,7 @@ class Users extends Component {
     this.handleChangePage = this.handleChangePage.bind(this)
     this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this)
     this.getFilter = this.getFilter.bind(this)
-    this.handleSearchColumnChange = this.handleSearchColumnChange.bind(this)
+    this.handleChange = this.handleChange.bind(this)
     this.handleRequestSort = this.handleRequestSort.bind(this)
   }
   openNewUser(){
@@ -106,8 +106,12 @@ class Users extends Component {
   handleChangeRowsPerPage(event){
     this.setState({limit: event.target.value, page: 0}, () => this.load())
   }
-  handleSearchColumnChange(event){
-    this.setState({ searchColumn: event.target.value }, () => this.load());
+  handleChange(event){
+    this.setState({ [event.target.name]: event.target.value }, () => {
+      if(this.state.search != ''){
+        this.load()
+      }
+    });
   }
   componentDidMount(){
     if(!this.props.users.loaded){
@@ -208,8 +212,9 @@ class Users extends Component {
       />
     )
     const searchColumn = (
-      <FormControl variant="outlined" style={{float: "right", color: "white"}}>
+      <FormControl variant="outlined" style={{width: "100%", backgroundColor: "#202225", borderRadius: "4px"}}>
         <InputLabel
+          shrink={true}
           style={{color: "white"}}
             ref={ref => {
               this.InputLabelRef = ref;
@@ -220,18 +225,16 @@ class Users extends Component {
           </InputLabel>
         <CustomSelect
           value={this.state.searchColumn}
-          onChange={this.handleSearchColumnChange}
+          onChange={this.handleChange}
           name="name"
           renderValue={value => `${value}`}
-          input={<OutlinedInput
+          input={<CustomOutlinedInput
             labelWidth={this.state.labelWidth}
             name="filter"
             id="outlined-filter-simple" />
           }
-        >
-          <MenuItem value="Username">Username</MenuItem>
-          <MenuItem value="Email">Email</MenuItem>
-        </CustomSelect>
+          items={["Username", "Email", "Stripe Cust", "ID"]}
+        />
       </FormControl>
     )
     return (

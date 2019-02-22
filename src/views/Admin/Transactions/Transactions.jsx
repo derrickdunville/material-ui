@@ -12,24 +12,22 @@ import IconButton from '@material-ui/core/IconButton'
 import Add from '@material-ui/icons/Add'
 import Close from '@material-ui/icons/Close'
 import TransactionForm from './TransactionForm.jsx'
-import FormControl from "@material-ui/core/FormControl";
-import TextField from
-"@material-ui/core/TextField"
+import FormControl from "@material-ui/core/FormControl"
+import TextField from "@material-ui/core/TextField"
 
 import CustomTextField from 'components/CustomTextField/CustomTextField.jsx'
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
-import TableFooter from '@material-ui/core/TableFooter';
-import TablePagination from '@material-ui/core/TablePagination';
-import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableRow from '@material-ui/core/TableRow'
+import TableFooter from '@material-ui/core/TableFooter'
+import TablePagination from '@material-ui/core/TablePagination'
+import Paper from '@material-ui/core/Paper'
 
-import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Input from '@material-ui/core/Input';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import InputLabel from '@material-ui/core/InputLabel';
+import Button from '@material-ui/core/Button'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
 
 import EnhancedTableHead from "components/TableHead/EnhancedTableHead.jsx"
 import TablePaginationActions from "components/TablePagination/TablePaginationActions.jsx"
@@ -37,6 +35,8 @@ import CustomTableCell from "components/CustomTableCell/CustomTableCell.jsx"
 import CustomTableSortLabel from "components/TableSortLabel/CustomTableSortLabel.jsx"
 import CustomMenuItem from "components/MenuItem/CustomMenuItem.jsx"
 import CustomSelect from "components/Select/CustomSelect.jsx"
+import CustomOutlinedInput from 'components/OutlinedInput/CustomOutlinedInput.jsx'
+
 
 import { parseDate } from 'utils/DateUtils'
 
@@ -49,7 +49,7 @@ class Transactions extends Component {
       searchColumn: "ID",
       anchorEl: null,
       labelWidth: 0,
-      order: "asc",
+      order: "desc",
       orderBy: "created_at",
       page: this.props.transactions.page,
       limit: this.props.transactions.limit
@@ -60,7 +60,7 @@ class Transactions extends Component {
     this.handleChangePage = this.handleChangePage.bind(this)
     this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this)
     this.getFilter = this.getFilter.bind(this)
-    this.handleSearchColumnChange = this.handleSearchColumnChange.bind(this)
+    this.handleChange = this.handleChange.bind(this)
     this.handleRequestSort = this.handleRequestSort.bind(this)
   }
   openNewTransaction(){
@@ -78,10 +78,20 @@ class Transactions extends Component {
       if(this.state.searchColumn === 'Username'){
         filter.username = this.state.search
       }
+      if(this.state.searchColumn === 'Transaction'){
+        filter.trans_num = this.state.search
+      }
+      if(this.state.searchColumn === 'Subscription'){
+        filter.subscription = this.state.search
+      }
+      if(this.state.searchColumn === 'Email'){
+        filter.email = this.state.search
+      }
     }
     return filter
   }
   load(){
+    console.log("load...")
     this.props.getTransactions(
       this.getFilter(),
       this.state.page,
@@ -98,24 +108,27 @@ class Transactions extends Component {
     this.setState({ order, orderBy }, () => this.load())
   }
   handleSearchChange(event){
-    this.setState({search: event.target.value}, () => this.load())
+    console.log("search changed ", event.currentTarget.value)
+    this.setState({search: event.currentTarget.value}, () => this.load())
   }
   handleChangePage(event, page){
+    console.log("Page changed ", page)
     this.setState({page}, () => this.load())
   }
   handleChangeRowsPerPage(event){
-    this.setState({limit: event.target.value, page: 0}, () => this.load())
+    this.setState({limit: event.currentTarget.value, page: 0}, () => this.load())
   }
-  handleSearchColumnChange(event){
-    this.setState({ searchColumn: event.target.value }, () => this.load());
+  handleChange(event){
+    this.setState({ [event.target.name]: event.target.value }, () => {
+      if(this.state.search != ''){
+        this.load()
+      }
+    });
   }
   componentDidMount(){
     if(!this.props.transactions.loaded){
       this.props.getTransactions()
     }
-    this.setState({
-     labelWidth: ReactDOM.findDOMNode(this.InputLabelRef).offsetWidth,
-   })
   }
   head(){
     return (
@@ -130,7 +143,7 @@ class Transactions extends Component {
     const emptyRows = limit - Math.min(limit, total - page * limit);
     const tableColumns = [
       {id:"id", label:"ID", numeric: false, disablePadding: false},
-      {id:"trans_num", label:"Trans Num", numeric: false, disablePadding: false},
+      {id:"trans_num", label:"Transaction", numeric: false, disablePadding: false},
       {id:"status", label:"Status", numeric: false, disablePadding: false},
       {id:"product", label:"Product", numeric: false, disablePadding: false},
       {id:"total", label:"Total", numeric: false, disablePadding: false},
@@ -214,33 +227,6 @@ class Transactions extends Component {
         }}
       />
     )
-    const searchColumn = (
-      <FormControl variant="outlined" style={{float: "right", color: "white"}}>
-        <InputLabel
-          style={{color: "white"}}
-            ref={ref => {
-              this.InputLabelRef = ref;
-            }}
-            htmlFor="outlined-filter-simple"
-          >
-            Filter
-          </InputLabel>
-        <CustomSelect
-          value={this.state.searchColumn}
-          onChange={this.handleSearchColumnChange}
-          name="name"
-          renderValue={value => `${value}`}
-          input={<OutlinedInput
-            labelWidth={this.state.labelWidth}
-            name="filter"
-            id="outlined-filter-simple" />
-          }
-        >
-          <MenuItem value="ID">ID</MenuItem>
-          <MenuItem value="Username">Username</MenuItem>
-        </CustomSelect>
-      </FormControl>
-    )
     return (
       <div className={`slide${route.zIndex}`}>
         {this.head()}
@@ -256,14 +242,28 @@ class Transactions extends Component {
           ):(
             <div className={classes.content}>
               <div style={{display: "flex", alignItems: "center"}}>
-                <div style={{minWidth: "160px"}}>
+                <div style={{minWidth: "170px"}}>
                   {this.props.transactions.total} Transactions
                   <IconButton onClick={this.openNewTransaction} color="inherit" aria-label="Menu">
                     <Add />
                   </IconButton>
                 </div>
                 <div style={{width: "100%"}}></div>
-                <div style={{minWidth: "150px"}}>{searchColumn}</div>
+                <div style={{minWidth: "150px"}}>
+                  <FormControl variant="outlined" style={{width: "100%", backgroundColor: "#202225", borderRadius: "4px"}}>
+                    <InputLabel shrink={true} style={{color: "white"}}>
+                      Filter
+                    </InputLabel>
+                    <CustomSelect
+                      value={this.state.searchColumn}
+                      name="searchColumn"
+                      onChange={this.handleChange}
+                      renderValue={value => `${value}`}
+                      input={<CustomOutlinedInput labelWidth={40}/>}
+                      items={["ID", "Username", "Email", "Transaction", "Subscription"]}
+                    />
+                  </FormControl>
+                </div>
                 <div style={{minWidth: "200px"}}>{search}</div>
               </div>
               <div>
