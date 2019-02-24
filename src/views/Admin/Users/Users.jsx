@@ -6,15 +6,14 @@ import PropTypes from 'prop-types';
 import withStyles from "@material-ui/core/styles/withStyles"
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx"
 import { withRouter } from "react-router-dom"
-import { getUsers } from 'actions/userActions'
+import { getUsers, clearDeleteUser } from 'actions/userActions'
 import { NavLink } from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton'
 import Add from '@material-ui/icons/Add'
 import Close from '@material-ui/icons/Close'
-import CreateUserForm from './CreateUserForm.jsx'
+import UserForm from './UserForm.jsx'
 import FormControl from "@material-ui/core/FormControl";
-import TextField from
-"@material-ui/core/TextField"
+import TextField from "@material-ui/core/TextField"
 
 import CustomTextField from 'components/CustomTextField/CustomTextField.jsx'
 import Table from '@material-ui/core/Table';
@@ -37,6 +36,8 @@ import CustomTableSortLabel from "components/TableSortLabel/CustomTableSortLabel
 import CustomMenuItem from "components/MenuItem/CustomMenuItem.jsx"
 import CustomSelect from "components/Select/CustomSelect.jsx"
 import CustomOutlinedInput from 'components/OutlinedInput/CustomOutlinedInput.jsx'
+import CustomSnackbar from "components/Snackbar/CustomSnackbar.jsx"
+
 
 import { parseDate } from 'utils/DateUtils'
 
@@ -247,7 +248,7 @@ class Users extends Component {
               <IconButton onClick={this.closeNewUser} color="inherit" aria-label="Menu">
                 <Close />
               </IconButton>
-              <CreateUserForm />
+              <UserForm editing={false}/>
             </div>
           ):(
             <div className={classes.content}>
@@ -265,6 +266,15 @@ class Users extends Component {
               <div>
                 {this.renderUsers()}
               </div>
+              <CustomSnackbar
+                color="success"
+                message={!this.props.users.deleteUserSuccessMessage ? "" : this.props.users.deleteUserSuccessMessage}
+                classes={{}}
+                place="br"
+                open={!this.props.users.deleteUserSuccessMessage ? false : true}
+                onClose={() => this.props.clearDeleteUser()}
+                close
+                />
             </div>
           )}
         </div>
@@ -287,5 +297,5 @@ function loadData(store, match){
 
 export default {
   loadData,
-  component: withRouter(connect(mapStateToProps, {getUsers})(withStyles(dashboardStyle)(Users)))
+  component: withRouter(connect(mapStateToProps, {getUsers, clearDeleteUser})(withStyles(dashboardStyle)(Users)))
 }

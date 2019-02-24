@@ -98,7 +98,7 @@ export const deleteProduct = (history, product_id) => async (dispatch, getState,
       type: types.DELETE_PRODUCT_SUCCESS,
       payload: res
     })
-    history.push("/admin/products")
+    history.replace("/admin/products")
   } catch (error) {
     console.dir(error)
     dispatch({

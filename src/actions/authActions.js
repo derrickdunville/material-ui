@@ -46,7 +46,7 @@ export const logout = () => async (dispatch, getState, api) => {
 export const signUpUser = (history, email, username, password, confirm_password) => async (dispatch, getState, api) => {
   dispatch({ type: types.SIGN_UP_USER })
   try {
-    const res = await api.post('/users', {
+    const res = await api.post('/signup', {
       "email": email,
       "username": username,
       "password": password,

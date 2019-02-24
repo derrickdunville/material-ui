@@ -14,7 +14,6 @@ export const getUsers = (filter=undefined, page=0, limit=10, order="asc", orderB
     }
   }
 
-  console.log("Url: " + url)
   try {
     const res = await api.get(url)
     dispatch({
@@ -45,7 +44,7 @@ export const getUser = (username) => async (dispatch, getState, api) => {
      })
   }
 }
-export const postUser = (user) => async (dispatch, getState, api) => {
+export const postUser = (history, user) => async (dispatch, getState, api) => {
   dispatch({
     type: types.POST_USER
   })
@@ -55,6 +54,11 @@ export const postUser = (user) => async (dispatch, getState, api) => {
       type: types.POST_USER_SUCCESS,
       payload: res
     })
+    try{
+      history.push("/admin/users/" + res.data.username)
+    } catch(error){
+      console.dir(error)
+    }
   } catch (error) {
     dispatch({
       type: types.POST_USER_FAIL,
@@ -79,7 +83,7 @@ export const putUser = (id, user) => async (dispatch, getState, api) => {
      })
   }
 }
-export const deleteUser = (user_id) => async (dispatch, getState, api) => {
+export const deleteUser = (history, user_id) => async (dispatch, getState, api) => {
   dispatch({
     type: types.DELETE_USER
   })
@@ -89,12 +93,26 @@ export const deleteUser = (user_id) => async (dispatch, getState, api) => {
       type: types.DELETE_USER_SUCCESS,
       payload: res
     })
+    history.replace("/admin/users")
   } catch (error) {
     dispatch({
       type: types.DELETE_USER_FAIL,
        payload: error.response
      })
   }
+}
+
+export const toggleEditOpen = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.TOGGLE_EDITING_USER })
+}
+export const clearPostUser = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.CLEAR_POST_USER })
+}
+export const clearPutUser = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.CLEAR_PUT_USER })
+}
+export const clearDeleteUser = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.CLEAR_DELETE_USER })
 }
 export const clearUser = () => async (dispatch, getState, api) => {
   dispatch({ type: types.CLEAR_USER })

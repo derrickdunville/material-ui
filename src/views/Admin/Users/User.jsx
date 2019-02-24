@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { NavLink, Switch, Route, Redirect, withRouter } from "react-router-dom"
 import { Helmet } from 'react-helmet'
-import { getUser, deleteUser, clearUser } from 'actions/userActions'
-import EditUserForm from './EditUserForm.jsx'
+import { getUser, deleteUser, clearUser, toggleEditOpen, clearPostUser } from 'actions/userActions'
+import UserForm from './UserForm.jsx'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -15,6 +15,8 @@ import Delete from '@material-ui/icons/Delete'
 import Edit from '@material-ui/icons/Edit'
 import withStyles from "@material-ui/core/styles/withStyles"
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx"
+import AlertDialog from "components/Dialog/AlertDialog.jsx"
+import CustomSnackbar from "components/Snackbar/CustomSnackbar.jsx"
 
 class User extends Component {
   constructor(props) {
@@ -23,17 +25,13 @@ class User extends Component {
       editOpen: false,
       deleteOpen: false
     }
-    this.openEdit = this.openEdit.bind(this)
-    this.closeEdit = this.closeEdit.bind(this)
+    this.toggleEdit = this.toggleEdit.bind(this)
     this.openDelete = this.openDelete.bind(this)
     this.closeDelete = this.closeDelete.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
   }
-  openEdit(){
-    this.setState({editOpen: true})
-  }
-  closeEdit(){
-    this.setState({editOpen: false})
+  toggleEdit(){
+    this.props.toggleEditOpen()
   }
   openDelete(){
     this.setState({deleteOpen: true})
@@ -42,7 +40,7 @@ class User extends Component {
     this.setState({deleteOpen: false})
   }
   handleDelete(){
-    this.props.deleteUser(this.props.user._id)
+    this.props.deleteUser(this.props.history, this.props.user._id)
   }
   componentDidMount(){
     console.log("User componentDidMount")
@@ -83,56 +81,54 @@ class User extends Component {
       </AppBar>
     )
 
-    const deleteUser = (
-      <div>
-        Are you sure you want to delete user {this.props.user.username}?
-          <Button onClick={this.handleDelete}>
-            Delete
-          </Button>
-          <Button onClick={this.closeDelete}>
-            Cancel
-          </Button>
-      </div>
-    )
-    const editUser = (
-      <div>
-        <Button onClick={this.closeEdit}>
-          Cancel
-        </Button>
-        <EditUserForm />
-      </div>
-    )
     return (
       <div className={`admin-slide${route.zIndex}`}>
         {this.head()}
         {appBar}
         <div className={classes.route} ref="mainPanel">
-          {(!this.state.deleteOpen && !this.state.editOpen) ? (
+          {this.props.user ? (
             <div className={classes.content}>
-              <IconButton onClick={this.openDelete} color="inherit" aria-label="Menu">
-                <Delete />
-              </IconButton>
-              <IconButton onClick={this.openEdit} color="inherit" aria-label="Menu">
-                <Edit />
-              </IconButton>
-              <h5>{this.props.user.username}</h5>
-              <h5>{this.props.user.email}</h5>
-              <h5>{this.props.user.created_at}</h5>
+              <div style={{display: "flex", marginBottom: "10px"}}>
+                <Button style={{width: "100%", marginRight: "10px"}} variant="outlined" color="default" onClick={this.toggleEdit}>
+                  {this.props.editOpen ? "Cancel" : "Edit"}
+                </Button>
+                <AlertDialog
+                  style={{width: "100%"}}
+                  buttonText="Delete"
+                  buttonColor="secondary"
+                  loading={this.props.deletingUser}
+                  loadingMessage={"Deleting User..."}
+                  successMessage={this.props.deleteUserSuccessMessage}
+                  errorMessage={this.props.deleteUserErrorMessage}
+                  open={this.state.deleteOpen}
+                  title={`Delete ${this.props.user.username}?`}
+                  text="Are you sure you would like to delete this user? This will result in this user being end-dated. It will not actually be deleted permenantly but it will be masked and all associated records will also be end-dated. This action cannot be undone."
+                  leftAction={this.closeDelete}
+                  leftActionText="Cancel"
+                  leftActionColor="default"
+                  rightAction={this.handleDelete}
+                  rightActionText="Delete"
+                  rightActionColor="secondary"
+                  onClick={this.openDelete}
+                  onClose={this.closeDelete}
+                  />
+              </div>
+              <div>
+                <UserForm editing={true} disabled={!this.props.editOpen} user={this.props.user}/>
+              </div>
             </div>
           ):(
-            <div>
-              {this.state.deleteOpen && (
-                <div className={classes.content}>
-                  {deleteUser}
-                </div>
-              )}
-              {this.state.editOpen && (
-                <div className={classes.content}>
-                  {editUser}
-                </div>
-              )}
-            </div>
+            <div> Loading ...</div>
           )}
+          <CustomSnackbar
+            color="success"
+            message={!this.props.postUserSuccessMessage ? "" : this.props.postUserSuccessMessage}
+            classes={{}}
+            place="br"
+            open={!this.props.postUserSuccessMessage ? false : true}
+            onClose={() => this.props.clearPostUser()}
+            close
+            />
         </div>
       </div>
     )
@@ -141,7 +137,12 @@ class User extends Component {
 
 function mapStateToProps(state) {
   return {
-    user: state.users.user
+    user: state.users.user,
+    editOpen: state.users.editOpen,
+    deletingUser: state.users.deletingUser,
+    deleteUserErrorMessage: state.users.deleteUserErrorMessage,
+    deleteUserSuccessMessage: state.users.deleteUserSuccessMessage,
+    postUserSuccessMessage: state.users.postUserSuccessMessage
   }
 }
 
@@ -153,5 +154,13 @@ function loadData(store, match){
 
 export default {
   loadData,
-  component: withRouter(connect(mapStateToProps, {getUser, clearUser, deleteUser})(withStyles(dashboardStyle)(User)))
+  component: withRouter(connect(mapStateToProps,
+    {
+      getUser,
+      clearUser,
+      deleteUser,
+      toggleEditOpen,
+      clearPostUser
+    }
+  )(withStyles(dashboardStyle)(User)))
 }

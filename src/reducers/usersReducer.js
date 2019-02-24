@@ -5,6 +5,7 @@ const initialState = {
   loading: false,
   message: false,
   error: false,
+  editOpen: false,
 
   user: false,
   page: 0,
@@ -13,15 +14,22 @@ const initialState = {
   docs: [],
 
   gettingUser: false,
-  gettingUserError: false,
+  getUserErrorMessage: false,
+
   gettingUsers: false,
-  gettingUsersError: false,
+  getUsersErrorMessage: false,
+
   postingUser: false,
-  postingUserError: false,
+  postUserErrorMessage: false,
+  postUserSuccessMessage: false,
+
   puttingUser: false,
-  puttingUserError: false,
+  putUserSuccesseMessage: false,
+  putUserErrorMessage: false,
+
   deletingUser: false,
-  deletingUserError: false
+  deleteUserSuccessMessage: false,
+  deleteUserErrorMessage: false
 }
 export default (state=initialState, action) => {
   switch (action.type) {
@@ -40,7 +48,7 @@ export default (state=initialState, action) => {
       return {
         ...state,
         gettingUser: false,
-        gettingUserError: action.payload.data.err.message
+        getUserErrorMessage: action.payload.data.err.message
       }
     case types.GET_USERS:
       return {
@@ -58,7 +66,7 @@ export default (state=initialState, action) => {
       return {
         ...state,
         gettingUsers: false,
-        gettingUsersError: action.payload.data.err.message
+        getUsersErrorMessage: action.payload.data.err.message
       }
     case types.POST_USER:
       return {
@@ -69,14 +77,28 @@ export default (state=initialState, action) => {
       return {
         ...state,
         postingUser: false,
-        // hmmmm, how should we handle posting success result
-        message: "created successfully"
+        docs: [action.payload.data, ...state.docs],// hmmmm, how should we handle posting success result
+        total: state.total + 1,
+        postUserSuccessMessage: "User successfully created",
+        postUserErrorMessage: false
       }
     case types.POST_USER_FAIL:
       return {
         ...state,
         postingUser: false,
-        postingUserError: action.payload.data.err.message
+        postUserSuccessMessage: false,
+        postUserErrorMessage: action.payload.data.err.message
+      }
+    case types.CLEAR_POST_USER:
+      return {
+        ...state,
+        postUserSuccessMessage: false,
+        postUserErrorMessage: false
+      }
+    case types.TOGGLE_EDITING_USER:
+      return {
+        ...state,
+        editOpen: !state.editOpen
       }
     case types.PUT_USER:
       return {
@@ -88,13 +110,20 @@ export default (state=initialState, action) => {
         ...state,
         puttingUser: false,
         user: action.payload.data,
-        message: "updated successfully"
+        putUserSuccessMessage: "updated successfully",
+        editOpen: false
       }
     case types.PUT_USER_FAIL:
       return {
         ...state,
         puttingUser: false,
-        puttingUserError: action.payload.data.err.message
+        putUserErrorMessage: action.payload.data.err.message
+      }
+    case types.CLEAR_PUT_USER:
+      return {
+        ...state,
+        putUserSuccessMessage: false,
+        putUserErrorMessage: false
       }
     case types.DELETE_USER:
       return {
@@ -104,19 +133,28 @@ export default (state=initialState, action) => {
     case types.DELETE_USER_SUCCESS:
       return {
         ...state,
-        deletingUser: false
+        deletingUser: false,
+        deleteUserSuccessMessage: "User successfully deleted.",
+        deleteUserErrorMessage: false
       }
     case types.DELETE_USER_FAIL:
       return {
         ...state,
         deletingUser: false,
-        deletingUserError: action.payload.data.err.message
+        deleteUserSuccessMessage: false,
+        deleteUserErrorMessage: action.payload.data.err.message
+      }
+    case types.CLEAR_DELETE_USER:
+      return {
+        ...state,
+        deleteUserErrorMessage: false,
+        deleteUserSuccessMessage: false
       }
     case types.CLEAR_USER:
       return {
         ...state,
         user: false,
-        gettingUserError: false
+        getUserError: false
       }
     default:
       return state
