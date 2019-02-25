@@ -23,90 +23,113 @@ import accountRoutes from '../routes/account'
 import adminRoutes from '../routes/admin'
 // @material-ui/icons
 import Dashboard from "@material-ui/icons/Dashboard"
-
+import MessageIcon from "@material-ui/icons/Message"
+import OnDemandVideoIcon from "@material-ui/icons/OndemandVideo"
+import WhatsHotIcon from "@material-ui/icons/Whatshot"
+import CodeIcon from "@material-ui/icons/Code"
 export default [
   {
     ...App,
     routes: [
       {
-        ...HomePage,
-        path: '/',
-        exact: true,
-      },
-      {
         ...LoginPage,
+        hidden: true,
         path: '/login',
       },
       {
         ...SignUpPage,
+        hidden: true,
         path: '/sign-up',
       },
       {
         ...ForgotPasswordPage,
+        hidden: true,
         path: '/forgot-password',
       },
       {
         ...ResetPasswordPage,
+        hidden: true,
         path: '/reset-password/:reset_token',
       },
       {
         ...UserDashboard,
-        path: '/app/',
+        path: '/',
         zIndex: "",
         routes: [
           {
             ...AppPage,
-            path: '/app/',
+            hidden: true,
+            title: "Contact",
+            path: '/contact',
+          },
+          {
+            ...AppPage,
+            hidden: true,
+            title: "Terms",
+            path: '/tos',
+          },
+          {
+            ...ForgotPasswordPage,
+            hidden: true,
+            path: '/forgot-password',
+          },
+          {
+            ...HomePage,
+            path: '/',
             exact: true,
-            title: "Home",
+            title: "Welcome",
             hidden: true,
             zIndex: "1"
           },
           {
             ...Chat,
-            path: '/app/chat',
+            path: '/chat',
             title: "Chat",
             zIndex: "1",
-            exact: true
+            exact: true,
+            icon: <MessageIcon/>
           },
           {
             ...Classes,
-            path: '/app/classes',
+            path: '/classes',
             title: "Classes",
             zIndex: "1",
-            exact: true
+            exact: true,
+            icon: <OnDemandVideoIcon/>
           },
           {
             ...Product,
-            path: '/app/classes/:id',
+            path: '/classes/:id',
             title: "Classes",
             hidden: true,
             zIndex: "2"
           },
           {
             ...Scanners,
-            path: '/app/scanners',
+            path: '/scanners',
             title: "Scanners",
             zIndex: "1",
-            exact: true
+            exact: true,
+            icon: <WhatsHotIcon/>
           },
           {
             ...Product,
-            path: '/app/scanners/:id',
+            path: '/scanners/:id',
             title: "Scanners",
             hidden: true,
             zIndex: "2"
           },
           {
             ...Scripts,
-            path: '/app/scripts',
+            path: '/scripts',
             title: "Scripts",
             zIndex: "1",
-            exact: true
+            exact: true,
+            icon: <CodeIcon/>
           },
           {
             ...Product,
-            path: '/app/scripts/:id',
+            path: '/scripts/:id',
             title: "Script",
             hidden: true,
             zIndex: "2"

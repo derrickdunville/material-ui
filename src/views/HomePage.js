@@ -25,20 +25,11 @@ class Home extends Component {
         {this.head()}
         <div className={classes.bgContainer}>
           <div className={classes.bg}>
-            <Navbar
-              routes={this.props.routes}
-              logoText={"App Title"}
-              logo={logo}
-              image={image}
-              color="blue"
-              {...rest}
-            />
             <div className={classes.welcome}>
                 Welcome
             </div>
           </div>
         </div>
-        <Footer />
       </div>
     )
   }

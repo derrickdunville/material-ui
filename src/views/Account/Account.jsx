@@ -20,6 +20,7 @@ import AttachMoney from '@material-ui/icons/AttachMoney'
 import Power from '@material-ui/icons/Power'
 import GetApp from '@material-ui/icons/GetApp'
 import Paper from '@material-ui/core/Paper'
+import requireAuth from 'components/hocs/requireAuth'
 
 class Account extends Component {
   constructor(props) {
@@ -59,28 +60,28 @@ class Account extends Component {
             </div>
             <Paper style={{backgroundColor: "#383838", padding: "10px", marginBottom: "10px"}}>
               <div style={{width: '100%'}}>
-                <NavLink style={{width: '100%'}} to={"/app/account/profile/"}>
+                <NavLink style={{width: '100%'}} to={"/account/profile/"}>
                   <div style={{width:"100%", height: "40px", display: "flex", alignItems: "center"}}>
                     <AccountBox style={{marginRight: "10px"}}/> Profile
                   </div>
                 </NavLink>
               </div>
               <div style={{width: '100%'}}>
-                <NavLink to={"/app/account/billing/"} style={{width: '100%'}}>
+                <NavLink to={"/account/billing/"} style={{width: '100%'}}>
                   <div style={{width:"100%", height: "40px", display: "flex", alignItems: "center"}}>
                     <AttachMoney style={{marginRight: "10px"}}/>Billing
                   </div>
                 </NavLink>
               </div>
               <div style={{width: '100%'}}>
-                <NavLink to={"/app/account/connections/"} style={{width: '100%'}}>
+                <NavLink to={"/account/connections/"} style={{width: '100%'}}>
                   <div style={{width:"100%", height: "40px", display: "flex", alignItems: "center"}}>
                     <Power style={{marginRight: "10px"}}/> Connections
                   </div>
                 </NavLink>
               </div>
               <div style={{width: '100%', marginBottom: "10px"}}>
-                <NavLink to={"/app/account/purchases/"} style={{width: '100%'}}>
+                <NavLink to={"/account/purchases/"} style={{width: '100%'}}>
                   <div style={{width:"100%", height: "40px", display: "flex", alignItems: "center"}}>
                     <GetApp  style={{marginRight: "10px"}}/> My Purchases
                   </div>
@@ -105,5 +106,5 @@ function mapStateToProps(state){
 }
 
 export default {
-  component: connect(mapStateToProps, {logout})(withRouter(withStyles(dashboardStyle)(Account)))
+  component: requireAuth(connect(mapStateToProps, {logout})(withRouter(withStyles(dashboardStyle)(Account))))
 }

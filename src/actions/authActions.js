@@ -22,7 +22,7 @@ export const loginUser = (history, username, password) => async (dispatch, getSt
       type: types.LOGIN_USER_SUCCESS,
       payload: res
     })
-    history.push('/app/')
+    history.push('/')
   } catch (error) {
     dispatch({
       type: types.LOGIN_USER_FAIL,

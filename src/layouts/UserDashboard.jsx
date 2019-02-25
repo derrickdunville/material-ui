@@ -1,50 +1,56 @@
 /* eslint-disable */
 import React from "react";
 import PropTypes from "prop-types";
-import { Switch, Route, Redirect, withRouter } from "react-router-dom";
+import { connect } from 'react-redux'
+import { renderRoutes } from 'react-router-config'
+import { NavLink, Switch, Route, Redirect, withRouter } from "react-router-dom";
+import { openNav, closeNav } from "actions"
+import { TransitionGroup, CSSTransition } from "react-transition-group";
+import requireAuth from 'components/hocs/requireAuth'
+
 // // creates a beautiful scrollbar
 // import PerfectScrollbar from "perfect-scrollbar";
 // import "perfect-scrollbar/css/perfect-scrollbar.css";
-// @material-ui/core components
-import withStyles from "@material-ui/core/styles/withStyles";
-// core components
-import Header from "components/Header/Header.jsx";
-import Footer from "components/Footer/Footer.jsx";
-import Sidebar from "components/Sidebar/Sidebar.jsx";
+
+// Style
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
+import withStyles from "@material-ui/core/styles/withStyles";
+
+// Assets
 import image from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png";
+
+// Components
 import Account from "views/Account/Account.jsx"
-import { renderRoutes } from 'react-router-config'
-
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ArrowBack from '@material-ui/icons/ArrowBack';
-import AccountBox from '@material-ui/icons/AccountBox';
-import { NavLink } from 'react-router-dom'
-
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import SettingsIcon from '@material-ui/icons/Settings';
-import GavelIcon from '@material-ui/icons/Gavel';
-
-import { openNav, closeNav } from "../actions"
-import { connect } from 'react-redux'
-import { TransitionGroup, CSSTransition } from "react-transition-group";
-
-import requireAuth from 'components/hocs/requireAuth'
-import MobileSidebar from 'components/Sidebar/MobileSidebar.jsx'
 import Avatar from 'components/Avatar/Avatar.jsx'
+import Footer from "components/Footer/Footer.jsx";
+import Header from "components/Header/Header.jsx";
+import MobileSidebar from 'components/Sidebar/MobileSidebar.jsx'
+import Sidebar from "components/Sidebar/Sidebar.jsx";
+
+// Core
+import AppBar from '@material-ui/core/AppBar'
+import Button from '@material-ui/core/Button'
+import Divider from '@material-ui/core/Divider'
+import Toolbar from '@material-ui/core/Toolbar'
+import Icon from '@material-ui/core/Icon'
+import IconButton from '@material-ui/core/IconButton'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer'
+import Typography from '@material-ui/core/Typography'
+
+// Icons
+import ArrowBack from '@material-ui/icons/ArrowBack'
+import AccountBox from '@material-ui/icons/AccountBox'
+import GavelIcon from '@material-ui/icons/Gavel'
+import InboxIcon from '@material-ui/icons/MoveToInbox'
+import MailIcon from '@material-ui/icons/Mail'
+import MenuIcon from '@material-ui/icons/Menu'
+import SettingsIcon from '@material-ui/icons/Settings'
+
 
 function getPathDepth (location) {
   // console.log("pathDepth: ", (location || {} ).pathname.split('/').length)
@@ -161,27 +167,51 @@ class UserDashboard extends React.Component {
           </div>
         </NavLink>
         <Divider />
-        <div style={{display: 'flex', color: "#000000"}}>
-          <NavLink exact to={"/app/"}
-            onClick={this.handleCloseNav}
-            key={2}
-            exact
-            className={classes.logoLink}
-            activeClassName="active"
-            style={{width: "100%"}}>
-            <Avatar />
-          </NavLink>
-          <NavLink to={'/app/account/'}
-            className={classes.logoLink}
-            style={{alignItems: "center", display: "flex", color: "#FFFFFF"}}>
-            <SettingsIcon style={{float: 'right', padding: '10px'}}/>
-          </NavLink>
-          {this.props.roles.includes("admin") && (
-            <NavLink to={'/admin/'} style={{alignItems: "center", display: "flex", color: "#FFFFFF"}}>
-              <GavelIcon style={{float: 'right', padding: '10px'}} />
+        {this.props.loggedIn ? (
+          <div style={{display: 'flex', color: "#000000"}}>
+            <NavLink to={"/account"}
+              onClick={this.handleCloseNav}
+              key={2}
+              className={classes.logoLink}
+              activeClassName="active"
+              style={{width: "100%"}}>
+              <Avatar />
             </NavLink>
-          )}
-        </div>
+            <NavLink to={'/account/'}
+              className={classes.logoLink}
+              style={{alignItems: "center", display: "flex", color: "#FFFFFF"}}>
+              <SettingsIcon style={{float: 'right', padding: '10px'}}/>
+            </NavLink>
+            {this.props.roles.includes("admin") && (
+              <NavLink to={'/admin/'} style={{alignItems: "center", display: "flex", color: "#FFFFFF"}}>
+                <GavelIcon style={{float: 'right', padding: '10px'}} />
+              </NavLink>
+            )}
+          </div>
+        ):(
+          <div style={{display: "flex"}}>
+            <NavLink exact to={"/login"}
+              onClick={this.handleCloseNav}
+              key={2}
+              exact
+              activeClassName="active"
+              style={{width: "100%", padding: "10px", height: "50px"}}>
+              <Button variant="outlined" color="primary" style={{width: "100%", height: "100%"}}>
+                Log In
+              </Button>
+            </NavLink>
+            <NavLink exact to={"/sign-up"}
+              onClick={this.handleCloseNav}
+              key={2}
+              exact
+              activeClassName="active"
+              style={{width: "100%", padding: "10px"}}>
+              <Button variant="outlined" color="primary" style={{width: "100%", height: "100%"}}>
+                Sign Up
+              </Button>
+            </NavLink>
+          </div>
+        )}
         <Divider />
         <div style={{display: "flex", flexWrap: "wrap", maxWidth: "250px" }}>
           {this.props.route.routes.map((route, index) => {
@@ -193,12 +223,38 @@ class UserDashboard extends React.Component {
                   exact={route.exact} to={route.path} className="navlink" key={index + 2} onClick={this.handleCloseNav}
                   style={{paddingLeft: "15px", marginLeft: "5px", marginRight: "5px", marginBottom: "5px", borderRadius: "3px"}}>
                   <div style={{display: "flex", width: "225px", height: "50px", paggingLeft: "15px", alignItems: "center"}}>
-                    <ListItemIcon style={{color: "#FFF"}}>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                    <ListItemIcon style={{color: "#FFF"}}>{route.icon}</ListItemIcon>
                     {route.title}
                   </div>
                 </NavLink>
               )}
           })}
+          <Divider />
+          <div style={{position: "fixed", bottom: "0"}}>
+            <div style={{display: "flex", justifyContent: "center", width: "230px"}}>
+              <div>
+                <NavLink to={'contact'} key={10} style={{width: "100%", color: "#898989"}} onClick={this.handleCloseNav}>
+                  Contact
+                </NavLink>
+              </div>
+              <div style={{width: "30px"}}>
+              </div>
+              <div>
+                <NavLink to={'tos'} key={10} style={{width: "100%", color: "#898989"}} onClick={this.handleCloseNav}>
+                  Terms
+                </NavLink>
+              </div>
+            </div>
+            <div style={{display: "flex", justifyContent: "center", width: "230px"}}>
+              <span style={{color: "#898989", fontSize: "12px"}}>
+                &copy; {1900 + new Date().getYear()}{" "}
+                <a href="http://www.derrickdunville.com" className={classes.a} style={{color: "#898989", fontSize: "12px"}}>
+                  Derrick Dunville
+                </a>
+              </span>
+            </div>
+          </div>
+
         </div>
       </div>
     );
@@ -237,11 +293,12 @@ UserDashboard.propTypes = {
 
 function mapStateToProps(state) {
   return {
+    loggedIn: state.auth.user || false,
     roles: state.auth.user.roles || []
   }
 }
 export default {
-  component: requireAuth(withRouter(connect(mapStateToProps, { openNav, closeNav })(withStyles(dashboardStyle)(UserDashboard))))
+  component: withRouter(connect(mapStateToProps, { openNav, closeNav })(withStyles(dashboardStyle)(UserDashboard)))
 }
 
 // <TransitionGroup childFactory={childFactoryCreator(this.getClassName(this.props.location), this.getTransitionTimeout(this.props.location))}>

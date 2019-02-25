@@ -171,7 +171,7 @@ class Product extends Component {
         className="app-bar-slide2"
         >
         <Toolbar>
-          <NavLink exact to={this.props.product.category == "class" ? (`/app/classes`) : (`/app/${this.props.product.category}s`)} style={{color: "#FFF"}}>
+          <NavLink exact to={this.props.product.category == "class" ? (`/classes`) : (`/${this.props.product.category}s`)} style={{color: "#FFF"}}>
             <IconButton color="inherit" aria-label="Menu">
               <ArrowBack />
             </IconButton>
