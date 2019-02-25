@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { postTransaction, putTransaction } from 'actions/transactionActions'
+import { withRouter } from 'react-router'
+import { postTransaction, putTransaction, clearPostTransaction, clearPutTransaction } from 'actions/transactionActions'
 import Button from "components/CustomButtons/Button.jsx";
 import CustomTextField from 'components/CustomTextField/CustomTextField.jsx'
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -266,5 +267,22 @@ class TransactionForm extends Component {
     )
   }
 }
+function mapStateToProps(state) {
+  return {
+    transactions: state.transactions,
+    postingTransaction: state.transactions.postingTransaction,
+    postTransactionSuccessMessage: state.transactions.postTransactionSuccessMessage,
+    postTransactionErrorMessage: state.transactions.postTransactionErrorMessage,
+    puttingTransaction: state.transactions.puttingTransaction,
+    putTransactionSuccessMessage: state.transactions.putTransactionSuccessMessage,
+    putTransactionErrorMessage: state.transactions.putTransactionErrorMessage
+  }
+}
 
-export default withStyles(formStyle)(TransactionForm)
+export default connect(mapStateToProps,
+  {
+    postTransaction,
+    clearPostTransaction,
+    putTransaction,
+    clearPutTransaction
+  })(withRouter(withStyles(formStyle)(TransactionForm)))

@@ -28,13 +28,7 @@ class Account extends Component {
   }
   head(){
     return (
-      <Helmet key={this.props.location}
-        title={"Account"}
-        meta={[
-          {
-            name: "Account"
-          }
-        ]}/>
+      <Helmet key={this.props.location} title={"Account"} meta={[{name: "Account"}]}/>
     )
   }
 
