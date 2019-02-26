@@ -51,6 +51,7 @@ export default [
         hidden: true,
         path: '/reset-password/:reset_token',
       },
+      ...adminRoutes,
       {
         ...UserDashboard,
         path: '/',
@@ -134,15 +135,18 @@ export default [
             hidden: true,
             zIndex: "2"
           },
-          ...accountRoutes
+          ...accountRoutes,
+          {
+            ...NotFoundPage,
+            hidden: true,
+            path: '',
+          }
         ]
       },
-      ...adminRoutes,
       {
         ...NotFoundPage,
         path: '',
       }
-
     ]
   }
 ]

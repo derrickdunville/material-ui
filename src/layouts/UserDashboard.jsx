@@ -202,7 +202,7 @@ class UserDashboard extends React.Component {
             </NavLink>
             <NavLink exact to={"/sign-up"}
               onClick={this.handleCloseNav}
-              key={2}
+              key={3}
               exact
               activeClassName="active"
               style={{width: "100%", padding: "10px"}}>
@@ -216,11 +216,11 @@ class UserDashboard extends React.Component {
         <div style={{display: "flex", flexWrap: "wrap", maxWidth: "250px" }}>
           {this.props.route.routes.map((route, index) => {
             if(route.hidden){
-              return (<div key={index+2}></div>)
+              return (<div key={index+10}></div>)
             } else {
               return (
                 <NavLink
-                  exact={route.exact} to={route.path} className="navlink" key={index + 2} onClick={this.handleCloseNav}
+                  exact={route.exact} to={route.path} className="navlink" key={index + 10} onClick={this.handleCloseNav}
                   style={{paddingLeft: "15px", marginLeft: "5px", marginRight: "5px", marginBottom: "5px", borderRadius: "3px"}}>
                   <div style={{display: "flex", width: "225px", height: "50px", paggingLeft: "15px", alignItems: "center"}}>
                     <ListItemIcon style={{color: "#FFF"}}>{route.icon}</ListItemIcon>
@@ -233,14 +233,14 @@ class UserDashboard extends React.Component {
           <div style={{position: "fixed", bottom: "0"}}>
             <div style={{display: "flex", justifyContent: "center", width: "230px"}}>
               <div>
-                <NavLink to={'contact'} key={10} style={{width: "100%", color: "#898989"}} onClick={this.handleCloseNav}>
+                <NavLink to={'contact'} key={4} style={{width: "100%", color: "#898989"}} onClick={this.handleCloseNav}>
                   Contact
                 </NavLink>
               </div>
               <div style={{width: "30px"}}>
               </div>
               <div>
-                <NavLink to={'tos'} key={10} style={{width: "100%", color: "#898989"}} onClick={this.handleCloseNav}>
+                <NavLink to={'tos'} key={5} style={{width: "100%", color: "#898989"}} onClick={this.handleCloseNav}>
                   Terms
                 </NavLink>
               </div>

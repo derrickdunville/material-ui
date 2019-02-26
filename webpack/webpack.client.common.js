@@ -2,6 +2,8 @@
 import path from 'path'
 import CleanWebpackPlugin from 'clean-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import RobotstxtPlugin from 'robotstxt-webpack-plugin'
+
 import qs from 'querystring';
 import merge from 'webpack-merge'
 import common from './webpack.common.js'
@@ -29,6 +31,7 @@ module.exports = merge(common,
     },
     plugins: [
       new CleanWebpackPlugin(['public']),
+      new RobotstxtPlugin({filePath: 'robots.txt'}),
       definePlugin
     ],
     module: {

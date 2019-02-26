@@ -14,7 +14,9 @@ class Home extends Component {
 
   head(){
     return (
-      <Helmet key={this.props.location} title={"Welcome"} meta={[{name: "Welcome"}]}/>
+      <Helmet key={this.props.location} title={"Welcome to App Title - Get Connected Today!"} meta={[
+          {name: "description", content: "This is the description for the website. It should appear when a link to the site is embedded somewhere on the web."}
+        ]}/>
     )
   }
 
@@ -26,7 +28,7 @@ class Home extends Component {
         <div className={classes.bgContainer}>
           <div className={classes.bg}>
             <div className={classes.welcome}>
-                Welcome
+                <h1>Welcome</h1>
             </div>
           </div>
         </div>

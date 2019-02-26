@@ -1,5 +1,6 @@
 import express from 'express';
 import http from 'http';
+import https from 'https';
 import renderApp from './src/server-render';
 import createStore from './src/createStore';
 import proxy from 'express-http-proxy'
@@ -9,10 +10,28 @@ import { matchRoutes } from 'react-router-config'
 global.window = {innerWidth: 1000, innerHeight: 1080}
 const app = express();
 // We serve bundle.js for client and any other static asstets from the public directory
-app.use(express.static('public'))
+var cacheTime = 86400000*7;     // 7 days
+app.use(express.static('public', { maxAge: cacheTime }))
 // Client side api calls need to be proxied to the api
 app.use('/api', proxy('http://127.0.0.1:3001'))
-// Anything else gets passed to the client app's server rendering
+
+if(process.env.NODE_ENV == 'production'){
+  app.get('*.js', function (req, res, next) {
+    console.log("getting compressesed .js")
+    req.url = req.url + '.gz';
+    res.set('Content-Encoding', 'gzip');
+    next();
+  });
+}
+
+// Cache-Control
+app.use(function (req, res, next) {
+    if (req.url.match(/^\/(css|js|img|font)\/.+/)) {
+        res.setHeader('Cache-Control', 'public, max-age=3600'); // cache header
+    }
+    next();
+});
+
 app.get('*', function(req, res, next) {
 
     const store = createStore(req)

@@ -170,7 +170,7 @@ class AdminDashboard extends React.Component {
             <h6>Admin Root</h6>
           </div>
         </NavLink>
-        <NavLink to={'/app/'} style={{alignItems: "center", display: "flex", color: "#FFF"}}>
+        <NavLink to={'/'} style={{alignItems: "center", display: "flex", color: "#FFF"}}>
           <ArrowBack style={{padding: '10px'}}/>
           Exit Admin
         </NavLink>
