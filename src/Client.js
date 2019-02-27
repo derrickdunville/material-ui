@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
 import PropTypes from 'prop-types';
 import "assets/css/material-dashboard-react.css?v=1.5.0";
-import indexRoutes from "routes/index.jsx";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Routes from './routes/app'
 import { renderRoutes } from 'react-router-config'

@@ -19,6 +19,12 @@
   position: absolute;
   top: 60px;
 } */
+
+
+/* Hide ReCaptcha*/
+body:not(.contact) .grecaptcha-badge {
+	display: none;
+}
 .update {
   color: "white"
 }

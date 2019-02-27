@@ -11,6 +11,7 @@ import ForgotPasswordPage from '../views/ForgotPasswordPage'
 import ResetPasswordPage from '../views/ResetPasswordPage'
 import UserDashboard from '../layouts/UserDashboard.jsx'
 import AppPage from "../views/App/AppPage.jsx"
+import Contact from "views/Contact/Contact.jsx"
 
 import Classes from 'views/Products/Classes.jsx'
 import Scripts from 'views/Products/Scripts.jsx'
@@ -58,7 +59,7 @@ export default [
         zIndex: "",
         routes: [
           {
-            ...AppPage,
+            ...Contact,
             hidden: true,
             title: "Contact",
             path: '/contact',

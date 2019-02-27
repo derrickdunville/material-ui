@@ -82,3 +82,24 @@ export const loadMemberships = (order="asc", orderBy="amount") => async (dispatc
      })
   }
 }
+
+export const POST_CONTACT = "POST_CONTACT"
+export const POST_CONTACT_SUCCESS = "POST_CONTACT_SUCCESS"
+export const POST_CONTACT_FAIL = "POST_CONTACT_FAIL"
+export const postContact = (contact) => async (dispatch, getState, api) => {
+  dispatch({
+    type: POST_CONTACT
+  })
+  try {
+    const res = await api.post('/contact', contact)
+    dispatch({
+      type: POST_CONTACT_SUCCESS,
+      payload: res
+    })
+  } catch (error) {
+    dispatch({
+      type: POST_CONTACT_FAIL,
+       payload: error.response
+     })
+  }
+}

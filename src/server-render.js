@@ -30,7 +30,7 @@ function renderApp(req, store, context) {
     <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
         <Provider store={store}>
-          <Server location={req.path} context={context}/>
+          <Server location={req.url} context={context}/>
         </Provider>
       </MuiThemeProvider>
     </JssProvider>

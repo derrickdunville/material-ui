@@ -75,13 +75,13 @@ class UserDashboard extends React.Component {
     this.mobileSidebar = React.createRef()
   }
   componentDidMount(){
-    // console.dir(this.props.location.pathname)
-    if(this.props.location.pathname === "/app"){
-      // console.log("doesn't end with /")
-      this.props.history.replace(`${this.props.location.pathname}/`)
-    } else {
-      this.props.history.replace(`${this.props.location.pathname}`)
-    }
+    // // console.dir(this.props.location.pathname)
+    // if(this.props.location.pathname === "/app"){
+    //   // console.log("doesn't end with /")
+    //   this.props.history.replace(`${this.props.location.pathname}/`)
+    // } else {
+    //   this.props.history.replace(`${this.props.location.pathname}`)
+    // }
   }
 
   componentWillReceiveProps () {

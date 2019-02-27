@@ -16,7 +16,8 @@ const definePlugin = new webpack.DefinePlugin({
     DISCORD_CLIENT_ID: JSON.stringify(process.env.DISCORD_CLIENT_ID),
     DISCORD_CALLBACK: JSON.stringify(process.env.DISCORD_CALLBACK),
     DISCORD_GUILD_ID: JSON.stringify(process.env.DISCORD_GUILD_ID || "353342769630281738"),
-    DISCORD_WELCOME_CHANNEL_ID: JSON.stringify(process.env.DISCORD_WELCOME_CHANNEL_ID || "544943256283119626")
+    DISCORD_WELCOME_CHANNEL_ID: JSON.stringify(process.env.DISCORD_WELCOME_CHANNEL_ID || "544943256283119626"),
+    RECAPTCHA_SITE_KEY: JSON.stringify(process.env.RECAPTCHA_SITE_KEY)
   }
 });
 

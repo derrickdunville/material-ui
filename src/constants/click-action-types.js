@@ -1,0 +1,3 @@
+export const POST_CLICK = "POST_CLICK"
+export const POST_CLICK_SUCCESS = "POST_CLICK_SUCCESS"
+export const POST_CLICK_FAIL = "POST_CLICK_FAIL"

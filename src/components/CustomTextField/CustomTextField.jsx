@@ -23,7 +23,10 @@ function CustomTextField({ ...props }) {
     labelProps,
     inputProps,
     error,
-    success
+    helperText,
+    success,
+    textFieldProps,
+    ...custom
   } = props;
 
   return (
@@ -55,6 +58,7 @@ function CustomTextField({ ...props }) {
         type={inputType}
         autoComplete="current-password"
         variant="outlined"
+        {...textFieldProps}
       />
     </FormControl>
   );

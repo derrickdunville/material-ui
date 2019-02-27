@@ -7,6 +7,8 @@ import { fetchCurrentUser, getPaymentMethod, getMyDiscordGuildMember } from 'act
 import dashboardStyle from 'assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx'
 import withStyles from '@material-ui/core/styles/withStyles'
 import Socket from 'utils/Socket.jsx'
+import { loadReCaptcha } from 'react-recaptcha-v3'
+const RECAPTCHA_SITE_KEY = process.env.RECAPTCHA_SITE_KEY
 
 class App extends Component {
   constructor(props) {
@@ -21,6 +23,7 @@ class App extends Component {
     } else {
       this.props.getPaymentMethod()
     }
+    loadReCaptcha(RECAPTCHA_SITE_KEY)
   }
   componentDidUpdate(prevProps, prevState){
     if(!prevProps.user && this.props.user){
