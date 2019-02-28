@@ -30,6 +30,7 @@ class MyPurchases extends Component {
   renderPurchases(){
     return (
       <div>
+        {this.props.products.length == 0 && (<div>You have not made any purchases. When you purchase Scripts, Scanners, or Classes they will be listed here.</div>)}
         {this.props.products.map(product => {
           return(
             <div key={product._id} style={{display:"flex", alignItems:"center", backgroundColor: "#202225", padding:"10px", borderRadius: "4px", marginBottom: "6px"}}>

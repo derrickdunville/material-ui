@@ -389,6 +389,11 @@ export default function(state = initialState, action) {
         updateProfileErrorMessage: false,
         updateProfileSuccessMessage: false
       }
+    case types.PAYMENT_METHOD_UPDATED:
+      return {
+        ...state,
+        payment_method: action.payload
+      }
     default:
       return state
   }

@@ -21,7 +21,8 @@ import {
   userDeleted
 } from 'actions/userActions'
 import {
-  fetchCurrentUser
+  fetchCurrentUser,
+  paymentMethodUpdated
 } from 'actions/authActions'
 
 import io from 'socket.io-client'
@@ -108,6 +109,12 @@ class Socket extends Component {
       // this just relogs in the user, so the entire auth.user is reloaded
       this.props.fetchCurrentUser()
     })
+    socket.on("PAYMENT_METHOD_UPDATED", payment_method => {
+      console.log("PAYMENT_METHOD_UPDATED")
+      console.dir(payment_method)
+      // this just relogs in the user, so the entire auth.user is reloaded
+      this.props.paymentMethodUpdated(payment_method)
+    })
   }
   leaveMe(){
     const { user } = this.props
@@ -168,5 +175,6 @@ export default connect(mapStateToProps, {
   productDeleted,
   userCreated,
   userUpdated,
-  userDeleted
+  userDeleted,
+  paymentMethodUpdated
 })(Socket)

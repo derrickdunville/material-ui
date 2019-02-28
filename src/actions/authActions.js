@@ -258,3 +258,7 @@ export const updateProfile = (id, user) => async (dispatch, getState, api) => {
 export const clearUpdateProfile = () => async (dispatch, getState, api) => {
   dispatch({type: types.CLEAR_UPDATE_PROFILE})
 }
+
+export const paymentMethodUpdated = (payment_method) => async (dispatch, getState, api) => {
+  dispatch({type: types.PAYMENT_METHOD_UPDATED, payload: payment_method})
+}
