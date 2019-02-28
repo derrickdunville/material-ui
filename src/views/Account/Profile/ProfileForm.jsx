@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { updateProfile } from 'actions/authActions'
+import { updateProfile, clearUpdateProfile } from 'actions/authActions'
 import Button from "components/CustomButtons/Button.jsx";
 import Paper from "@material-ui/core/Paper"
 import CustomTextField from 'components/CustomTextField/CustomTextField.jsx'
@@ -8,6 +8,9 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import formStyle from "assets/jss/material-dashboard-react/views/formStyle.jsx"
 import FormControl from "@material-ui/core/FormControl"
 import Avatar from "./Avatar.jsx"
+import CustomSnackbar from "components/Snackbar/CustomSnackbar.jsx"
+
+var strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 
 class ProfileForm extends Component {
   constructor(props) {
@@ -62,6 +65,108 @@ class ProfileForm extends Component {
     this.props.updateProfile(this.state.id, form_data)
   }
 
+
+  validate(){
+    if(this.state.username != this.props.user.username ||
+      this.state.email != this.props.user.email ||
+      this.state.new_password != '' && this.state.password != ''){
+        if(this.validateUsername() &&
+          this.validateEmail() &&
+          this.validatePassword() &&
+          this.validateNewPassword()){
+            return true
+          }
+      }
+      return false
+  }
+  validateUsername(){
+    console.log("validate username")
+    if(this.state.username === '') return false
+    return true
+  }
+
+  validateEmail(){
+    if(this.state.email === '' || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(this.state.email)) return false
+    return true
+  }
+  emailHelperText(){
+    if(this.state.email === '') return "Required"
+    if(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(this.state.email)) return "Invalid email address"
+    return null
+  }
+
+  validatePassword(){
+    // if there are changes we need to validate password
+    if(this.state.username != this.props.user.username ||
+      this.state.email != this.props.user.email ||
+      this.state.new_password != ''){
+        // something was changed
+        if(this.state.password == '' || this.props.updateProfileErrorMessage) return false
+      }
+    return true
+  }
+  passwordHelperText(){
+    // if there are changes we need to validate password
+    if(this.state.username != this.props.user.username ||
+      this.state.email != this.props.user.email ||
+      this.state.new_password != ''){
+        // something was changed
+        if(this.state.password == '') return "Required"
+      }
+
+    if(this.props.updateProfileErrorMessage){
+      return this.props.updateProfileErrorMessage
+    }
+    return null
+  }
+  validateNewPassword(){
+    // only validate newPassword is changePassword is open
+    if(this.state.changePassword &&
+      (this.state.new_password === '' ||
+      this.state.new_password == this.state.password ||
+      !strongRegex.test(this.state.new_password))
+    ) return false
+    return true
+  }
+  newPasswordHelperText(){
+    let text = ''
+    if(this.state.changePassword &&
+      this.state.new_password === ''){
+        text = "Required"
+        return
+      }
+    if(this.state.changePassword &&
+      this.state.new_password == this.state.password){
+        text = "Password must be different"
+        return
+      }
+    if(this.state.changePassword){
+      let lowercaseAlphaRegex = new RegExp("^(?=.*[a-z])")
+      let uppercaseAlphaRegex = new RegExp("^(?=.*[A-Z])")
+      let numericRegex = new RegExp("^(?=.*[0-9])")
+      let specialRegex = new RegExp("^(?=.*[!@#\$%\^&])")
+      let lengthRegex = new RegExp("^(?=.{8,})")
+      if(!lowercaseAlphaRegex.test(this.state.new_password)){
+        text += "Must contain at least 1 lowercase alphabetic character. "
+      }
+      if(!uppercaseAlphaRegex.test(this.state.new_password)){
+        text += "Must contain at least 1 uppercase alphabetic character. "
+      }
+      if(!numericRegex.test(this.state.new_password)){
+        text += "Must contain at least 1 numeric character. "
+      }
+      if(!specialRegex.test(this.state.new_password)){
+        text += "Must contain at least 1 special character. "
+      }
+      if(!lengthRegex.test(this.state.new_password)){
+        text += "Must be 8 characters or longer. "
+      }
+      return text
+    }
+    return null
+  }
+
+
   render(){
     const { classes } = this.props;
     return(
@@ -88,6 +193,10 @@ class ProfileForm extends Component {
                 value: this.state.username,
                 onChange: this.handleChange
               }}
+              textFieldProps={{
+                error: !this.validateUsername(),
+                helperText: !this.validateUsername() ? "Required": null
+              }}
             />
             <CustomTextField
               labelText="Email"
@@ -97,6 +206,10 @@ class ProfileForm extends Component {
                 name: 'email',
                 value: this.state.email,
                 onChange: this.handleChange
+              }}
+              textFieldProps={{
+                error: !this.validateEmail(),
+                helperText: this.emailHelperText()
               }}
             />
             <CustomTextField
@@ -109,6 +222,10 @@ class ProfileForm extends Component {
                 value: this.state.password,
                 onChange: this.handleChange
               }}
+              textFieldProps={{
+                error: !this.validatePassword(),
+                helperText: this.passwordHelperText()
+              }}
             />
           {this.state.changePassword && (
             <CustomTextField
@@ -120,6 +237,10 @@ class ProfileForm extends Component {
                 type: "password",
                 value: this.state.new_password,
                 onChange: this.handleChange
+              }}
+              textFieldProps={{
+                error: !this.validateNewPassword(),
+                helperText: this.newPasswordHelperText()
               }}
             />
           )}
@@ -138,6 +259,7 @@ class ProfileForm extends Component {
                   style={{width: '100px', height: '50px'}}
                   color="primary"
                   type="submit"
+                  disabled={!this.validate()}
                   onClick={this.handleSubmit}>
                   Save
                 </Button>
@@ -146,6 +268,15 @@ class ProfileForm extends Component {
           </FormControl>
           </form>
         </Paper>
+        <CustomSnackbar
+          color="success"
+          message={!this.props.updateProfileSuccessMessage ? "" : this.props.updateProfileSuccessMessage}
+          classes={{}}
+          place="br"
+          open={!this.props.updateProfileSuccessMessage ? false : true}
+          onClose={() => this.props.clearUpdateProfile()}
+          close
+          />
       </div>
     )
   }
@@ -153,8 +284,10 @@ class ProfileForm extends Component {
 
 function mapStateToProps(state) {
   return {
+    updateProfileSuccessMessage: state.auth.updateProfileSuccessMessage,
+    updateProfileErrorMessage: state.auth.updateProfileErrorMessage,
     user: state.auth.user
   }
 }
 
-export default connect(mapStateToProps, { updateProfile })(withStyles(formStyle)(ProfileForm))
+export default connect(mapStateToProps, { updateProfile, clearUpdateProfile })(withStyles(formStyle)(ProfileForm))

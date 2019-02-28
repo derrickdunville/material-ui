@@ -35,7 +35,7 @@ const initialState = {
 
   updatingProfile: false,
   updateProfileSuccessMessage: false,
-  updateProfileFailMessage: false
+  updateProfileErrorMessage: false
 
 }
 export default function(state = initialState, action) {
@@ -363,7 +363,6 @@ export default function(state = initialState, action) {
         updatingProfile: true
       }
     case types.UPDATE_PROFILE_SUCCESS:
-      console.log("UPDATE_PROFILE_SUCCESS")
       return {
         ...state,
         user: {
@@ -373,17 +372,23 @@ export default function(state = initialState, action) {
           email: action.payload.data.email
         },
         updatingProfile: false,
-        updatingProfileSuccessMessage: "Successfully updated profile",
-        updatingProfileErrorMessage: false,
+        updateProfileSuccessMessage: "Successfully updated profile",
+        updateProfileErrorMessage: false,
       }
     case types.UPDATE_PROFILE_FAIL:{
-      console.log("UPDATE_PROFILE_FAIL")
       return {
         ...state,
         updatingProfile: false,
-        updatingProfileSuccessMessage: false,
+        updateProfileSuccessMessage: false,
+        updateProfileErrorMessage: action.payload.data.err.message
       }
     }
+    case types.CLEAR_UPDATE_PROFILE:
+      return {
+        ...state,
+        updateProfileErrorMessage: false,
+        updateProfileSuccessMessage: false
+      }
     default:
       return state
   }

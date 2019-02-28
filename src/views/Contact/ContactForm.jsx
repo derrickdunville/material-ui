@@ -105,7 +105,7 @@ class ContactForm extends Component {
               <a style={{color: "##2196f3"}} href="https://policies.google.com/privacy"> Privacy Policy</a> and
               <a style={{color: "##2196f3"}} href="https://policies.google.com/terms"> Terms of Service</a> apply.
             </div>
-            <Button right variant="outlined" color="primary" type="submit">Send</Button>
+            <Button variant="outlined" color="primary" type="submit">Send</Button>
           </div>
         </form>
       </div>

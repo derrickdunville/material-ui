@@ -254,3 +254,7 @@ export const updateProfile = (id, user) => async (dispatch, getState, api) => {
      })
   }
 }
+
+export const clearUpdateProfile = () => async (dispatch, getState, api) => {
+  dispatch({type: types.CLEAR_UPDATE_PROFILE})
+}
