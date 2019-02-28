@@ -67,9 +67,16 @@ class ProfileForm extends Component {
 
 
   validate(){
+    console.log("username valid: ", this.validateUsername())
+    console.log("email valid: ", this.validateUsername())
+    console.log("password valid: ", this.validatePassword())
+    console.log("new_password valid: ", this.validateNewPassword())
+
     if(this.state.username != this.props.user.username ||
       this.state.email != this.props.user.email ||
-      this.state.new_password != '' && this.state.password != ''){
+      this.state.new_password != '' ||
+      this.state.password != '' ||
+      this.state.avatar != null){
         if(this.validateUsername() &&
           this.validateEmail() &&
           this.validatePassword() &&
@@ -80,7 +87,6 @@ class ProfileForm extends Component {
       return false
   }
   validateUsername(){
-    console.log("validate username")
     if(this.state.username === '') return false
     return true
   }
@@ -99,7 +105,7 @@ class ProfileForm extends Component {
     // if there are changes we need to validate password
     if(this.state.username != this.props.user.username ||
       this.state.email != this.props.user.email ||
-      this.state.new_password != ''){
+      this.state.new_password != '' || this.state.avatar != null){
         // something was changed
         if(this.state.password == '' || this.props.updateProfileErrorMessage) return false
       }
@@ -109,7 +115,7 @@ class ProfileForm extends Component {
     // if there are changes we need to validate password
     if(this.state.username != this.props.user.username ||
       this.state.email != this.props.user.email ||
-      this.state.new_password != ''){
+      this.state.new_password != '' || this.state.avatar != null){
         // something was changed
         if(this.state.password == '') return "Required"
       }
@@ -133,12 +139,13 @@ class ProfileForm extends Component {
     if(this.state.changePassword &&
       this.state.new_password === ''){
         text = "Required"
-        return
+        return text
       }
     if(this.state.changePassword &&
       this.state.new_password == this.state.password){
+        console.log("password must be differnt")
         text = "Password must be different"
-        return
+        return text
       }
     if(this.state.changePassword){
       let lowercaseAlphaRegex = new RegExp("^(?=.*[a-z])")
