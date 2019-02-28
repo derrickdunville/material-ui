@@ -33,14 +33,19 @@ class ProfileForm extends Component {
     this.handleRemoveAvatar = this.handleRemoveAvatar.bind(this)
     this.handleChangeAvatar = this.handleChangeAvatar.bind(this)
   }
+  componentWillUnmount(){
+    this.props.clearUpdateProfile()
+  }
   handleChange(event){
+    if(this.props.updateProfileErrorMessage || this.props.updateProfileSuccessMessage){
+      this.props.clearUpdateProfile()
+    }
     this.setState({ [event.target.name]: event.target.value })
   }
   handleChangePassword(event){
     this.setState({ changePassword: !this.state.changePassword })
   }
   handleChangeAvatar(file){
-    console.log("avatar changed")
     this.setState({ avatar: file, removeAvatar: false })
   }
   handleRemoveAvatar(){
@@ -62,21 +67,15 @@ class ProfileForm extends Component {
       form_data.append('avatar', this.state.avatar)
     }
     form_data.append('user', JSON.stringify(user))
-    this.props.updateProfile(this.state.id, form_data)
+    this.setState({password: '', new_password: '', changePassword: false, removeAvatar: false, avatar: null}, () => this.props.updateProfile(this.state.id, form_data))
   }
 
-
   validate(){
-    console.log("username valid: ", this.validateUsername())
-    console.log("email valid: ", this.validateUsername())
-    console.log("password valid: ", this.validatePassword())
-    console.log("new_password valid: ", this.validateNewPassword())
-
     if(this.state.username != this.props.user.username ||
       this.state.email != this.props.user.email ||
       this.state.new_password != '' ||
-      this.state.password != '' ||
-      this.state.avatar != null){
+      this.state.avatar != null ||
+      this.state.removeAvatar){
         if(this.validateUsername() &&
           this.validateEmail() &&
           this.validatePassword() &&
@@ -103,9 +102,12 @@ class ProfileForm extends Component {
 
   validatePassword(){
     // if there are changes we need to validate password
+    if(this.props.updateProfileErrorMessage == "Invalid password"){
+      return false
+    }
     if(this.state.username != this.props.user.username ||
       this.state.email != this.props.user.email ||
-      this.state.new_password != '' || this.state.avatar != null){
+      this.state.new_password != '' || this.state.avatar != null || this.state.removeAvatar){
         // something was changed
         if(this.state.password == '' || this.props.updateProfileErrorMessage) return false
       }
@@ -115,7 +117,7 @@ class ProfileForm extends Component {
     // if there are changes we need to validate password
     if(this.state.username != this.props.user.username ||
       this.state.email != this.props.user.email ||
-      this.state.new_password != '' || this.state.avatar != null){
+      this.state.new_password != '' || this.state.avatar != null || this.state.removeAvatar){
         // something was changed
         if(this.state.password == '') return "Required"
       }
@@ -143,7 +145,6 @@ class ProfileForm extends Component {
       }
     if(this.state.changePassword &&
       this.state.new_password == this.state.password){
-        console.log("password must be differnt")
         text = "Password must be different"
         return text
       }
@@ -255,13 +256,11 @@ class ProfileForm extends Component {
             <div style={{display: "flex", width: "100%"}}>
               <div style={{width: "100%"}}></div>
               <div style={{display: "flex"}}>
-                {!this.state.changePassword && (
-                  <Button
-                    style={{boxShadow: "none", width: '140px', height: '50px', backgroundColor: "transparent"}}
-                    onClick={this.handleChangePassword}>
-                    Change Password?
-                  </Button>
-                )}
+                <Button
+                  style={{boxShadow: "none", width: '140px', height: '50px', backgroundColor: "transparent"}}
+                  onClick={this.handleChangePassword}>
+                  {!this.state.changePassword ? "Change Password?" : "Nevermind"}
+                </Button>
                 <Button
                   style={{width: '100px', height: '50px'}}
                   color="primary"
