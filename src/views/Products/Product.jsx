@@ -71,6 +71,12 @@ class Product extends Component {
 
   renderProduct(){
     const { product, classes } = this.props
+    let category = ""
+    if(this.props.product.category == "class"){
+      category = "classes"
+    } else {
+      category = this.props.product.category+"s"
+    }
     return (
       <div>
       {product != false ? (
@@ -124,7 +130,17 @@ class Product extends Component {
           ):(
             <div style={{display: "flex", alignItems: "center"}}>
               <div style={{width: "100%", fontSize: "16px", fontWeight: "1"}}>${(product.amount/100).toFixed(2)}</div>
-              <Button variant="outlined" style={{float: "right"}} color="default" onClick={this.openCheckout}>Buy</Button>
+              {this.props.auth.user ? (
+                <Button variant="outlined" style={{float: "right"}} color="default" onClick={this.openCheckout}>
+                  Buy
+                </Button>
+              ):(
+                <NavLink to={`/login?from=/${category}/${this.props.product._id}`}>
+                  <Button variant="outlined" style={{float: "right"}} color="default">
+                    Login
+                  </Button>
+                </NavLink>
+              )}
             </div>
           )}
           <div style={{marginTop: "10px"}}>

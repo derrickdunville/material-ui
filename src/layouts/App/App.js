@@ -13,7 +13,7 @@ class App extends Component {
     super(props);
   }
   componentDidMount(){
-    if(!this.props.memberships){
+    if(this.props.memberships.docs.length == 0){
       this.props.loadMemberships()
     }
     if(!this.props.user){

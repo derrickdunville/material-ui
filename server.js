@@ -59,7 +59,7 @@ app.get('*', function(req, res, next) {
       console.log(context)
       if (context.url) {
         // using 301 causes browser to cache as permanently moved, so use 307 instead as temporary redirect
-        return res.redirect(307, context.url)
+        return res.redirect(307, context.url + encodeURI("?from="+req.path))
       }
       if (context.notFound) {
         res.status(404)

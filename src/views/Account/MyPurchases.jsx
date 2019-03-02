@@ -9,6 +9,7 @@ import ProfileForm from './Profile/ProfileForm.jsx'
 import { downloadProduct } from 'actions/productActions'
 import GetApp from '@material-ui/icons/GetApp'
 import PlayArrow from '@material-ui/icons/PlayArrow'
+import requireAuth from 'components/hocs/requireAuth'
 
 class MyPurchases extends Component {
   constructor(props) {
@@ -89,5 +90,5 @@ function mapStateToProps(state){
 }
 
 export default {
-  component: connect(mapStateToProps, { downloadProduct })(withStyles(dashboardStyle)(MyPurchases))
+  component: requireAuth(connect(mapStateToProps, { downloadProduct })(withStyles(dashboardStyle)(MyPurchases)))
 }

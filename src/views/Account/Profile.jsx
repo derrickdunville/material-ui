@@ -4,6 +4,7 @@ import withStyles from "@material-ui/core/styles/withStyles"
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx"
 import { withRouter } from "react-router-dom"
 import ProfileForm from './Profile/ProfileForm.jsx'
+import requireAuth from 'components/hocs/requireAuth'
 
 class Profile extends Component {
   constructor(props) {
@@ -38,5 +39,5 @@ class Profile extends Component {
 }
 
 export default {
-  component: withRouter(withStyles(dashboardStyle)(Profile))
+  component: requireAuth(withRouter(withStyles(dashboardStyle)(Profile)))
 }

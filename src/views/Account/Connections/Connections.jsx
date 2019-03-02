@@ -4,6 +4,7 @@ import withStyles from "@material-ui/core/styles/withStyles"
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx"
 import { withRouter } from "react-router-dom"
 import Discord from "./Discord.jsx"
+import requireAuth from 'components/hocs/requireAuth'
 
 class Connections extends Component {
   constructor(props) {
@@ -38,5 +39,5 @@ class Connections extends Component {
 }
 
 export default {
-  component: withRouter(withStyles(dashboardStyle)(Connections))
+  component: requireAuth(withRouter(withStyles(dashboardStyle)(Connections)))
 }

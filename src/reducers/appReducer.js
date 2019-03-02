@@ -12,7 +12,9 @@ const initialState = {
   auth: "no authorization yet",
   navOpen: false,
   adminNavOpen: true,
-  memberships: false
+  memberships: {
+    docs: []
+  }
 }
 export default (state=initialState, action) => {
   switch(action.type){
@@ -38,15 +40,18 @@ export default (state=initialState, action) => {
       }
     case LOAD_MEMBERSHIPS:
       return {
+        ...state,
         loadingMemberships: true
       }
     case LOAD_MEMBERSHIPS_SUCCESS:
       return {
+        ...state,
         loadingMemberships: false,
         memberships: action.payload.data
       }
     case LOAD_MEMBERSHIPS_FAIL:
       return {
+        ...state,
         loadingMemberships: false
       }
     default:

@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
+import { withRouter } from 'react-router'
 
 export default (ChildComponent) => {
   class RequireAuth extends Component {
     render() {
       switch (this.props.auth.user) {
         case false:
-          return <Redirect to="/login"/>
+          return <Redirect to="/login" from={this.props.location.url}/>
         default:
           return <ChildComponent {...this.props}/>
       }
@@ -18,5 +19,5 @@ export default (ChildComponent) => {
     return { auth }
   }
 
-  return connect(mapStateToProps)(RequireAuth)
+  return withRouter(connect(mapStateToProps)(RequireAuth))
 }

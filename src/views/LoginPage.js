@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { loginUser, resetAuth } from '../actions/authActions'
 import { Helmet } from 'react-helmet'
@@ -8,6 +9,7 @@ import CustomTextField from '../components/CustomTextField/CustomTextField.jsx'
 import withStyles from "@material-ui/core/styles/withStyles";
 import authStyle from "../assets/jss/material-dashboard-react/views/authStyle.jsx"
 import logo from "../assets/img/reactlogo.png";
+import queryString from 'query-string'
 
 class LoginPage extends Component {
   constructor(props) {
@@ -32,7 +34,9 @@ class LoginPage extends Component {
   }
   handleSubmit(event){
     event.preventDefault()
-    this.props.loginUser(this.props.history, this.state.username, this.state.password)
+    const userCameFrom = queryString.parse(this.props.location.search).from
+    console.log("user came from: ", userCameFrom)
+    this.props.loginUser(this.props.history, userCameFrom || "/", this.state.username, this.state.password)
   }
   componentWillMount(){
     console.log("will mount")
@@ -43,11 +47,7 @@ class LoginPage extends Component {
   }
   componentDidMount(){
     console.log("did mount")
-    setTimeout(() => {
-      console.log(this.username)
-      let value = this.username.current.value
-      console.log("value: ", value)
-    }, 3000)
+    console.dir(this.props.location.search)
   }
 
   head(){

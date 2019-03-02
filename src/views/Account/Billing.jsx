@@ -27,6 +27,7 @@ import TransactionDialog from 'components/Dialog/TransactionDialog.jsx'
 import { Elements } from 'react-stripe-elements'
 import Button from '@material-ui/core/Button'
 import PaymentMethod from 'components/Stripe/PaymentMethod.jsx'
+import requireAuth from 'components/hocs/requireAuth'
 
 class Billing extends Component {
   constructor(props) {
@@ -479,7 +480,7 @@ function mapStateToProps(state) {
 }
 
 export default {
-  component: connect(mapStateToProps, {
+  component: requireAuth(connect(mapStateToProps, {
     loadMemberships,
     toggleCreateSubscriptionOpen,
     clearCreateSubscription,
@@ -491,5 +492,5 @@ export default {
     clearResumeSubscription,
     toggleCreateTransactionOpen,
     clearCreateTransaction
-   })(withStyles(dashboardStyle)(Billing))
+  })(withStyles(dashboardStyle)(Billing)))
 }

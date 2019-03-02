@@ -11,7 +11,7 @@ export const fetchCurrentUser = () => async (dispatch, getState, api) => {
 export const resetAuth = () => async (dispatch) => {
   dispatch({ type: types.RESET_AUTH })
 }
-export const loginUser = (history, username, password) => async (dispatch, getState, api) => {
+export const loginUser = (history, redirect_to, username, password) => async (dispatch, getState, api) => {
   dispatch({
     type: types.LOGIN_USER,
     payload: {}
@@ -22,7 +22,7 @@ export const loginUser = (history, username, password) => async (dispatch, getSt
       type: types.LOGIN_USER_SUCCESS,
       payload: res
     })
-    history.push('/')
+    history.push(redirect_to)
   } catch (error) {
     dispatch({
       type: types.LOGIN_USER_FAIL,

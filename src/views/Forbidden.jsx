@@ -15,7 +15,7 @@ const Forbidden = ({ staticContext = {} }) => {
           <h4 style={{color: "#a1a1a1", maxWidth: "600px", textAlign: "center"}}>Sorry, but you need to go back the way you came!</h4>
         </div>
         <div style={{display:"flex", justifyContent: "center"}}>
-          <NavLink to={'/app'}>
+          <NavLink exact to={'/'}>
             <Button variant="outlined" color="primary">Go Back</Button>
           </NavLink>
         </div>

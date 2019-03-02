@@ -134,7 +134,7 @@ class Chat extends Component {
     if(this.props.discord_guild_member){
       active = 4
     }
-    if(this.props.activeMemberships.length == 0){
+    if(this.props.user && this.props.activeMemberships.length == 0){
       active = 1
     }
     return active
@@ -179,15 +179,19 @@ class Chat extends Component {
       <div>
         {!this.props.user ? (
           <div>
-            <Typography style={{color: "white"}}>Create an account with us</Typography>
+            <Typography style={{color: "white"}}>Go to Sign Up to create an account or Log in to your existing account</Typography>
             <div>
               <div>
-                <Button variant="outlined" color="primary">
-                  Login
-                </Button>
-                <Button variant="outlined" color="primary">
-                  Sign Up
-                </Button>
+                <NavLink to={'/login?from=/chat'}>
+                  <Button variant="outlined" color="primary">
+                    Login
+                  </Button>
+                </NavLink>
+                <NavLink to={'/sign-up'}>
+                  <Button variant="outlined" color="primary">
+                    Sign Up
+                  </Button>
+                </NavLink>
               </div>
             </div>
           </div>
