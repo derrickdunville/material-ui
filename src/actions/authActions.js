@@ -53,7 +53,7 @@ export const signUpUser = (history, email, username, password, confirm_password)
       "confirm_password": confirm_password
     })
     dispatch({ type: types.SIGN_UP_USER_SUCCESS, payload: res })
-    history.push('/app/')
+    history.push('/')
   } catch (error) {
     dispatch({ type: types.SIGN_UP_USER_FAIL, payload: error.response })
   }
