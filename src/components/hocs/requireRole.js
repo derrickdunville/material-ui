@@ -6,7 +6,7 @@ import Forbidden from 'views/Forbidden.jsx'
 export default (requiredRole) => ChildComponent => {
   class RequireRole extends Component {
     render() {
-      switch (this.props.roles.includes(requiredRole)) {
+      switch (this.props.role === requiredRole) {
         case false:
           return <Forbidden />
         default:
@@ -17,7 +17,7 @@ export default (requiredRole) => ChildComponent => {
 
   function mapStateToProps({ auth }) {
     return {
-      roles: auth.user.roles || []
+      role: auth.user.role || 'everyone'
     }
   }
 

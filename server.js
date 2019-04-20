@@ -9,6 +9,15 @@ import { matchRoutes } from 'react-router-config'
 import queryString from 'query-string'
 
 global.window = {innerWidth: 1000, innerHeight: 1080}
+
+console.log("NODE_ENV: ", process.env.NODE_ENV)
+console.log("API_URL: ", process.env.API_URL)
+console.log("DISCORD_CLIENT_ID: ", process.env.DISCORD_CLIENT_ID)
+console.log("DISCORD_CALLBACK: ", process.env.DISCORD_CALLBACK)
+console.log("DISCORD_GUILD_ID: ", process.env.DISCORD_GUILD_ID)
+console.log("DISCORD_WELCOME_CHANNEL_ID: ", process.env.DISCORD_WELCOME_CHANNEL_ID)
+console.log("RECAPTCHA_SITE_KEY: ", process.env.RECAPTCHA_SITE_KEY)
+
 const app = express();
 // We serve bundle.js for client and any other static asstets from the public directory
 var cacheTime = 86400000*7;     // 7 days

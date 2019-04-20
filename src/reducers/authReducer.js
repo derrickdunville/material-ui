@@ -394,6 +394,16 @@ export default function(state = initialState, action) {
         ...state,
         payment_method: action.payload
       }
+    case types.DISCORD_OAUTH_REVOKE_SUCCESS:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          discordDiscriminator: null,
+          discordUsername: null,
+          discordId: null
+        }
+      }
     default:
       return state
   }

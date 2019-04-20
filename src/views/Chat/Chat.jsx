@@ -16,7 +16,7 @@ import { getMyDiscordGuildMember, joinDiscordServer } from 'actions/authActions'
 import Discord from 'views/Account/Connections/Discord.jsx'
 import Button from '@material-ui/core/Button'
 import { parseDate } from 'utils/DateUtils'
-import { getActiveMemberships } from 'utils/UserUtils'
+import { getActiveMemberships, getAvailableMemberships } from 'utils/UserUtils'
 import Stepper from 'components/Stepper/CustomStepper.jsx'
 import Step from 'components/Stepper/CustomStep.jsx'
 import StepLabel from 'components/Stepper/CustomStepLabel.jsx'
@@ -99,11 +99,11 @@ class Chat extends Component {
   }
   getOpenProduct(id){
     console.log("getting open product")
-    console.log("memberships: ", this.props.memberships.docs.length)
-    for(let i = 0; i < this.props.memberships.docs.length; ++i){
-      console.dir(this.props.memberships.docs[i]._id)
-      if(this.props.memberships.docs[i]._id == id){
-        return this.props.memberships.docs[i]
+    console.log("memberships: ", this.props.memberships.length)
+    for(let i = 0; i < this.props.memberships.length; ++i){
+      console.dir(this.props.memberships[i]._id)
+      if(this.props.memberships[i]._id == id){
+        return this.props.memberships[i]
       }
     }
     return {}
@@ -221,10 +221,10 @@ class Chat extends Component {
       <div>
       {this.props.memberships ? (
         <div>
-          {this.props.memberships.docs.length == 0 && (
+          {this.props.memberships.length == 0 && (
             <div>Empty</div>
           )}
-          {this.props.memberships.docs.map(membership => (
+          {this.props.memberships.map(membership => (
             <div key={membership._id}
               className={classes.membershipContainer}
               >
@@ -438,7 +438,7 @@ function mapStateToProps(state){
     discord_guild_member: state.auth.discord_guild_member,
     discordUsername: state.auth.user.discordUsername || false,
     discordDiscriminator: state.auth.user.discordDiscriminator || false,
-    memberships: state.app.memberships || false
+    memberships: getAvailableMemberships(state.app.memberships.docs || [], state.auth.user.transactions || [])
   }
 }
 

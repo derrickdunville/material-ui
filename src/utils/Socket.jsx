@@ -26,7 +26,7 @@ import {
 } from 'actions/authActions'
 
 import io from 'socket.io-client'
-const socket = io('https://api.ascendtrading.ngrok.io', { path: '/ws' })
+const socket = io('http://api.ascendtrading.ngrok.io', { path: '/ws' })
 
 class Socket extends Component {
 
@@ -124,7 +124,7 @@ class Socket extends Component {
   componentDidMount() {
     if(this.props.user){
       this.joinMe()
-      if(this.props.user.roles.includes('admin')){
+      if(this.props.user.role === 'admin'){
         this.joinAdmin()
       }
     }
@@ -140,13 +140,13 @@ class Socket extends Component {
     }
     if(!prevProps.user && user){
       this.joinMe()
-      if(user.roles.includes('admin')){ this.joinAdmin() }
+      if(user.role === 'admin'){ this.joinAdmin() }
     }
   }
   componentWillUnmount() {
     console.log("socket controller componentWillUnmount()")
     this.leaveMe()
-    if(this.props.user.roles.includes('admin')){ this.leaveAdmin() }
+    if(this.props.user.role === 'admin'){ this.leaveAdmin() }
   }
   render() {
     console.log("rendering socket controller")

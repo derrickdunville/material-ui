@@ -168,7 +168,7 @@ class UserDashboard extends React.Component {
         </NavLink>
         <Divider />
         {this.props.loggedIn ? (
-          <div style={{display: 'flex', color: "#000000"}}>
+          <div style={{display: 'flex', maxWidth: "250px", color: "#000000"}}>
             <NavLink to={"/account"}
               onClick={this.handleCloseNav}
               key={2}
@@ -182,7 +182,7 @@ class UserDashboard extends React.Component {
               style={{alignItems: "center", display: "flex", color: "#FFFFFF"}}>
               <SettingsIcon style={{float: 'right', padding: '10px'}}/>
             </NavLink>
-            {this.props.roles.includes("admin") && (
+            {this.props.role === "admin" && (
               <NavLink to={'/admin/'} style={{alignItems: "center", display: "flex", color: "#FFFFFF"}}>
                 <GavelIcon style={{float: 'right', padding: '10px'}} />
               </NavLink>
@@ -233,14 +233,14 @@ class UserDashboard extends React.Component {
           <div style={{position: "fixed", bottom: "0"}}>
             <div style={{display: "flex", justifyContent: "center", width: "230px"}}>
               <div>
-                <NavLink to={'contact'} key={4} style={{width: "100%", color: "#898989"}} onClick={this.handleCloseNav}>
+                <NavLink to={'/contact'} key={4} style={{width: "100%", color: "#898989"}} onClick={this.handleCloseNav}>
                   Contact
                 </NavLink>
               </div>
               <div style={{width: "30px"}}>
               </div>
               <div>
-                <NavLink to={'tos'} key={5} style={{width: "100%", color: "#898989"}} onClick={this.handleCloseNav}>
+                <NavLink to={'/tos'} key={5} style={{width: "100%", color: "#898989"}} onClick={this.handleCloseNav}>
                   Terms
                 </NavLink>
               </div>
@@ -254,7 +254,6 @@ class UserDashboard extends React.Component {
               </span>
             </div>
           </div>
-
         </div>
       </div>
     );
@@ -294,7 +293,7 @@ UserDashboard.propTypes = {
 function mapStateToProps(state) {
   return {
     loggedIn: state.auth.user || false,
-    roles: state.auth.user.roles || []
+    role: state.auth.user.role || 'everyone'
   }
 }
 export default {

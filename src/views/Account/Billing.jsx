@@ -5,7 +5,7 @@ import withStyles from '@material-ui/core/styles/withStyles'
 import dashboardStyle from 'assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx'
 import Paper from '@material-ui/core/Paper'
 import { parseDate } from 'utils/DateUtils'
-import { getActiveMemberships } from 'utils/UserUtils'
+import { getActiveMemberships, getAvailableMemberships } from 'utils/UserUtils'
 import { loadMemberships } from 'actions'
 import {
   toggleCreateSubscriptionOpen,
@@ -426,40 +426,6 @@ class Billing extends Component {
 }
 
 
-function excludeActiveProducts(products, transactions){
-  // get all active membership product ids
-  let activeMembershipProductIds = new Set()
-  for(let i = 0; i < transactions.length; ++i){
-    let current = transactions[i]
-    if(current.product.category == "membership"){
-      // check the expires_at
-      if(current.expires_at){
-        let expires = new Date(current.expires_at)
-        let now = new Date()
-        if(expires > now){
-          // membership has not expired yet
-          activeMembershipProductIds.add(current.product._id)
-        }
-      } else {
-        // no expiration date
-        activeMembershipProductIds.add(current.product._id)
-      }
-    }
-  }
-
-  // if a product id exists in active memberships exluce it
-  if(activeMembershipProductIds.size > 0){
-    let filteredProducts = []
-    for(let i = 0; i < products.length; ++i){
-      if(!activeMembershipProductIds.has(products[i]._id)){
-        filteredProducts.push(products[i])
-      }
-    }
-    return filteredProducts
-  } else {
-    return products
-  }
-}
 function hasMembershipWithNoExpiration(activeMemberships){
   for(let i = 0; i < activeMemberships.length; ++i){
     if(activeMemberships[i].expires_at == null && activeMemberships[i].product.category == "membership"){
@@ -474,7 +440,7 @@ function mapStateToProps(state) {
     cancelOpen: state.subscriptions.cancelOpen,
     transactions: state.auth.user.transactions || [],
     subscriptions: state.auth.user.subscriptions || [],
-    products: excludeActiveProducts(state.app.memberships.docs || [], (state.auth.user.transactions || [])) || [],
+    products: getAvailableMemberships(state.app.memberships.docs || [], state.auth.user.transactions || []),
     auth: state.auth
   }
 }

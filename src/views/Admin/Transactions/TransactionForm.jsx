@@ -50,13 +50,15 @@ class TransactionForm extends Component {
     this.handleSubscriptionChange = this.handleSubscriptionChange.bind(this)
   }
   componentDidUpdate(prevProps, prevState){
-    console.log("component did update")
-    if(this.props.transaction.status !== prevState.status){
-      this.setState({
-        ...this.props.transaction,
-        user: {value: this.props.transaction.user._id, label: this.props.transaction.user.username},
-        product: {value: this.props.transaction.product._id, label: this.props.transaction.product.name}
-      })
+    if(this.props.editing){
+      console.log("component did update")
+      if(this.props.transaction.status !== prevState.status){
+        this.setState({
+          ...this.props.transaction,
+          user: {value: this.props.transaction.user._id, label: this.props.transaction.user.username},
+          product: {value: this.props.transaction.product._id, label: this.props.transaction.product.name}
+        })
+      }
     }
   }
   handleChange(event){

@@ -10,6 +10,7 @@ import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { StripeProvider } from 'react-stripe-elements';
 
+
 class Client extends Component {
   componentDidMount() {
     // Remove the server-side injected CSS.
@@ -26,7 +27,7 @@ class Client extends Component {
   render(){
     return (
       <BrowserRouter>
-        <StripeProvider apiKey="pk_test_1u5ImR375vh3iwVcWfdaPtJk">
+        <StripeProvider apiKey={`${process.env.STRIPE_PUBLISHABLE_KEY}`}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <div>{renderRoutes(Routes)}</div>
           </MuiPickersUtilsProvider>

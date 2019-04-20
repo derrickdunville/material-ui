@@ -46,7 +46,7 @@ class MyPurchases extends Component {
                 </Button>
               )}
               {product.category=='class' && (
-                <NavLink to={`/app/classes/${product._id}`}>
+                <NavLink to={`/classes/${product._id}`}>
                   <Button variant="outlined" color="primary">
                     <PlayArrow/>
                   </Button>

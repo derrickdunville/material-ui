@@ -167,6 +167,8 @@ export const getPaymentMethod = () => async (dispatch, getState, api) => {
 // DISCORD OAUTH ACTIONS
 function openInNewTab(state) {
   console.log("opening new tab")
+  console.log("Discord Client Id: ", process.env.DISCORD_CLIENT_ID)
+  console.log("Discord Redirect :", process.env.DISCORD_CALLBACK)
   var win = window.open(`https://discordapp.com/api/oauth2/authorize?client_id=${discord_client_id}&redirect_uri=${redirect}&state=${state}&response_type=code&scope=identify%20guilds.join`, '_blank')
   win.focus();
 }

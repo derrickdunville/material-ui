@@ -27,6 +27,11 @@ module.exports = {
       {
         test: /\.(jpg|jpeg|png|gif|mp3|svg)$/,
         loaders: ["file-loader"]
+      },
+      // Favicon
+      {
+        test: /\.(ico)$/,
+        loader: 'file-loader?name=[name].[ext]'  // <-- retain original file name
       }
     ]
   }

@@ -12,6 +12,10 @@ import CustomTextField from 'components/CustomTextField/CustomTextField.jsx'
 import withStyles from '@material-ui/core/styles/withStyles'
 import formStyle from 'assets/jss/material-dashboard-react/views/formStyle.jsx'
 import AlertDialog from 'components/Dialog/AlertDialog.jsx'
+import InputLabel from '@material-ui/core/InputLabel'
+import FormControl from "@material-ui/core/FormControl"
+import CustomSelect from "components/Select/CustomSelect.jsx"
+import CustomOutlinedInput from 'components/OutlinedInput/CustomOutlinedInput.jsx'
 
 class UserForm extends Component {
   constructor(props) {
@@ -29,6 +33,7 @@ class UserForm extends Component {
         username:'',
         email:'',
         password:'',
+        roles: [],
       }
     }
 
@@ -135,6 +140,21 @@ class UserForm extends Component {
               disabled: this.props.disabled
             }}
           />
+          <FormControl classes={{root: classes.formControl}} variant="outlined" style={{width: "100%", backgroundColor: "#202225", borderRadius: "4px"}}>
+            <InputLabel style={{color: "white"}}>
+              Role
+            </InputLabel>
+            <CustomSelect
+              disabled={this.props.disabled}
+              value={this.state.role}
+              onChange={this.handleChange}
+              name="interval"
+              renderValue={value => `${value}`}
+              input={<CustomOutlinedInput labelWidth={26} name="filter"/>}
+              items={["Admin", "Member", "Everyone"]}
+              >
+            </CustomSelect>
+          </FormControl>
         {!this.props.disabled && (
           <Button
             style={{width: '100px', height: '50px', float: "right"}}

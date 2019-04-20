@@ -46,7 +46,8 @@ function renderApp(req, store, context) {
   // Lastly we need to inject our header tags into our head - these allow social media site to create nice looking embeds
   const helmet = Helmet.renderStatic()
 
-  return `<!DOCTYPE html>
+  return `
+    <!DOCTYPE html>
     <html>
       <head>
         ${helmet.title.toString()}
@@ -54,12 +55,14 @@ function renderApp(req, store, context) {
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="theme-color" content="#000000">
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" />
         <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Orbitron" />
         <script src="https://js.stripe.com/v3/"></script>
+
       </head>
       <body>
         <div id="root">${rendered}</div>
