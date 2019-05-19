@@ -1,4 +1,4 @@
-import AdminDashboard from "../layouts/AdminDashboard.jsx"
+import AdminDashboard from '../layouts/AdminDashboard.jsx'
 import AppPage from "../views/App/AppPage.jsx"
 
 import RouteContainer from "../containers/RouteContainer.jsx"
@@ -12,6 +12,7 @@ import Transactions from "../views/Admin/Transactions/Transactions.jsx"
 import Transaction from "../views/Admin/Transactions/Transaction.jsx"
 import Subscriptions from "../views/Admin/Subscriptions/Subscriptions.jsx"
 import Subscription from "../views/Admin/Subscriptions/Subscription.jsx"
+import UserFormTest from "../views/Admin/Users/UserFormTest.jsx"
 
 export default [
   {
@@ -24,6 +25,13 @@ export default [
         path: '/admin/',
         exact: true,
         title: "Dashboard",
+        zIndex: 1
+      },
+      {
+        ...UserFormTest,
+        path: '/admin/form',
+        exact: true,
+        title: "Form Test",
         zIndex: 1
       },
       {

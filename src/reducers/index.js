@@ -10,6 +10,10 @@ import subscriptionsReducer from './subscriptionsReducer'
 import autocompleteReducer from './autocompleteReducer'
 import contactReducer from './contactReducer'
 
+//Redux Form Reducers
+import contactReduxFormReducer from './forms/contactReduxFormReducer'
+import userReduxFormReducer from './forms/userReduxFormReducer'
+
 export default combineReducers({
   app: appReducer,
   auth: authReducer,
@@ -19,15 +23,9 @@ export default combineReducers({
   transactions: transactionsReducer,
   subscriptions: subscriptionsReducer,
   autocomplete: autocompleteReducer,
+  contact: contactReducer,
   form: formReducer.plugin({
-    contact: (state, action) => { // <------ 'account' is name of form given to reduxForm()
-      switch(action.type) {
-        case "POST_CONTACT_SUCCESS":
-          return undefined;       // <--- blow away form data
-        default:
-          return state;
-      }
-    }
-  }),
-  contact: contactReducer
+    contact: contactReduxFormReducer,
+    userForm: userReduxFormReducer
+  })
 })

@@ -11,7 +11,7 @@ const initialState = {
   message: "this is our initial state, awesome reducer hot loading is working",
   auth: "no authorization yet",
   navOpen: false,
-  adminNavOpen: true,
+  adminNavOpen: false,
   memberships: {
     docs: []
   }

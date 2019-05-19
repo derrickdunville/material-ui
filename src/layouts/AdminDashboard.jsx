@@ -54,7 +54,6 @@ class AdminDashboard extends React.Component {
     super(props)
     this.state = {
       left: false,
-      mobile: true,
       prevDepth: getPathDepth(props.location),
       prevPath: props.location.pathname,
     }
@@ -62,39 +61,39 @@ class AdminDashboard extends React.Component {
     this.handleOpenNav = this.handleOpenNav.bind(this)
     this.handleSidebar = this.handleSidebar.bind(this)
     this.getClassName = this.getClassName.bind(this)
-    this.resizeFunction = this.resizeFunction.bind(this)
+    // this.resizeFunction = this.resizeFunction.bind(this)
     this.getTransitionTimeout = this.getTransitionTimeout.bind(this)
     this.sidebar = React.createRef()
   }
-  componentDidMount(){
-    if(this.props.location.pathname === "/admin"){
-      this.props.history.replace(`${this.props.location.pathname}/`)
-    } else {
-      this.props.history.replace(`${this.props.location.pathname}`)
-    }
-    // this causes a render immediatly which helps the sidebar get into its correct parent component
-    if(window.innerWidth >= 960){
-      this.setState({ mobile: false})
-    } else {
-      this.setState({ mobile: true})
-    }
-     window.addEventListener("resize", this.resizeFunction)
-  }
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.resizeFunction)
-  }
+  // componentDidMount(){
+  //   if(this.props.location.pathname === "/admin"){
+  //     this.props.history.replace(`${this.props.location.pathname}/`)
+  //   } else {
+  //     this.props.history.replace(`${this.props.location.pathname}`)
+  //   }
+  //   // this causes a render immediatly which helps the sidebar get into its correct parent component
+  //   if(window.innerWidth >= 960){
+  //     this.setState({ mobile: false})
+  //   } else {
+  //     this.setState({ mobile: true})
+  //   }
+  //    window.addEventListener("resize", this.resizeFunction)
+  // }
+  // componentWillUnmount() {
+  //   window.removeEventListener("resize", this.resizeFunction)
+  // }
   componentWillReceiveProps () {
     window.previousLocation = this.props.location
     this.setState({ prevDepth: getPathDepth(this.props.location) })
     this.setState({ prevPath: this.props.location.pathname })
   }
-  resizeFunction() {
-    if (window.innerWidth >= 960 && this.state.mobile) {
-      this.setState({ mobile: false })
-    } else if(window.innerWidth < 960 && !this.state.mobile) {
-      this.setState({ mobile: true})
-    }
-  }
+  // resizeFunction() {
+  //   if (window.innerWidth >= 960 && this.state.mobile) {
+  //     this.setState({ mobile: false })
+  //   } else if(window.innerWidth < 960 && !this.state.mobile) {
+  //     this.setState({ mobile: true})
+  //   }
+  // }
   handleSidebar(){
     return
   }
@@ -131,7 +130,7 @@ class AdminDashboard extends React.Component {
   }
   render() {
     const { classes, route, ...rest } = this.props
-
+    console.log("admin dashboard render")
     const switchRoutes = (
       <Switch location={this.props.location}>
         {this.props.route.routes.map((prop, key) => {
@@ -229,13 +228,13 @@ class AdminDashboard extends React.Component {
       </SwipeableDrawer>
     )
     //This returns a childFactory to provide to TransitionGroup
-    const childFactoryCreator = (classNames, timeout) => (
-      (child) => {
-        return React.cloneElement(child, {
-          classNames, timeout
-        })
-      }
-    )
+    // const childFactoryCreator = (classNames, timeout) => (
+    //   (child) => {
+    //     return React.cloneElement(child, {
+    //       classNames, timeout
+    //     })
+    //   }
+    // )
 
     return (
       <div id="wrapper" className={classes.wrapper}>

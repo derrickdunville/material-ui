@@ -11,7 +11,7 @@ import { NavLink } from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton'
 import Add from '@material-ui/icons/Add'
 import Close from '@material-ui/icons/Close'
-import UserForm from './UserForm.jsx'
+import UserReduxForm from './UserReduxForm.jsx'
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField"
 
@@ -248,7 +248,7 @@ class Users extends Component {
               <IconButton onClick={this.closeNewUser} color="inherit" aria-label="Menu">
                 <Close />
               </IconButton>
-              <UserForm editing={false}/>
+              <UserReduxForm />
             </div>
           ):(
             <div className={classes.content}>
@@ -278,6 +278,7 @@ class Users extends Component {
             </div>
           )}
         </div>
+
       </div>
     )
   }

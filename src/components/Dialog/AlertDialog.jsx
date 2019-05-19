@@ -12,12 +12,36 @@ class AlertDialog extends React.Component {
     this.props.onClose(ev)
   }
   render() {
-    const { hidden, successMessage, errorMessage, loading, loadingMessage, name, style, open, onClick, onClose, buttonColor, buttonText, title, text, leftAction, leftActionText, leftActionColor, rightAction, rightActionText, rightActionColor} = this.props
+    const {
+      hidden,
+      disabled,
+      successMessage,
+      errorMessage,
+      loading,
+      loadingMessage,
+      name,
+      style,
+      open,
+      onClick,
+      onClose,
+      buttonColor,
+      buttonText,
+      title,
+      text,
+      leftAction,
+      leftActionText,
+      leftActionColor,
+      rightAction,
+      rightActionText,
+      rightActionColor,
+      buttonProps,
+    } = this.props
     let buttonStyle= { width: "100%"}
     if(hidden) buttonStyle.display = "none"
+    console.dir(buttonProps)
     return (
-      <div style={{...style}}>
-        <Button name={name} style={buttonStyle} variant="outlined" color={buttonColor || "primary"} onClick={onClick}>
+      <div>
+        <Button name={name} disabled={disabled} variant="outlined" color={buttonColor || "primary"} onClick={onClick} {...buttonProps}>
           {buttonText}
         </Button>
         <Dialog
