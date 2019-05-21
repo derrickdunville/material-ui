@@ -38,14 +38,21 @@ const initialState = {
 
   gettingProduct: false,
   gettingProductError: false,
+
   gettingProducts: false,
   gettingProductsError: false,
+
   postingProduct: false,
-  postingProductError: false,
+  postProductErrorMessage: false,
+  postProductSuccessMessage: false,
+
   puttingProduct: false,
-  puttingProductError: false,
+  putProductSuccessMessage: false,
+  putProductErrorMessage: false,
+
   deletingProduct: false,
-  deletingProductError: false
+  deleteProductSuccessMessage: false,
+  deleteProductErrorMessage: false
 }
 export default (state=initialState, action) => {
   switch (action.type) {
@@ -95,13 +102,13 @@ export default (state=initialState, action) => {
         ...state,
         postingProduct: false,
         // hmmmm, how should we handle posting success result
-        message: "Product created successfully"
+        postProductSuccessMessage: "Product created successfully"
       }
     case POST_PRODUCT_FAIL:
       return {
         ...state,
         postingProduct: false,
-        postingProductError: action.payload.data.err.message
+        postProductErrorMessage: action.payload.data.err.message
       }
     case PUT_PRODUCT:
       return {
@@ -113,13 +120,14 @@ export default (state=initialState, action) => {
         ...state,
         puttingProduct: false,
         editOpen: false,
+        product: action.payload.data,
         message: "Product updated successfully."
       }
     case PUT_PRODUCT_FAIL:
       return {
         ...state,
         puttingProduct: false,
-        puttingProductError: action.payload.data.err.message
+        putProductErrorMessage: action.payload.data.err.message
       }
     case DELETE_PRODUCT:
       return {
@@ -130,13 +138,13 @@ export default (state=initialState, action) => {
       return {
         ...state,
         deletingProduct: false,
-        message: "Product deleted successfully."
+        deleteProductSuccessMessage: "Product deleted successfully."
       }
     case DELETE_PRODUCT_FAIL:
       return {
         ...state,
         deletingProduct: false,
-        deletingProductError: action.payload.data.err.message
+        deleteProductErrorMessage: action.payload.data.err.message
       }
     case CLEAR_PRODUCT:
       return {

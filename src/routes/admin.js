@@ -12,7 +12,7 @@ import Transactions from "../views/Admin/Transactions/Transactions.jsx"
 import Transaction from "../views/Admin/Transactions/Transaction.jsx"
 import Subscriptions from "../views/Admin/Subscriptions/Subscriptions.jsx"
 import Subscription from "../views/Admin/Subscriptions/Subscription.jsx"
-import UserFormTest from "../views/Admin/Users/UserFormTest.jsx"
+import FormTest from "../views/Admin/Users/FormTest.jsx"
 
 export default [
   {
@@ -28,7 +28,7 @@ export default [
         zIndex: 1
       },
       {
-        ...UserFormTest,
+        ...FormTest,
         path: '/admin/form',
         exact: true,
         title: "Form Test",

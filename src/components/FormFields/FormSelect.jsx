@@ -23,6 +23,7 @@ const FormSelect = ({
   <CustomFormControl variant="outlined" margin="normal">
     <InputLabel
       htmlFor={id}
+      shrink={input.value ? true : false}
       style={{color: "white"}}>
       {label}
     </InputLabel>

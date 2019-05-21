@@ -12,23 +12,24 @@ import IconButton from '@material-ui/core/IconButton'
 import Add from '@material-ui/icons/Add'
 import Close from '@material-ui/icons/Close'
 import ProductForm from './ProductForm.jsx'
-import FormControl from "@material-ui/core/FormControl";
+import ProductReduxForm from './ProductReduxForm.jsx'
+import FormControl from "@material-ui/core/FormControl"
 import TextField from
 "@material-ui/core/TextField"
 
 import CustomTextField from 'components/CustomTextField/CustomTextField.jsx'
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
-import TableFooter from '@material-ui/core/TableFooter';
-import TablePagination from '@material-ui/core/TablePagination';
-import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableRow from '@material-ui/core/TableRow'
+import TableFooter from '@material-ui/core/TableFooter'
+import TablePagination from '@material-ui/core/TablePagination'
+import Paper from '@material-ui/core/Paper'
 
-import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
+import Button from '@material-ui/core/Button'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
 
 import EnhancedTableHead from "components/TableHead/EnhancedTableHead.jsx"
 import TablePaginationActions from "components/TablePagination/TablePaginationActions.jsx"
@@ -241,7 +242,7 @@ class Products extends Component {
               <IconButton onClick={this.closeNewProduct} color="inherit" aria-label="Menu">
                 <Close />
               </IconButton>
-              <ProductForm />
+              <ProductReduxForm editing={false} />
             </div>
           ):(
             <div className={classes.content}>

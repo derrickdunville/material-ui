@@ -14,3 +14,7 @@ export const numericRegex = new RegExp("^(?=.*[0-9])")
 export const specialRegex = new RegExp("^(?=.*[!@#\$%\^&])")
 // length is 8 or greater
 export const lengthRegex = new RegExp("^(?=.{8,})")
+
+// Alpha - only Alpha characters
+export const alpha = new RegExp("^[a-zA-Z\\s]+$")
+export const numeric = new RegExp("^[0-9]+$")

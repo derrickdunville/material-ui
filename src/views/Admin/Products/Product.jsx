@@ -4,6 +4,7 @@ import { NavLink, Switch, Route, Redirect, withRouter } from "react-router-dom"
 import { Helmet } from 'react-helmet'
 import { getProduct, deleteProduct, clearProduct, clearMessage, toggleEditOpen } from 'actions/productActions'
 import ProductForm from './ProductForm.jsx'
+import ProductReduxForm from './ProductReduxForm.jsx'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -89,32 +90,7 @@ class Product extends Component {
         <div className={classes.route} ref="mainPanel">
           <div className={classes.content}>
             {this.props.product ? (
-              <div>
-                <div style={{display: "flex", marginBottom: "10px"}}>
-                  <Button style={{width: "100%", marginRight: "10px"}} variant="outlined" color="default" onClick={this.toggleEdit}>
-                    {this.props.editOpen ? "Cancel" : "Edit"}
-                  </Button>
-                  <AlertDialog
-                    style={{width: "100%"}}
-                    buttonText="Delete"
-                    buttonColor="secondary"
-                    open={this.state.deleteOpen}
-                    title={`Delete ${this.props.product.name}?`}
-                    text="Are you sure you would like to delete this product? This will result in this product being end-dated. It will not actually be deleted permenantly but it will no longer be purchaseable and will disappear from the corresponding product page. Associated content will still be available to those who have purchased it."
-                    leftAction={this.closeDelete}
-                    leftActionText="Cancel"
-                    leftActionColor="default"
-                    rightAction={this.handleDelete}
-                    rightActionText="Delete"
-                    rightActionColor="secondary"
-                    onClick={this.openDelete}
-                    onClose={this.closeDelete}
-                    />
-                </div>
-                <div>
-                  <ProductForm editing={true} disabled={!this.props.editOpen}/>
-                </div>
-              </div>
+                <ProductReduxForm editing={true} disabled={!this.props.editOpen} product={this.props.product}/>
               ):(
                 <div> Loading ...</div>
               )}
@@ -138,7 +114,7 @@ function mapStateToProps(state) {
   return {
     products: state.products,
     product: state.products.product,
-    message: state.products.message,
+    message: state.products.postProductSuccessMessage,
     editOpen: state.products.editOpen
   }
 }
