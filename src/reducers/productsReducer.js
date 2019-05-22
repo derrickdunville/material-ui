@@ -19,7 +19,10 @@ import {
   TOGGLE_EDITING_PRODUCT,
   DOWNLOAD_PRODUCT,
   DOWNLOAD_PRODUCT_SUCCESS,
-  DOWNLOAD_PRODUCT_FAIL
+  DOWNLOAD_PRODUCT_FAIL,
+  CLEAR_POST_PRODUCT,
+  CLEAR_PUT_PRODUCT,
+  CLEAR_DELETE_PRODUCT
 } from '../constants/product-action-types'
 import fileSaver from 'file-saver'
 
@@ -82,6 +85,7 @@ export default (state=initialState, action) => {
       console.log("GET_PRODUCTS_SUCCESS")
       return {
         ...state,
+        loaded: true,
         gettingProducts: false,
         ...action.payload.data
       }
@@ -101,7 +105,7 @@ export default (state=initialState, action) => {
       return {
         ...state,
         postingProduct: false,
-        // hmmmm, how should we handle posting success result
+        docs: [action.payload, ...state.docs],
         postProductSuccessMessage: "Product created successfully"
       }
     case POST_PRODUCT_FAIL:
@@ -120,8 +124,9 @@ export default (state=initialState, action) => {
         ...state,
         puttingProduct: false,
         editOpen: false,
+        docs: state.docs.map(product => (product._id === action.payload.data._id) ? action.payload.data : product),
         product: action.payload.data,
-        message: "Product updated successfully."
+        putProductSuccessMessage: "Product updated successfully."
       }
     case PUT_PRODUCT_FAIL:
       return {
@@ -168,7 +173,6 @@ export default (state=initialState, action) => {
         downloadingProduct: true
       }
     case DOWNLOAD_PRODUCT_SUCCESS:
-      // fileSaver.saveAs(action.payload.data, action.payload.filename)
       return {
         ...state,
         downloadingProduct: false
@@ -180,7 +184,39 @@ export default (state=initialState, action) => {
         downloadingProduct: false,
         downloadProductErrorMessage: action.payload.data.message
       }
+    case CLEAR_POST_PRODUCT:
+      return{
+        ...state,
+        postProductErrorMessage: false,
+        postProductSuccessMessage: false
+      }
+    case CLEAR_PUT_PRODUCT:
+      return {
+        ...state,
+        putProductErrorMessage: false,
+        putProductSuccessMessage: false
+      }
+    case CLEAR_DELETE_PRODUCT:
+      return {
+        ...state,
+        deleteProductErrorMessage: false,
+        deleteProductSuccessMessage: false
+      }
     default:
       return state
+  }
+}
+function deleteProductFromDocs(docs, payload){
+  let target_index = -1
+  for(let i = 0; i < docs.length; ++i){
+    if(docs[i]._id == payload._id){
+      target_index = i
+      break
+    }
+  }
+  if(target_index > -1){
+    return ([...docs.slice(0, target_index), ...docs.slice(target_index + 1)])
+  } else {
+    return ([...docs])
   }
 }

@@ -144,6 +144,18 @@ export const downloadProduct = (product_id) => async (dispatch, getState, api) =
   }
 }
 
+// Clear Actions
+export const clearPostProduct = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.CLEAR_POST_PRODUCT})
+}
+export const clearPutProduct = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.CLEAR_PUT_PRODUCT})
+}
+export const clearDeleteProduct = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.CLEAR_DELETE_PRODUCT})
+}
+
+// Socket event actions
 export const productCreated = () => async (dispatch, getState, api) => {
   dispatch({ type: types.PRODUCT_CREATED})
 }

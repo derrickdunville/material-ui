@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { NavLink, Switch, Route, Redirect, withRouter } from "react-router-dom"
 import { Helmet } from 'react-helmet'
-import { getProduct, deleteProduct, clearProduct, clearMessage, toggleEditOpen } from 'actions/productActions'
-import ProductForm from './ProductForm.jsx'
+import { getProduct, deleteProduct, clearProduct, clearPostProduct, toggleEditOpen } from 'actions/productActions'
 import ProductReduxForm from './ProductReduxForm.jsx'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -22,29 +21,11 @@ import CustomSnackbar from "components/Snackbar/CustomSnackbar.jsx"
 class Product extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      deleteOpen: false
-    }
-    this.toggleEdit = this.toggleEdit.bind(this)
-    this.openDelete = this.openDelete.bind(this)
-    this.closeDelete = this.closeDelete.bind(this)
-    this.handleDelete = this.handleDelete.bind(this)
   }
-  toggleEdit(){
-    this.props.toggleEditOpen()
-  }
-  openDelete(){
-    this.setState({deleteOpen: true})
-  }
-  closeDelete(){
-    this.setState({deleteOpen: false})
-  }
-  handleDelete(){
-    this.props.deleteProduct(this.props.history, this.props.product._id)
-  }
+
   componentDidMount(){
     console.log("Product componentDidMount")
-    if(!this.props.products.loaded){
+    if(!this.props.products.product){
       this.props.getProduct(this.props.match.params.id)
     }
   }
@@ -100,7 +81,7 @@ class Product extends Component {
                 classes={{}}
                 place="br"
                 open={!this.props.message ? false : true}
-                onClose={() => this.props.clearMessage()}
+                onClose={() => this.props.clearPostProduct()}
                 close
                 />
             </div>
@@ -133,9 +114,7 @@ export default {
       {
         getProduct,
         clearProduct,
-        deleteProduct,
-        clearMessage,
-        toggleEditOpen
+        clearPostProduct,
       }
     )
     (withStyles(dashboardStyle)(Product)))

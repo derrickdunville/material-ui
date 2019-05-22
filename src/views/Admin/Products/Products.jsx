@@ -6,12 +6,11 @@ import PropTypes from 'prop-types';
 import withStyles from "@material-ui/core/styles/withStyles"
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx"
 import { withRouter } from "react-router-dom"
-import { getProducts, clearMessage } from 'actions/productActions'
+import { getProducts, clearDeleteProduct } from 'actions/productActions'
 import { NavLink } from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton'
 import Add from '@material-ui/icons/Add'
 import Close from '@material-ui/icons/Close'
-import ProductForm from './ProductForm.jsx'
 import ProductReduxForm from './ProductReduxForm.jsx'
 import FormControl from "@material-ui/core/FormControl"
 import TextField from
@@ -110,7 +109,9 @@ class Products extends Component {
     this.setState({ searchColumn: event.target.value }, () => this.load());
   }
   componentDidMount(){
-    this.props.getProducts()
+    if(!this.props.products.loaded){
+      this.props.getProducts()
+    }
     this.setState({
      labelWidth: ReactDOM.findDOMNode(this.InputLabelRef).offsetWidth,
    })
@@ -262,11 +263,11 @@ class Products extends Component {
               </div>
               <CustomSnackbar
                 color="success"
-                message={!this.props.products.message ? "" : this.props.products.message}
+                message={!this.props.message ? "" : this.props.message}
                 classes={{}}
                 place="br"
-                open={!this.props.products.message ? false : true}
-                onClose={() => this.props.clearMessage()}
+                open={!this.props.message ? false : true}
+                onClose={() => this.props.clearDeleteProduct()}
                 close
                 />
             </div>
@@ -279,7 +280,8 @@ class Products extends Component {
 
 function mapStateToProps(state) {
   return {
-    products: state.products
+    products: state.products,
+    message: state.products.deleteProductSuccessMessage
   }
 }
 
@@ -291,5 +293,5 @@ function loadData(store, match){
 
 export default {
   loadData,
-  component: withRouter(connect(mapStateToProps, { getProducts, clearMessage })(withStyles(dashboardStyle)(Products)))
+  component: withRouter(connect(mapStateToProps, { getProducts, clearDeleteProduct })(withStyles(dashboardStyle)(Products)))
 }

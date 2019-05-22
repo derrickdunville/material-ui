@@ -1,7 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
-import { postProduct, putProduct } from 'actions/productActions'
+import {
+  postProduct,
+  putProduct,
+  deleteProduct,
+  clearPostProduct,
+  clearPutProduct,
+  clearDeleteProduct
+} from 'actions/productActions'
 import { Field, reduxForm, formValueSelector  } from 'redux-form'
 import * as regex from 'utils/regex'
 
@@ -80,7 +87,7 @@ class ProductReduxForm extends Component {
     this.setState({deleteOpen: false})
   }
   handleDelete = () => {
-    this.props.deleteUser(this.props.history, this.props.product._id)
+    this.props.deleteProduct(this.props.history, this.props.product._id)
   }
 
   openCreate = () => {
@@ -90,7 +97,7 @@ class ProductReduxForm extends Component {
     this.setState({createOpen: false})
     let this2 = this
     setTimeout(function () {
-      // this2.props.clearPostUser()
+      this2.props.clearPostProduct()
     }, 200);
   }
 
@@ -99,10 +106,9 @@ class ProductReduxForm extends Component {
   }
   closeEdit = () => {
     this.setState({editOpen: false})
-    // clearPutUser
     let this2 = this
     setTimeout(function () {
-      // this2.props.clearPutUser()
+      this2.props.clearPutProduct()
     }, 200);
   }
 
@@ -120,6 +126,7 @@ class ProductReduxForm extends Component {
       access: this.props.access,
     }
 
+    console.dir(product)
     if(this.props.category === 'membership' && this.props.discord_role_id){
       product.discord_role_id = this.props.discord_role_id
     }
@@ -206,7 +213,7 @@ class ProductReduxForm extends Component {
                 buttonText="Save"
                 buttonColor="primary"
                 loading={this.props.puttingProduct}
-                loadingMessage={"Saving User..."}
+                loadingMessage={"Saving Product..."}
                 successMessage={this.props.putProductSuccessMessage}
                 errorMessage={this.props.putProductErrorMessage}
                 open={this.state.editOpen}
@@ -231,7 +238,7 @@ class ProductReduxForm extends Component {
               buttonText="Delete"
               buttonColor="secondary"
               loading={this.props.deletingProduct}
-              loadingMessage={"Deleting User..."}
+              loadingMessage={"Deleting Product..."}
               successMessage={this.props.deleteProductSuccessMessage}
               errorMessage={this.props.deleteProductErrorMessage}
               open={this.state.deleteOpen}
@@ -294,6 +301,10 @@ export default connect(
   mapStateToProps,
   {
     postProduct,
-    putProduct
+    clearPostProduct,
+    putProduct,
+    clearPutProduct,
+    deleteProduct,
+    clearDeleteProduct
   }
 )(ProductReduxForm)

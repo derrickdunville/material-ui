@@ -110,6 +110,7 @@ export default (state=initialState, action) => {
         ...state,
         puttingUser: false,
         user: action.payload.data,
+        docs: state.docs.map(user => (user._id === action.payload.data._id) ? action.payload.data : user),
         putUserSuccessMessage: "updated successfully",
         editOpen: false
       }
