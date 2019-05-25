@@ -11,7 +11,7 @@ import { NavLink } from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton'
 import Add from '@material-ui/icons/Add'
 import Close from '@material-ui/icons/Close'
-import TransactionForm from './TransactionForm.jsx'
+import TransactionReduxForm from './TransactionReduxForm.jsx'
 import FormControl from "@material-ui/core/FormControl"
 import TextField from "@material-ui/core/TextField"
 
@@ -237,7 +237,7 @@ class Transactions extends Component {
               <IconButton onClick={this.closeNewTransaction} color="inherit" aria-label="Menu">
                 <Close />
               </IconButton>
-              <TransactionForm />
+              <TransactionReduxForm />
             </div>
           ):(
             <div className={classes.content}>

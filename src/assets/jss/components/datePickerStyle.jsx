@@ -74,7 +74,7 @@ const datePickerTheme = createMuiTheme({
           borderColor: "#07C16E !important",
           boxShadow: "inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6)"
         },
-        borderRadius: "4px",
+        borderRadius: "4px"
       },
       input: {
         color: "white"
@@ -87,18 +87,15 @@ const datePickerTheme = createMuiTheme({
           borderWidth: "1px",
           borderColor: "#07C16E",
           boxShadow: "inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6)"
-        },
-        '&disabled' : {
-          color: "#a1a1a1 !important"
         }
+      },
+      disabled: {
+        color: "#a1a1a1 !important"
       }
     },
     MuiFormLabel: {
       root: {
-        color: "white !important",
-        '&disabled' : {
-          color: "#a1a1a1 !important"
-        }
+        color: "white !important"
       }
     },
     MuiIconButton: {

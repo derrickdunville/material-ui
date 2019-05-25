@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core/styles';
 import serialize from 'serialize-javascript'
 import { Helmet } from 'react-helmet'
+import { extractCritical } from 'emotion-server'
 
 function renderApp(req, store, context) {
   // Create a sheetsRegistry instance.
@@ -36,12 +37,15 @@ function renderApp(req, store, context) {
     </JssProvider>
   );
   // All the required CSS from the compenents that need to be renderered on the requested path were put into our sheetsRegistry. We need to inject this into the intial page load style so it rendered the same style as the client.
-  const css = sheetsRegistry.toString()
+  const jss_css = sheetsRegistry.toString()
+
+  // Used to extract critical css for react-select based components
+  const { css } = extractCritical(rendered)
 
   // We also need to inject the base css manually.
   // This appears to be a work around for loading a style sheet that was used as an import in Dashboard layout
   const base_css = fs.readFileSync('./src/assets/css/material-dashboard-react.css', 'utf8');
-  const combined_css = css + " " + base_css
+  const combined_css = jss_css + " " + css + " " + base_css
 
   // Lastly we need to inject our header tags into our head - these allow social media site to create nice looking embeds
   const helmet = Helmet.renderStatic()

@@ -44,7 +44,7 @@ class Scanners extends Component {
         )}
         {this.props.products.map(product => {
           return (
-            <NavLink key={product._id} to={`/classes/${product._id}`} style={{marginBottom: "6px"}}>
+            <NavLink key={product._id} to={`/scanners/${product._id}`} style={{marginBottom: "6px"}}>
               <Paper className={classes.productContainer}>
                 {product.cover_image != null ? (
                  <img className={classes.productImage} src={`https://s3.amazonaws.com/${product.cover_image.bucket}/${product.cover_image.key}`}/>

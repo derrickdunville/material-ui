@@ -38,15 +38,21 @@ const initialState = {
 
   gettingTransaction: false,
   gettingTransactionError: false,
+
   gettingTransactions: false,
   gettingTransactionsError: false,
+
   postingTransaction: false,
-  postingTransactionError: false,
+  postTransactionErrorMessage: false,
+  postTransactionSuccessMessage: false,
+
   puttingTransaction: false,
   putTransactionSuccessMessage: false,
   putTransactionErrorMessage: false,
+
   deletingTransaction: false,
-  deletingTransactionError: false
+  deleteTransactionErrorMessage: false,
+  deleteTransactionSuccessMessage: false
 }
 export default (state=initialState, action) => {
   switch (action.type) {
@@ -100,7 +106,7 @@ export default (state=initialState, action) => {
       return {
         ...state,
         postingTransaction: false,
-        postingTransactionError: action.payload.data.err.message
+        postTransactionErrorMessage: action.payload.data.err.message
       }
     case PUT_TRANSACTION:
       return {
@@ -136,7 +142,7 @@ export default (state=initialState, action) => {
       return {
         ...state,
         deletingTransaction: false,
-        deletingTransactionError: action.payload.data.err.message
+        deleteTransactionErrorMessage: action.payload.data.err.message
       }
     case CLEAR_TRANSACTION:
       return {
@@ -149,6 +155,24 @@ export default (state=initialState, action) => {
         ...state,
         putTransactionErrorMessage: false,
         putTransactionSuccessMessage: false
+      }
+    case CLEAR_POST_TRANSACTION:
+      return {
+        ...state,
+        postTransactionErrorMessage: false,
+        postTransactionSuccessMessage: false
+      }
+    case CLEAR_PUT_TRANSACTION:
+      return {
+        ...state,
+        putTransactionErrorMessage: false,
+        putTransactionSuccessMessage: false
+      }
+    case CLEAR_DELETE_TRANSACTION:
+      return {
+        ...state,
+        deleteTransactionErrorMessage: false,
+        deleteTransactionSuccessMessage: false
       }
     case TRANSACTION_CREATED:
       console.log("TRANSACTION_CREATED")

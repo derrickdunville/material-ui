@@ -19,61 +19,64 @@ const FormSelect = ({
   classes,
   labelWidth,
   ...custom
-}) => (
-  <CustomFormControl variant="outlined" margin="normal">
-    <InputLabel
-      htmlFor={id}
-      shrink={input.value ? true : false}
-      style={{color: "white"}}>
-      {label}
-    </InputLabel>
-    <Select
-      classes={{
-        root: classes.root,
-        icon: classes.icon,
-        disabled: classes.disabled
-      }}
-      MenuProps={{
-        classes: {
-          paper: classes.listRoot
-        },
-        MenuListProps: {
+}) => {
+  // console.dir(input)
+  return (
+    <CustomFormControl variant="outlined" margin="normal">
+      <InputLabel
+        htmlFor={id}
+        shrink={input.value != "" ? true : false}
+        style={{color: "white"}}>
+        {label}
+      </InputLabel>
+      <Select
+        classes={{
+          root: classes.root,
+          icon: classes.icon,
+          disabled: classes.disabled
+        }}
+        MenuProps={{
           classes: {
-            root: classes.listRoot
+            paper: classes.listRoot
+          },
+          MenuListProps: {
+            classes: {
+              root: classes.listRoot
+            }
           }
-        }
-      }}
-      style={{width: '100%'}}
-      input={
-        <CustomOutlinedInput
-          error={touched && invalid}
-          labelWidth={labelWidth}
-          name={name}
-          id={id}
-          {...input} />
-        }
-      {...custom}
-      >
-      {items !== undefined && (
-        items.map((item) => (
-          <CustomMenuItem
-            key={item}
-            style={{color: "white"}}
-            id={item}
-            value={item}>
-            {item.charAt(0).toUpperCase() + item.slice(1)}
-          </CustomMenuItem>
-        ))
-      )}
-    </Select>
-    {(touched && error) &&
-      <FormHelperText
-        error={true}
-        id="component-helper-text">
-        {error}
-      </FormHelperText>
-    }
-  </CustomFormControl>
-)
+        }}
+        style={{width: '100%'}}
+        input={
+          <CustomOutlinedInput
+            error={touched && invalid}
+            labelWidth={input.value != "" ? labelWidth : 0}
+            name={name}
+            id={id}
+            {...input} />
+          }
+        {...custom}
+        >
+        {items !== undefined && (
+          items.map((item) => (
+            <CustomMenuItem
+              key={item}
+              style={{color: "white"}}
+              id={item}
+              value={item}>
+              {item.charAt(0).toUpperCase() + item.slice(1)}
+            </CustomMenuItem>
+          ))
+        )}
+      </Select>
+      {(touched && error) &&
+        <FormHelperText
+          error={true}
+          id="component-helper-text">
+          {error}
+        </FormHelperText>
+      }
+    </CustomFormControl>
+  )
+}
 
 export default withStyles(selectStyle)(FormSelect)
