@@ -25,7 +25,6 @@ const CustomCheckbox = ({ input, label, classes }) => (
         }}
         checked={input.value ? true : false}
         onChange={input.onChange}
-        value={input.value}
         color="primary"
       />}
     label={label}
