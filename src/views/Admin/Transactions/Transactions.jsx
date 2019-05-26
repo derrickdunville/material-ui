@@ -217,7 +217,7 @@ class Transactions extends Component {
         labelText="Search"
         inputType="text"
         formControlProps={{
-          fullWidth: false,
+          fullWidth: true,
           style: {float: "right"}
         }}
         inputProps={{
@@ -226,6 +226,22 @@ class Transactions extends Component {
           onChange: this.handleSearchChange
         }}
       />
+    )
+
+    const searchColumn = (
+      <FormControl variant="outlined" style={{width: "100%", backgroundColor: "#202225", borderRadius: "4px"}}>
+        <InputLabel shrink={true} style={{color: "white"}}>
+          Filter
+        </InputLabel>
+        <CustomSelect
+          value={this.state.searchColumn}
+          name="searchColumn"
+          onChange={this.handleChange}
+          renderValue={value => `${value}`}
+          input={<CustomOutlinedInput labelWidth={40}/>}
+          items={["ID", "Username", "Email", "Transaction", "Subscription"]}
+        />
+      </FormControl>
     )
     return (
       <div className={`slide${route.zIndex}`}>
@@ -241,30 +257,17 @@ class Transactions extends Component {
             </div>
           ):(
             <div className={classes.content}>
-              <div style={{display: "flex", alignItems: "center"}}>
-                <div style={{minWidth: "170px"}}>
+              <div className={classes.filterContainer}>
+                <div style={{minWidth: "170px", width: "100%"}}>
                   {this.props.transactions.total} Transactions
                   <IconButton onClick={this.openNewTransaction} color="inherit" aria-label="Menu">
                     <Add />
                   </IconButton>
                 </div>
-                <div style={{width: "100%"}}></div>
-                <div style={{minWidth: "150px"}}>
-                  <FormControl variant="outlined" style={{width: "100%", backgroundColor: "#202225", borderRadius: "4px"}}>
-                    <InputLabel shrink={true} style={{color: "white"}}>
-                      Filter
-                    </InputLabel>
-                    <CustomSelect
-                      value={this.state.searchColumn}
-                      name="searchColumn"
-                      onChange={this.handleChange}
-                      renderValue={value => `${value}`}
-                      input={<CustomOutlinedInput labelWidth={40}/>}
-                      items={["ID", "Username", "Email", "Transaction", "Subscription"]}
-                    />
-                  </FormControl>
+                <div style={{display: "flex"}}>
+                  <div style={{minWidth: "140px"}}>{searchColumn}</div>
+                  <div style={{minWidth: "120px", width: "100%"}}>{search}</div>
                 </div>
-                <div style={{minWidth: "200px"}}>{search}</div>
               </div>
               <div>
                 {this.renderTransactions()}

@@ -4,13 +4,16 @@ const defaultBackgroundColor = "#454545"
 
 const chatStyle = theme => ({
   content: {
+    [theme.breakpoints.up("sm")]: {
+      height: "calc(100vh - 64px)",
+    },
     overflowX: "hidden",
     overflowY: "auto",
     marginTop: "0px",
     padding: "15px 15px",
-    height: "calc(100vh - 94px)",
+    height: "calc(100vh - 56px)",
     backgroundColor: defaultBackgroundColor,
-    width: "calc(100%-30px)",
+    width: "100%",
     webkitBoxShadow: "-3px 0px 5px -3px rgba(0,0,0,0.75)",
     mozBoxShadow: "-3px 0px 5px -3px rgba(0,0,0,0.75)",
     boxShadow: "-3px 0px 5px -3px rgba(0,0,0,0.75)"

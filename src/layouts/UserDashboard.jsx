@@ -161,7 +161,7 @@ class UserDashboard extends React.Component {
           exact
           className={classes.logoLink}
           activeClassName="active">
-          <div className={classes.logoImage} style={{display: 'flex', alignItems: "center", justifyContent: "center", paddingTop:"10px", height: "56px" }}>
+          <div className={classes.logoImage} style={{display: 'flex', alignItems: "center", justifyContent: "center", paddingTop:"10px", paddingBottom: "10px", height: "66px"}}>
             <img src={logo} className={classes.img} style={{width: '80px'}}/>
             <h6>App Title</h6>
           </div>

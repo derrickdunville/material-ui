@@ -63,6 +63,7 @@ export default [
             hidden: true,
             title: "Contact",
             path: '/contact',
+            zIndex: "1"
           },
           {
             ...AppPage,

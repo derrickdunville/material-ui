@@ -100,13 +100,18 @@ const appStyle = theme => ({
     overflow: "hidden"
   },
   content: {
+    [theme.breakpoints.up("sm")]: {
+      height: "calc(100vh - 64px)",
+    },
+    position: "relative",
+    zIndex: "2",
     overflowX: "hidden",
     overflowY: "auto",
     marginTop: "0px",
     padding: "15px 15px",
-    height: "calc(100vh - 94px)",
+    height: "calc(100vh - 56px)",
     backgroundColor: defaultBackgroundColor,
-    width: "calc(100% - 30px)",
+    width: "100%",
     webkitBoxShadow: "-3px 0px 5px -3px rgba(0,0,0,0.75)",
     mozBoxShadow: "-3px 0px 5px -3px rgba(0,0,0,0.75)",
     boxShadow: "-3px 0px 5px -3px rgba(0,0,0,0.75)"
@@ -138,7 +143,6 @@ const appStyle = theme => ({
   productContainer: {
     [theme.breakpoints.up("sm")]: {
       display: "flex",
-      maxHeight: "100px"
     },
     backgroundColor: "#383838",
     borderRadius: "4px",
@@ -159,13 +163,12 @@ const appStyle = theme => ({
   },
   productDetails: {
     [theme.breakpoints.up("sm")]: {
-      width: "100%"
+      width: "100%",
     },
+    padding: "5px",
     display: "flex",
     alignItems: "center",
     borderRadius: "4px",
-    paddingTop: "3px",
-    paddingBottom: "10px"
   },
   productCoverImage: {
     [theme.breakpoints.up("md")]: {
@@ -176,6 +179,14 @@ const appStyle = theme => ({
     height: "calc((100vw - 50px) * .5625)",
     borderRadius: "4px",
     backgroundColor: "#202225"
+  },
+  filterContainer: {
+    [theme.breakpoints.up("sm")]: {
+      display: "flex"
+    },
+    display: "flex-wrap",
+    alignItems: "center",
+    width: "100%"
   }
 });
 

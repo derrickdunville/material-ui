@@ -4,7 +4,7 @@ import { withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
 import { postContact } from 'actions'
 import withStyles from '@material-ui/core/styles/withStyles'
-import homeStyle from 'assets/jss/material-dashboard-react/views/homeStyle.jsx'
+import dashboardStyle from 'assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx'
 import ContactForm from 'views/Contact/ContactForm.jsx'
 import UserReduxForm from 'views/Admin/Users/UserReduxForm.jsx'
 import AlertDialog from 'components/Dialog/AlertDialog.jsx'
@@ -58,9 +58,9 @@ class Contact extends Component {
     const text = `Have any questions or concerns? We are here to help and would love to hear from you. Here's how to get in touch with us.`
 
     return (
-      <div className={classes.home} style={{marginTop:"64px"}}>
+      <div className={`slide${route.zIndex}`}>
         {this.head()}
-        <div style={{margin: "20px", paddingTop: "20px"}}>
+        <div className={classes.content}>
           <div style={{marginBottom: "20px"}}>
             <Typography style={{textAlign: "center"}} variant={'h4'}>{text}</Typography>
           </div>
@@ -109,5 +109,5 @@ function mapStateToProps(state){
   }
 }
 export default {
-  component: connect(mapStateToProps, {postContact})(withRouter(withStyles(homeStyle)(Contact)))
+  component: connect(mapStateToProps, {postContact})(withRouter(withStyles(dashboardStyle)(Contact)))
 }

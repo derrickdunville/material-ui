@@ -92,11 +92,13 @@ class SignUpPage extends Component {
             </div>
             <div style={{marginBottom: "10px"}}>
               <CustomTextField
+                autoComplete="new-password"
                 id="password-input"
                 labelText="Password"
                 inputType="password"
                 formControlProps={{fullWidth: true}}
                 inputProps={{
+                  autoComplete: "new-password",
                   name: 'password',
                   value: this.state.password,
                   onChange: this.handleChange
@@ -110,6 +112,7 @@ class SignUpPage extends Component {
                 inputType="password"
                 formControlProps={{fullWidth: true}}
                 inputProps={{
+                  autoComplete: "new-password",
                   name: 'confirm_password',
                   value: this.state.confirm_password,
                   onChange: this.handleChange

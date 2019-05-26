@@ -193,10 +193,11 @@ class Products extends Component {
     const { anchorEl } = this.state;
     const search = (
       <CustomTextField
+        style={{width: "100%"}}
         labelText="Search"
         inputType="text"
         formControlProps={{
-          fullWidth: false,
+          fullWidth: true,
           style: {float: "right"}
         }}
         inputProps={{
@@ -247,16 +248,17 @@ class Products extends Component {
             </div>
           ):(
             <div className={classes.content}>
-              <div style={{display: "flex", alignItems: "center"}}>
-                <div style={{minWidth: "150px"}}>
+              <div className={classes.filterContainer}>
+                <div style={{minWidth: "170px", width: "100%"}}>
                   {this.props.products.total} Products
                   <IconButton onClick={this.openNewProduct} color="inherit" aria-label="Menu">
                     <Add />
                   </IconButton>
                 </div>
-                <div style={{width: "100%"}}></div>
-                <div style={{minWidth: "150px"}}>{searchColumn}</div>
-                <div style={{minWidth: "200px"}}>{search}</div>
+                <div style={{display: "flex"}}>
+                  <div style={{minWidth: "140px"}}>{searchColumn}</div>
+                  <div style={{minWidth: "120px", width: "100%"}}>{search}</div>
+                </div>
               </div>
               <div>
                 {this.renderProducts()}

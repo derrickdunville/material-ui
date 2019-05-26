@@ -21,6 +21,9 @@
 } */
 
 
+div, img {
+	box-sizing: border-box;
+}
 /* Hide ReCaptcha*/
 body:not(.contact) .grecaptcha-badge {
 	display: none;
@@ -116,7 +119,10 @@ body:not(.contact) .grecaptcha-badge {
 @media only screen and (max-width: 600px){
   .slide1,
   .slide2,
-  .slide3 {
+  .slide3,
+	.admin-slide1,
+	.admin-slide2,
+	.admin-slide3 {
     margin-top: 56px !important;
   }
 }

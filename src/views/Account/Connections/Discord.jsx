@@ -33,7 +33,7 @@ class Discord extends Component {
            backgroundColor: "#7289da",
            alignItems: "center",
            padding: "10px",
-           height: "60px"
+           height: "80px"
          }}>
          <div style={{minWidth: "60px", height: "60px", marginLeft: "-3px", marginRight: '10px'}}>
            <img style={{width: "60px", height:"60px"}} src={discord_icon}/>
