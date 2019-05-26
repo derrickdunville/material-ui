@@ -50,6 +50,13 @@ function renderApp(req, store, context) {
   // Lastly we need to inject our header tags into our head - these allow social media site to create nice looking embeds
   const helmet = Helmet.renderStatic()
 
+  let bundle
+  if(process.env.NODE_ENV == 'production'){
+    bundle = `<script src="/bundle.js.gz"></script>`
+  } else {
+    bundle = `<script src="/bundle.js"></script>`
+  }
+
   return `
     <!DOCTYPE html>
     <html>
@@ -74,7 +81,7 @@ function renderApp(req, store, context) {
         <script type="text/javascript">
           window.INITIAL_STATE = ${serialize(store.getState())}
         </script>
-        <script src="/bundle.js"></script>
+        ${bundle}
       </body>
     </html>
   `

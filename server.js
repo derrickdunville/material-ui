@@ -21,18 +21,23 @@ console.log("RECAPTCHA_SITE_KEY: ", process.env.RECAPTCHA_SITE_KEY)
 const app = express();
 // We serve bundle.js for client and any other static asstets from the public directory
 var cacheTime = 86400000*7;     // 7 days
+
+/* Production 
+  We are serving gzip'd bundle.
+  Here we need to tell the browser about the encoding
+*/
+if(process.env.NODE_ENV == 'production'){
+  app.get('*.js.gz', function(req, res, next){
+    res.set('Content-Encoding', 'gzip')
+    res.set('Content-Type', 'text/javascript')
+    next()
+  })
+}
+
 app.use(express.static('public', { maxAge: cacheTime }))
+
 // Client side api calls need to be proxied to the api
 app.use('/api', proxy('http://127.0.0.1:3001'))
-
-// if(process.env.NODE_ENV == 'production'){
-//   app.get('*.js', function (req, res, next) {
-//     console.log("getting compressesed .js")
-//     req.url = req.url + '.gz';
-//     res.set('Content-Encoding', 'gzip');
-//     next();
-//   });
-// }
 
 // Cache-Control
 // app.use(function (req, res, next) {
