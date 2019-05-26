@@ -76,6 +76,7 @@ const appStyle = theme => ({
     backgroundColor: sideBarBackgroundColor,
     position: "relative",
     width: '250px',
+    height: "100%",
     zIndex: "-1",
     [theme.breakpoints.up("md")]: {
       zIndex: "1 !important",
@@ -120,7 +121,10 @@ const appStyle = theme => ({
     marginTop: "0px"
   },
   list: {
+    display: "flex",
+    flexDirection: "column",
     width: 250,
+    height: "100%"
   },
   fullList: {
     width: 'auto'

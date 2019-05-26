@@ -51,6 +51,7 @@ class MobileSidebar extends Component{
           tabIndex={0}
           role="button"
           onKeyDown={this.closeSidebar}
+          style={{height: "100%"}}
         >
           {this.props.sideList}
         </div>

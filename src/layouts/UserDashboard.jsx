@@ -229,30 +229,31 @@ class UserDashboard extends React.Component {
                 </NavLink>
               )}
           })}
-          <Divider />
-          <div style={{position: "fixed", bottom: "0"}}>
-            <div style={{display: "flex", justifyContent: "center", width: "230px"}}>
-              <div>
-                <NavLink to={'/contact'} key={4} style={{width: "100%", color: "#898989"}} onClick={this.handleCloseNav}>
-                  Contact
-                </NavLink>
-              </div>
-              <div style={{width: "30px"}}>
-              </div>
-              <div>
-                <NavLink to={'/tos'} key={5} style={{width: "100%", color: "#898989"}} onClick={this.handleCloseNav}>
-                  Terms
-                </NavLink>
-              </div>
+        </div>
+        <Divider />
+        <div style={{height: "100%"}}/>
+        <div>
+          <div style={{display: "flex", justifyContent: "center", width: "230px"}}>
+            <div>
+              <NavLink to={'/contact'} key={4} style={{width: "100%", color: "#898989"}} onClick={this.handleCloseNav}>
+                Contact
+              </NavLink>
             </div>
-            <div style={{display: "flex", justifyContent: "center", width: "230px"}}>
-              <span style={{color: "#898989", fontSize: "12px"}}>
-                &copy; {1900 + new Date().getYear()}{" "}
-                <a href="http://www.derrickdunville.com" className={classes.a} style={{color: "#898989", fontSize: "12px"}}>
-                  Derrick Dunville
-                </a>
-              </span>
+            <div style={{width: "30px"}}>
             </div>
+            <div>
+              <NavLink to={'/tos'} key={5} style={{width: "100%", color: "#898989"}} onClick={this.handleCloseNav}>
+                Terms
+              </NavLink>
+            </div>
+          </div>
+          <div style={{display: "flex", justifyContent: "center", width: "230px"}}>
+            <span style={{color: "#898989", fontSize: "12px"}}>
+              &copy; {1900 + new Date().getYear()}{" "}
+              <a href="http://www.derrickdunville.com" className={classes.a} style={{color: "#898989", fontSize: "12px"}}>
+                Derrick Dunville
+              </a>
+            </span>
           </div>
         </div>
       </div>
