@@ -55,8 +55,13 @@ function renderApp(req, store, context) {
     bundle = `<script src="/bundle.js.gz"></script>`
   } else {
     bundle = `<script src="/bundle.js"></script>`
+
   }
 
+
+// chartist stuff
+// <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" />
+// <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
   return `
     <!DOCTYPE html>
     <html>
@@ -67,13 +72,10 @@ function renderApp(req, store, context) {
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="theme-color" content="#000000">
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" />
-        <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Orbitron" />
-        <script src="https://js.stripe.com/v3/"></script>
-
+        <script id="stripe-js" async defer src="https://js.stripe.com/v3/"></script>
       </head>
       <body>
         <div id="root">${rendered}</div>

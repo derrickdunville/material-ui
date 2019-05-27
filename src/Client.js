@@ -12,6 +12,12 @@ import { StripeProvider } from 'react-stripe-elements';
 
 
 class Client extends Component {
+  constructor(){
+    super();
+    this.state = {
+      stripe: null
+    }
+  }
   componentDidMount() {
     // Remove the server-side injected CSS.
     // const baseCss = document.getElementById('base-css');
@@ -22,12 +28,21 @@ class Client extends Component {
     if (jssStyles && jssStyles.parentNode) {
       jssStyles.parentNode.removeChild(jssStyles);
     }
+
+    if (window.Stripe) {
+      this.setState({stripe: window.Stripe(process.env.STRIPE_PUBLISHABLE_KEY)});
+    } else {
+      document.querySelector('#stripe-js').addEventListener('load', () => {
+        // Create Stripe instance once Stripe.js loads
+        this.setState({stripe: window.Stripe(process.env.STRIPE_PUBLISHABLE_KEY)});
+      });
+    }
   }
 
   render(){
     return (
       <BrowserRouter>
-        <StripeProvider apiKey={`${process.env.STRIPE_PUBLISHABLE_KEY}`}>
+        <StripeProvider stripe={this.state.stripe}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <div>{renderRoutes(Routes)}</div>
           </MuiPickersUtilsProvider>

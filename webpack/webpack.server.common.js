@@ -19,7 +19,6 @@ module.exports = merge(common,
     plugins: [
       new CleanWebpackPlugin(['build'])
     ],
-
     module: {
       rules: [
 

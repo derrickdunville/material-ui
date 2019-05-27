@@ -10,12 +10,7 @@ module.exports = merge(common,
     mode: 'production',
     devtool: 'source-map',
     plugins: [
-      new webpack.DefinePlugin({ // <-- key to reducing React's size
-        'process.env': {
-          'NODE_ENV': JSON.stringify('production')
-        }
-      }),
-      new CompressionPlugin({
+      new CompressionPlugin({ // <-- key to reducing React's size
         algorithm: 'gzip'
       })
     ],

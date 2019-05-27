@@ -1,7 +1,24 @@
 // Base configuration for both client and server
 import path from 'path'
+import webpack from 'webpack'
+
+const webpackDefine = new webpack.DefinePlugin({
+  'process.env': {
+    NODE_ENV: JSON.stringify("production"),
+    API_URL: JSON.stringify(process.env.API_URL || 'http://localhost:3001/'),
+    DISCORD_CLIENT_ID: JSON.stringify(process.env.DISCORD_CLIENT_ID),
+    DISCORD_CALLBACK: JSON.stringify(process.env.DISCORD_CALLBACK),
+    DISCORD_GUILD_ID: JSON.stringify(process.env.DISCORD_GUILD_ID || "353342769630281738"),
+    DISCORD_WELCOME_CHANNEL_ID: JSON.stringify(process.env.DISCORD_WELCOME_CHANNEL_ID || "544943256283119626"),
+    RECAPTCHA_SITE_KEY: JSON.stringify(process.env.RECAPTCHA_SITE_KEY),
+    STRIPE_PUBLISHABLE_KEY: JSON.stringify(process.env.STRIPE_PUBLISHABLE_KEY)
+  }
+});
 
 module.exports = {
+  plugins: [
+    webpackDefine
+  ],
   resolve: {
     modules: [path.join(__dirname, '..', 'src'), 'node_modules']
   },

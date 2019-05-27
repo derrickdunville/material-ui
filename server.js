@@ -17,12 +17,13 @@ console.log("DISCORD_CALLBACK: ", process.env.DISCORD_CALLBACK)
 console.log("DISCORD_GUILD_ID: ", process.env.DISCORD_GUILD_ID)
 console.log("DISCORD_WELCOME_CHANNEL_ID: ", process.env.DISCORD_WELCOME_CHANNEL_ID)
 console.log("RECAPTCHA_SITE_KEY: ", process.env.RECAPTCHA_SITE_KEY)
+console.log("STRIPE_PUBLISHABLE_KEY: ", process.env.STRIPE_PUBLISHABLE_KEY)
 
 const app = express();
 // We serve bundle.js for client and any other static asstets from the public directory
 var cacheTime = 86400000*7;     // 7 days
 
-/* Production 
+/* Production
   We are serving gzip'd bundle.
   Here we need to tell the browser about the encoding
 */
@@ -32,6 +33,14 @@ if(process.env.NODE_ENV == 'production'){
     res.set('Content-Type', 'text/javascript')
     next()
   })
+
+  // Cache-Control
+  app.use(function (req, res, next) {
+    if (req.url.match(/^\/(css|img|font)\/.+/)) {
+      res.setHeader('Cache-Control', 'public, max-age=3600'); // cache header
+    }
+    next();
+  });
 }
 
 app.use(express.static('public', { maxAge: cacheTime }))
@@ -39,13 +48,7 @@ app.use(express.static('public', { maxAge: cacheTime }))
 // Client side api calls need to be proxied to the api
 app.use('/api', proxy('http://127.0.0.1:3001'))
 
-// Cache-Control
-// app.use(function (req, res, next) {
-//   if (req.url.match(/^\/(css|js|img|font)\/.+/)) {
-//     res.setHeader('Cache-Control', 'public, max-age=3600'); // cache header
-//   }
-//   next();
-// });
+
 
 app.get('*', function(req, res, next) {
 
