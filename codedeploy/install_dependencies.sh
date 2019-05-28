@@ -25,6 +25,7 @@ fi
 # we need to traverse to where the application bundle is copied too.
 echo installing application with npm
 cd /var/www/
+git checkout codedeploy
 sudo npm install
 
 echo installing pm2
