@@ -87,12 +87,7 @@ app.get('*', function(req, res, next) {
    })
 })
 
-// Setup server to listen over https
-const server = https.createServer({
-  key: fs.readFileSync('server.key'),
-  cert: fs.readFileSync('server.cert')
-}, app)
-
+const server = http.createServer(app)
 server.listen(3000, 'localhost', function(err) {
   if (err) throw err
 
