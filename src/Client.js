@@ -19,21 +19,26 @@ class Client extends Component {
     }
   }
   componentDidMount() {
-    // Remove the server-side injected CSS.
-    // const baseCss = document.getElementById('base-css');
-    // if (baseCss && baseCss.parentNode) {
-    //   baseCss.parentNode.removeChild(baseCss);
-    // }
+    /* Server-Side CSS
+    *  During server-side rendering we use JSS and emotion to generate the styles
+    *  needed for the componentes within the app. When the bundle starts we can safely
+    *  remove these injected styles.
+    */
     const jssStyles = document.getElementById('jss-server-side');
     if (jssStyles && jssStyles.parentNode) {
       jssStyles.parentNode.removeChild(jssStyles);
     }
 
+    /* Server-Side Stripe
+    *  Stripe.js is not included during Server-Side rendering.
+    *  We also load the script async and defer it during the initial page load.
+    *  So when the bundle starts running we need to create a stripe instance and
+    *  provide it to the StripeProvider.
+    */
     if (window.Stripe) {
       this.setState({stripe: window.Stripe(process.env.STRIPE_PUBLISHABLE_KEY)});
     } else {
       document.querySelector('#stripe-js').addEventListener('load', () => {
-        // Create Stripe instance once Stripe.js loads
         this.setState({stripe: window.Stripe(process.env.STRIPE_PUBLISHABLE_KEY)});
       });
     }

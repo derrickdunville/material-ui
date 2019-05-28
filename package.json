@@ -27,6 +27,7 @@
     "chokidar": "2.0.3",
     "classnames": "2.2.6",
     "clean-webpack-plugin": "1.0.0",
+    "compression": "^1.7.4",
     "date-fns": "^2.0.0-alpha.27",
     "emotion-server": "9.0.0",
     "eslint": "4.19.1",

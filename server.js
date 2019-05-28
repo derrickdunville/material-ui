@@ -7,6 +7,7 @@ import proxy from 'express-http-proxy'
 import Routes from './src/routes/app'
 import { matchRoutes } from 'react-router-config'
 import queryString from 'query-string'
+import compression from 'compression'
 
 global.window = {innerWidth: 1000, innerHeight: 1080}
 
@@ -19,9 +20,10 @@ console.log("DISCORD_WELCOME_CHANNEL_ID: ", process.env.DISCORD_WELCOME_CHANNEL_
 console.log("RECAPTCHA_SITE_KEY: ", process.env.RECAPTCHA_SITE_KEY)
 console.log("STRIPE_PUBLISHABLE_KEY: ", process.env.STRIPE_PUBLISHABLE_KEY)
 
-const app = express();
+const app = express()
+app.use(compression())
 // We serve bundle.js for client and any other static asstets from the public directory
-var cacheTime = 86400000*7;     // 7 days
+var cacheTime = 86400000*7     // 7 days
 
 /* Production
   We are serving gzip'd bundle.
@@ -36,11 +38,11 @@ if(process.env.NODE_ENV == 'production'){
 
   // Cache-Control
   app.use(function (req, res, next) {
-    if (req.url.match(/^\/(css|img|font)\/.+/)) {
-      res.setHeader('Cache-Control', 'public, max-age=3600'); // cache header
+    if (req.url.match(/^\/(css|img|font|png|jpg|jpeg|gif|gz|js)\/.+/)) {
+      res.setHeader('Cache-Control', 'public, max-age=3600') // cache header
     }
-    next();
-  });
+    next()
+  })
 }
 
 app.use(express.static('public', { maxAge: cacheTime }))
@@ -83,19 +85,24 @@ app.get('*', function(req, res, next) {
       }
       res.send(content)
    })
-});
+})
 
-const server = http.createServer(app);
+// Setup server to listen over https
+const server = https.createServer({
+  key: fs.readFileSync('server.key'),
+  cert: fs.readFileSync('server.cert')
+}, app)
+
 server.listen(3000, 'localhost', function(err) {
-  if (err) throw err;
+  if (err) throw err
 
   if(process.env.DISCORD_CLIENT_ID == undefined ||
     process.env.DISCORD_CALLBACK == undefined){
     console.error("DISCORD env vars not found. Discord OAuth will not work")
   }
 
-  const addr = server.address();
+  const addr = server.address()
 
-  console.log('Listening at http://%s:%d', addr.address, addr.port);
+  console.log('Listening at http://%s:%d', addr.address, addr.port)
   console.log("__dirname:", __dirname)
-});
+})

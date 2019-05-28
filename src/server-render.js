@@ -62,6 +62,12 @@ function renderApp(req, store, context) {
 // chartist stuff
 // <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" />
 // <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+
+/* PageSpeed notes
+*   loading font links within the <footer> tag puts the app at 100/100 on desktop,
+*   but the font flicker is pretty much not worth it when 99/100 is pretty close
+*   to perfect.
+*/
   return `
     <!DOCTYPE html>
     <html>
