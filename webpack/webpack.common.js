@@ -4,7 +4,7 @@ import webpack from 'webpack'
 
 const webpackDefine = new webpack.DefinePlugin({
   'process.env': {
-    NODE_ENV: JSON.stringify("production"),
+    NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
     API_URL: JSON.stringify(process.env.API_URL || 'http://localhost:3001/'),
     DISCORD_CLIENT_ID: JSON.stringify(process.env.DISCORD_CLIENT_ID),
     DISCORD_CALLBACK: JSON.stringify(process.env.DISCORD_CALLBACK),

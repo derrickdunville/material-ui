@@ -6,7 +6,7 @@ import axios from 'axios'
 export default (req) => {
   console.log("in create store")
   const axiosInstance = axios.create({
-    baseURL: 'http://127.0.0.1:3001',
+    baseURL: process.env.API_URL,
     headers: { cookie: req.get('cookie') || ''},
     withCredentials: true
   })

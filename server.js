@@ -48,9 +48,7 @@ if(process.env.NODE_ENV == 'production'){
 app.use(express.static('public', { maxAge: cacheTime }))
 
 // Client side api calls need to be proxied to the api
-app.use('/api', proxy('http://127.0.0.1:3001'))
-
-
+app.use('/api', proxy(process.env.API_URL))
 
 app.get('*', function(req, res, next) {
 
