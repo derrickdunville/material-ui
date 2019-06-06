@@ -26,7 +26,7 @@ import {
 } from 'actions/authActions'
 
 import io from 'socket.io-client'
-const socket = io('https://api.ascendtrading.ngrok.io', { path: '/ws' })
+const socket = io(process.env.API_URL, { path: '/ws' })
 
 class Socket extends Component {
 
