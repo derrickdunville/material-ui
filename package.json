@@ -14,6 +14,9 @@
     "dev:build-server": "babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.server.dev.js --watch",
     "dev:build-client": "rm -rf ./public && babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.client.dev.js --watch",
     "production": "./environment/production.sh",
+    "codedeploy:production:build-server": "babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.server.prod.js --production",
+    "codedeploy:production:build-client": "babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.client.prod.js --production",
+    "codedeploy:production": "node build/bundle.js",    
     "local": "./environment/local.sh",
     "ngrok": "./environment/ngrok.sh"
   },
