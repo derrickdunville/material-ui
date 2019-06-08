@@ -5,18 +5,22 @@ files:
     destination: /var/www/
 hooks:
   ApplicationStop:
-    - location: codedeploy/stop_server.sh
+    - location: codedeploy/application_stop.sh
       timeout: 300
       runas: root
   BeforeInstall:
-    - location: codedeploy/install_dependencies.sh
+    - location: codedeploy/before_install.sh
       timeout: 300
       runas: root
+  AfterInstall:
+    - location: codedeploy/after_install.sh
+      timeout: 300
+      runas: ubuntu
   ApplicationStart:
-    - location: codedeploy/start_server.sh
+    - location: codedeploy/application_start.sh
       timeout: 300
-      runas: root
+      runas: ubuntu
   ValidateService:
-    - location: codedeploy/validate_server.sh
+    - location: codedeploy/validate_service.sh
       timeout: 300
-      runas: root
+      runas: ubuntu
