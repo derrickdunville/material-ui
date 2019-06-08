@@ -10,6 +10,7 @@ echo validating service...;
 # we use curl to test that the server is responding with a 200 HTTP status code
 # its necessary to use -k --insecure when testing localhost over https since the
 # certificate cannot be validated against localhost
+sudo pm2 list
 HTTP_STATUS="$(curl --write-out %{http_code} --silent --output /dev/null -k --insecure https://localhost)"
 if [ $HTTP_STATUS = "200" ]; then
         echo "Server responded with 200. All is well";
