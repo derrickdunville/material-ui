@@ -6,4 +6,4 @@
 
 # for now we are just checking that we get back a page from the server
 echo validating service...
-curl -m 5 https://localhost
+#curl -m 5 https://localhost:80
