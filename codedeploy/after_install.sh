@@ -29,10 +29,17 @@ export DISCORD_WELCOME_CHANNEL_ID=553815971597516800
 # configuring secret ENV VARS on the instance using AWS Parameter Store
 stripe_publishable_key=$(aws ssm get-parameters --region us-east-1 --names prodMaterialUiStripePublishableKey --with-decryption --query Parameters[0].Value)
 export STRIPE_PUBLISHABLE_KEY=$stripe_publishable_key
+echo $stripe_publishable_key
+
 discord_client_secret=$(aws ssm get-parameters --region us-east-1 --names prodMaterialUiDiscordClientSecret --with-decryption --query Parameters[0].Value)
 export DISCORD_CLIENT_SECRET=$discord_client_secret
+echo $discord_client_secret
+
 recaptcha_site_key=$(aws ssm get-parameters --region us-east-1 --names prodMaterialUiRecaptchaSiteKey --with-decryption --query Parameters[0].Value)
 export RECAPTCHA_SITE_KEY=$recaptcha_site_key
+echo recaptcha_site_key
+
+echo NODE_ENV
 
 
 echo building application...
