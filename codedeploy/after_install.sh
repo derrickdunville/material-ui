@@ -17,6 +17,23 @@ cd /var/www
 echo installing application...
 npm install
 
+export NODE_ENV=production
+export API_URL=https://api.material-ui.derrickdunville.com
+export CLIENT_ROOT_URL=https://material-ui.derrickdunville.com
+export DISCORD_CLIENT_ID=406318468703584266
+export DISCORD_CALLBACK=https://api.material-ui.derrickdunville.com/oauth/discord/callback
+export DISCORD_GUILD_ID=353342769630281738
+export DISCORD_WELCOME_CHANNEL_ID=553815971597516800
+
+# configuring secret ENV VARS on the instance using AWS Parameter Store
+stripe_publishable_key=$(aws ssm get-parameters --region us-east-1 --names prodMaterialUiStripePublishableKey --with-decryption --query Parameters[0].Value)
+export STRIPE_PUBLISHABLE_KEY=$stripe_publishable_key
+discord_client_secret=$(aws ssm get-parameters --region us-east-1 --names prodMaterialUiDiscordClientSecret --with-decryption --query Parameters[0].Value)
+export DISCORD_CLIENT_SECRET=$discord_client_secret
+recaptcha_site_key=$(aws ssm get-parameters --region us-east-1 --names prodMaterialUiRecaptchaSiteKey --with-decryption --query Parameters[0].Value)
+export RECAPTCHA_SITE_KEY=$recaptcha_site_key
+
+
 echo building application...
 npm run codedeploy:production:build-server
 npm run codedeploy:production:build-client
