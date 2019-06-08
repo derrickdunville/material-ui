@@ -7,6 +7,9 @@
 # for now we are just checking that we get back a page from the server
 echo validating service...;
 
+# give pm2 10 seconds to start the application before testing that its running
+sleep 10s;
+
 # we use curl to test that the server is responding with a 200 HTTP status code
 # its necessary to use -k --insecure when testing localhost over https since the
 # certificate cannot be validated against localhost
