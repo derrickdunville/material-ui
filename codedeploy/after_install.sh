@@ -14,6 +14,7 @@ echo after install running...
 
 # Here we can will install the application with npm and build it
 cd /var/www
+sudo chown ubuntu:ubuntu -R .
 echo installing application...
 npm install
 
