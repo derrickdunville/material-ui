@@ -29,23 +29,26 @@ export DISCORD_WELCOME_CHANNEL_ID=553815971597516800
 # configuring secret ENV VARS on the instance using AWS Parameter Store
 stripe_publishable_key=$(~/.local/bin/aws ssm get-parameters --region us-east-1 --names prodMaterialUiStripePublishableKey --with-decryption --query Parameters[0].Value)
 export STRIPE_PUBLISHABLE_KEY=$stripe_publishable_key
-echo $stripe_publishable_key
-
 discord_client_secret=$(~/.local/bin/aws ssm get-parameters --region us-east-1 --names prodMaterialUiDiscordClientSecret --with-decryption --query Parameters[0].Value)
 export DISCORD_CLIENT_SECRET=$discord_client_secret
-echo $discord_client_secret
-
 recaptcha_site_key=$(~/.local/bin/aws ssm get-parameters --region us-east-1 --names prodMaterialUiRecaptchaSiteKey --with-decryption --query Parameters[0].Value)
 export RECAPTCHA_SITE_KEY=$recaptcha_site_key
-echo recaptcha_site_key
 
-echo "NODE_ENV: $NODE_ENV"
-echo "API_URL: $API_URL"
-echo "CLIENT_ROOT: $CLIENT_ROOT"
-echo "DISCORD_CLIENT_ID: $DISCORD_CLIENT_ID"
-echo "DISCORD_CALLBACK: $DISCORD_CALLBACK"
-echo "DISCORD_GUILD_ID: $DISCORD_GUILD_ID"
-echo "DISCORD_WELCOME_CHANNEL_ID: $DISCORD_WELCOME_CHANNEL_ID"
+# ***CAUTION*** - THESE ARE SENSITIVE ENVIRONMENT VARIABLES AND
+# SHOULD NOT BE LOGGED ANYWHERE ON THE SERVER. ONLY UNCOMMENT
+# TO CONFIRM THEY ARE BEING SET CORRECTLY DURING DEBUGGING.
+# echo $stripe_publishable_key
+# echo $discord_client_secret
+# echo $recaptcha_site_key
+
+# THESE ONES ARE NOT SENSITIVE
+# echo "NODE_ENV: $NODE_ENV"
+# echo "API_URL: $API_URL"
+# echo "CLIENT_ROOT_URL: $CLIENT_ROOT_URL"
+# echo "DISCORD_CLIENT_ID: $DISCORD_CLIENT_ID"
+# echo "DISCORD_CALLBACK: $DISCORD_CALLBACK"
+# echo "DISCORD_GUILD_ID: $DISCORD_GUILD_ID"
+# echo "DISCORD_WELCOME_CHANNEL_ID: $DISCORD_WELCOME_CHANNEL_ID"
 
 echo building application...
 npm run codedeploy:production:build-server
