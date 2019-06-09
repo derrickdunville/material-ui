@@ -58,6 +58,8 @@ build_server_status=$?
 if [ $build_server_status != "0" ]; then
   echo "failed to build server with npm exit code: $build_server_status"
   exit 1
+else
+  echo "server built successfully"
 fi
 
 # build the client an check the for non-zero exit code
@@ -66,6 +68,8 @@ build_client_status=$?
 if [ $build_client_status != "0" ]; then
   echo "failed to build client with npm exit code: $build_client_status"
   exit 1
+else
+  echo "client built successfully"
 fi
 
 echo after install finished
