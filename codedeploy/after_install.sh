@@ -56,16 +56,17 @@ echo building application...
 npm run codedeploy:production:build-server
 build_server_status=$?
 if [ build_server_status != "0" ]; then
-  echo "failed to build server with npm exit code: $status"
-  exit 1;
+  echo "failed to build server with npm exit code: $build_server_status"
+  exit 1
 fi
 
 # build the client an check the for non-zero exit code
 npm run codedeploy:production:build-client
 build_client_status=$?
 if [ build_client_status != "0" ]; then
-  echo "failed to build client with npm exit code: $status"
-  exit 1;
+  echo "failed to build client with npm exit code: $build_client_status"
+  exit 1
 fi
 
 echo after install finished
+exit 0
