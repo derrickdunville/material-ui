@@ -53,6 +53,14 @@ export RECAPTCHA_SITE_KEY=$recaptcha_site_key
 echo building application...
 
 # build the server an check the for non-zero exit code
+npm run exit-code
+exit_code_status=$?
+if [ exit_code_status != "0" ]; then
+  echo "failed to build server with npm exit code: $exit_code_status"
+  exit 1
+fi
+
+# build the server an check the for non-zero exit code
 npm run codedeploy:production:build-server
 build_server_status=$?
 if [ build_server_status != "0" ]; then
