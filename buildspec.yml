@@ -13,12 +13,11 @@ phases:
       - echo setting up codedeploy scripts...
       - echo "${DEPLOYMENT_LEVEL}"
       - |
-        if [ "$DEPLOYMENT_LEVEL" == "production" ]; then
-          echo "Deploying Production";
-          cd codedeploy;
-          cp production/after_install.sh ./after_install.sh;
-        fi;
-      - echo how do we see the logs?
+        if [ "$DEPLOYMENT_LEVEL" = "production" ]; then
+          echo "Deploying Production"
+          cd codedeploy
+          cp production/after_install.sh ./after_install.sh
+        fi
       - echo might use this to run mocha
   post_build:
     commands:
