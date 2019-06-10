@@ -17,7 +17,14 @@ phases:
           echo "Deploying Production"
           cd codedeploy
           cp production/after_install.sh ./after_install.sh
+          ls -l
+        else
+          echo "Deploying Staging"
+          cd codedeploy
+          cp staging/after_install.sh ./after_install.sh
+          ls -l
         fi
+
       - echo might use this to run mocha
   post_build:
     commands:
