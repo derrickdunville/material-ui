@@ -1,12 +1,10 @@
 import express from 'express'
 import http from 'http'
-import https from 'https'
 import renderApp from './src/server-render'
 import createStore from './src/createStore'
 import proxy from 'express-http-proxy'
 import Routes from './src/routes/app'
 import { matchRoutes } from 'react-router-config'
-import queryString from 'query-string'
 import compression from 'compression'
 
 global.window = {innerWidth: 1000, innerHeight: 1080}

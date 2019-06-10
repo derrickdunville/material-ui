@@ -10,6 +10,13 @@ phases:
   build:
     commands:
       - echo Build started on `date`
+      - echo setting up codedeploy scripts...
+      - echo "${DEPLOYMENT_LEVEL}"
+      - |
+        if [[ "$DEPLOYMENT_LEVEL" == "production"]]; then
+          echo "Deploying Production";
+          ls -l;
+        fi;
       - echo might use this to run mocha
   post_build:
     commands:
