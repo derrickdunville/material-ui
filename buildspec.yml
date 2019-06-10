@@ -17,6 +17,7 @@ phases:
           echo "Deploying Production";
           ls -l;
         fi;
+      - echo how do we see the logs?
       - echo might use this to run mocha
   post_build:
     commands:
