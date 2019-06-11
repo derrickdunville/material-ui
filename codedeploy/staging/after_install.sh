@@ -19,19 +19,19 @@ echo installing application...
 npm install
 
 export NODE_ENV=production
-export API_URL=https://api.material-ui.derrickdunville.com
-export CLIENT_ROOT_URL=https://material-ui.derrickdunville.com
+export API_URL=https://staging.api.material-ui.derrickdunville.com
+export CLIENT_ROOT_URL=https://staging.material-ui.derrickdunville.com
+export DISCORD_CALLBACK=https://staging.api.material-ui.derrickdunville.com/oauth/discord/callback
 export DISCORD_CLIENT_ID=406318468703584266
-export DISCORD_CALLBACK=https://api.material-ui.derrickdunville.com/oauth/discord/callback
 export DISCORD_GUILD_ID=353342769630281738
 export DISCORD_WELCOME_CHANNEL_ID=553815971597516800
 
 # configuring secret ENV VARS on the instance using AWS Parameter Store
-stripe_publishable_key=$(~/.local/bin/aws ssm get-parameters --region us-east-1 --names prodMaterialUiStripePublishableKey --with-decryption --query Parameters[0].Value)
+stripe_publishable_key=$(~/.local/bin/aws ssm get-parameters --region us-east-1 --names stagingMaterialUiStripePublishableKey --with-decryption --query Parameters[0].Value)
 export STRIPE_PUBLISHABLE_KEY=$stripe_publishable_key
-discord_client_secret=$(~/.local/bin/aws ssm get-parameters --region us-east-1 --names prodMaterialUiDiscordClientSecret --with-decryption --query Parameters[0].Value)
+discord_client_secret=$(~/.local/bin/aws ssm get-parameters --region us-east-1 --names stagingMaterialUiDiscordClientSecret --with-decryption --query Parameters[0].Value)
 export DISCORD_CLIENT_SECRET=$discord_client_secret
-recaptcha_site_key=$(~/.local/bin/aws ssm get-parameters --region us-east-1 --names prodMaterialUiRecaptchaSiteKey --with-decryption --query Parameters[0].Value)
+recaptcha_site_key=$(~/.local/bin/aws ssm get-parameters --region us-east-1 --names stagingMaterialUiRecaptchaSiteKey --with-decryption --query Parameters[0].Value)
 export RECAPTCHA_SITE_KEY=$recaptcha_site_key
 
 # ***CAUTION*** - THESE ARE SENSITIVE ENVIRONMENT VARIABLES AND
