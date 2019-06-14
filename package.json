@@ -16,8 +16,8 @@
     "production": "./environment/production.sh",
     "local": "./environment/local.sh",
     "ngrok": "./environment/ngrok.sh",
-    "codedeploy:production:build-server": "babel-node --max-old-space-size=2048 ./node_modules/webpack/bin/webpack --config ./webpack/webpack.server.prod.js --production",
-    "codedeploy:production:build-client": "babel-node --max-old-space-size=2048 ./node_modules/webpack/bin/webpack --config ./webpack/webpack.client.prod.js --production",
+    "codedeploy:production:build-server": "NODE_ENV=production babel-node --max-old-space-size=2048 ./node_modules/webpack/bin/webpack --config ./webpack/webpack.server.prod.js",
+    "codedeploy:production:build-client": "NODE_ENV=production babel-node --max-old-space-size=2048 ./node_modules/webpack/bin/webpack --config ./webpack/webpack.client.prod.js",
     "codedeploy:production": "node build/bundle.js"
   },
   "dependencies": {
