@@ -29,6 +29,6 @@
 
 # simply stop the application process using pm2
 echo stopping application...
-sudo pm2 stop --silent npm
+sudo pm2 stop --silent bundle
 sudo pm2 list
 echo application stopped
