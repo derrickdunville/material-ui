@@ -11,7 +11,7 @@
     "webpack-server": "babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.server.babel.js",
     "dev": "npm-run-all --parallel dev:*",
     "dev:server": "nodemon --watch build/ --exec \"node build/bundle.js\"",
-    "dev:build-server": "babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.server.dev.js --watch",
+    "dev:build-server": "rm -rf ./build && babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.server.dev.js --watch",
     "dev:build-client": "rm -rf ./public && babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.client.dev.js --watch",
     "production": "./environment/production.sh",
     "local": "./environment/local.sh",
