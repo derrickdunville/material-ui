@@ -11,7 +11,7 @@ import webpack from 'webpack'
 
 module.exports = merge(common,
   {
-    // target: 'web',
+    target: 'web',
     entry: path.join(__dirname, '..', 'src', 'index.js'),
     output: {
       path: path.resolve(__dirname, '..', 'public'),
@@ -19,7 +19,6 @@ module.exports = merge(common,
       filename: "bundle.js"
     },
     plugins: [
-      new CleanWebpackPlugin(['public']),
       new RobotstxtPlugin({filePath: 'robots.txt'})
     ],
     module: {

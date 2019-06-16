@@ -16,14 +16,9 @@ module.exports = merge(common,
       publicPath: '/',
       filename: "bundle.js"
     },
-    plugins: [
-      new CleanWebpackPlugin(['build'])
-    ],
     module: {
       rules: [
-
         // The server requires a different loader for css then the client. Server is unable to use style loader because of window being undefined on the server.
-
         // window is for the browser. It might be possible to define an empty global.window on the server to keep node_modules that refernece the window from failing during server side rendering.
         {
           test: /\.(css|scss)$/,

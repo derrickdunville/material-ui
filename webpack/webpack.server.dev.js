@@ -5,7 +5,7 @@ import webpackNodeExternals from 'webpack-node-externals';
 module.exports = merge(common,
   {
     mode: 'development',
-    // devtool: 'inline-source-map',
+    devtool: 'inline-source-map',
     externals: [webpackNodeExternals()]
   }
 );
