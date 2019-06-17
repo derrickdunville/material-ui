@@ -13,6 +13,7 @@
 * Data fetching through a remote API ✅
 * Discord Integration ✅
 * Stripe Integration ✅
+* AWS CodeBuild CodeDeploy CodePipeline ✅
 
 ### Environment Variables
 The following section outlines the required environment variables that need to be set before the application and all of its features will work correctly.
@@ -28,7 +29,7 @@ The following section outlines the required environment variables that need to b
 ## Local Environments
 In `./scripts/local` there are templated scripts that are used by `npm run` to build and start the application locally. They are currently committed with unset environment variables. The previously mentioned ENV VARS should be updated within these scripts after copying the templates.
 
-Use the following commands to copy the templates to the correct names used by `npm run`:
+Once cloned locally, use the following commands to copy the templates to the correct names used by `npm run`:
 ```
 cp ./scripts/local/development.template.sh ./scripts/local/development.sh
 cp ./scripts/local/ngrok.template.sh ./scripts/local/ngrok.sh
@@ -36,7 +37,6 @@ cp ./scripts/local/production.template.sh ./scripts/local/production.sh
 ```
 
 ### Installing
-Once cloned locally, run
 ```
 npm install
 ```
