@@ -26,7 +26,14 @@ The following section outlines the required environment variables that need to b
 * `RECAPTCHA_SITE_KEY` - Google ReCaptcha V3 site key. Used to protect contact from.
 
 ## Local Environments
-The `./environment` directory contains various scripts that are run by `npm` to set these environment variables prior to starting the application. The previously mentioned ENV VARS should be updated within these scripts.
+In `./scripts/local` there are templated scripts that are used by `npm run` to build and start the application locally. They are currently committed with unset environment variables. The previously mentioned ENV VARS should be updated within these scripts after copying the templates.
+
+Use the following commands to copy the templates to the correct names used by `npm run`:
+```
+cp ./scripts/local/development.template.sh ./scripts/local/development.sh
+cp ./scripts/local/ngrok.template.sh ./scripts/local/ngrok.sh
+cp ./scripts/local/production.template.sh ./scripts/local/production.sh
+```
 
 ### Installing
 Once cloned locally, run
@@ -76,20 +83,3 @@ This is the production branch. No commits should ever be made directly to this b
 
 ##### Staging
 This is the staging branch. It is used as a pre-production, pre-release environment for quality assurance. This level should be used to test and confirm new features are working as expected in the integrated environment. It is deployed to https://staging.material-ui.derrickdunville.com
-
-## Scripts
-
-Changes to scripts/local/* should not be committed. They are currently commited with unset environment variables. These environment variables should be set locally.
-
-To leave the file in the repo but ignore future changes to it:
-```
-git update-index --assume-unchanged <file>
-```
-and to undo this:
-```
-git update-index --no-assume-unchanged <file>
-```
-to find out which files have been set this way:
-```
-git ls-files -v|grep '^h'
-```
