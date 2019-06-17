@@ -4,3 +4,7 @@ public/
 environment/
 npm-debug.log
 ignore/*
+scripts/local/*
+!scripts/local/development.template.sh
+!scripts/local/ngrok.template.sh
+!scripts/local/production.template.sh
