@@ -8,8 +8,8 @@ const webpackDefine = new webpack.DefinePlugin({
     API_URL: JSON.stringify(process.env.API_URL || 'http://localhost:3001/'),
     DISCORD_CLIENT_ID: JSON.stringify(process.env.DISCORD_CLIENT_ID),
     DISCORD_CALLBACK: JSON.stringify(process.env.DISCORD_CALLBACK),
-    DISCORD_GUILD_ID: JSON.stringify(process.env.DISCORD_GUILD_ID || "353342769630281738"),
-    DISCORD_WELCOME_CHANNEL_ID: JSON.stringify(process.env.DISCORD_WELCOME_CHANNEL_ID || "544943256283119626"),
+    DISCORD_GUILD_ID: JSON.stringify(process.env.DISCORD_GUILD_ID),
+    DISCORD_WELCOME_CHANNEL_ID: JSON.stringify(process.env.DISCORD_WELCOME_CHANNEL_ID),
     RECAPTCHA_SITE_KEY: JSON.stringify(process.env.RECAPTCHA_SITE_KEY),
     STRIPE_PUBLISHABLE_KEY: JSON.stringify(process.env.STRIPE_PUBLISHABLE_KEY)
   }

@@ -2,30 +2,29 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      nodejs: 8
     commands:
-      - echo install packages here.
+      - echo installing application and dependencies...
+      - node --version
+      - npm --version
+      - npm install
   pre_build:
     commands:
-      - echo pre build maybe install dependencies here...
+      - echo determining deployment level...
+      - echo "${DEPLOYMENT_LEVEL}"
   build:
     commands:
       - echo Build started on `date`
-      - echo setting up codedeploy scripts...
-      - echo "${DEPLOYMENT_LEVEL}"
-      - |
-        if [ "$DEPLOYMENT_LEVEL" = "production" ]; then
-          echo "Deploying Production"
-          cd codedeploy
-          cp production/after_install.sh ./after_install.sh
-        else
-          echo "Deploying Staging"
-          cd codedeploy
-          cp staging/after_install.sh ./after_install.sh
-        fi
+      - npm run codebuild:build
       - echo might use this to run mocha
   post_build:
     commands:
       - echo Build completed on `date`
 artifacts:
    files:
-     - '**/*'
+     - 'build/*'
+     - 'public/*'
+     - 'src/assets/css/material-dashboard-react.css'
+     - 'codedeploy/*'
+     - 'appspec.yml'

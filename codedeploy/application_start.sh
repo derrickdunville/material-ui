@@ -8,6 +8,6 @@ echo application start running..
 # start the application with pm2
 echo starting application...
 cd /var/www
-sudo pm2 start npm -- run codedeploy:production
-
+export NODE_ENV=production
+sudo pm2 start node build/bundle.js
 echo application start finished
