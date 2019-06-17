@@ -4,3 +4,4 @@ public/
 environment/
 npm-debug.log
 scripts/local/*
+ignore/*
