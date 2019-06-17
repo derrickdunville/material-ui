@@ -1,5 +1,7 @@
 # Material UI with SSR using React and Redux
 
+Test branch protection.
+
 ## Goals
 * Material UI ✅
 * React 16 ✅
