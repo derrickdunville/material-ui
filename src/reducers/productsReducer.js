@@ -25,6 +25,7 @@ import {
   CLEAR_DELETE_PRODUCT
 } from '../constants/product-action-types'
 import fileSaver from 'file-saver'
+import { updateDoc, deleteDoc } from './utils/reducerUtils'
 
 const initialState = {
   loaded: false,
@@ -57,7 +58,8 @@ const initialState = {
   deleteProductSuccessMessage: false,
   deleteProductErrorMessage: false
 }
-export default (state=initialState, action) => {
+
+const productsReducer = (state=initialState, action) => {
   switch (action.type) {
     case GET_PRODUCT:
       return {
@@ -68,13 +70,13 @@ export default (state=initialState, action) => {
       return {
         ...state,
         gettingProduct: false,
-        product: action.payload.data
+        product: action.payload
       }
     case GET_PRODUCT_FAIL:
       return {
         ...state,
         gettingProduct: false,
-        gettingProductError: action.payload.data.err.message
+        gettingProductError: action.payload.err.message
       }
     case GET_PRODUCTS:
       return {
@@ -82,18 +84,17 @@ export default (state=initialState, action) => {
         gettingProducts: true,
       }
     case GET_PRODUCTS_SUCCESS:
-      console.log("GET_PRODUCTS_SUCCESS")
       return {
         ...state,
         loaded: true,
         gettingProducts: false,
-        ...action.payload.data
+        ...action.payload
       }
     case GET_PRODUCTS_FAIL:
       return {
         ...state,
         gettingProducts: false,
-        gettingProductsError: action.payload.data.err.message
+        gettingProductsError: action.payload.err.message
       }
     case POST_PRODUCT:
       return {
@@ -101,7 +102,6 @@ export default (state=initialState, action) => {
         postingProduct: true
       }
     case POST_PRODUCT_SUCCESS:
-      console.log("POST_PRODUCT_SUCCESS")
       return {
         ...state,
         postingProduct: false,
@@ -112,7 +112,7 @@ export default (state=initialState, action) => {
       return {
         ...state,
         postingProduct: false,
-        postProductErrorMessage: action.payload.data.err.message
+        postProductErrorMessage: action.payload.err.message
       }
     case PUT_PRODUCT:
       return {
@@ -124,15 +124,15 @@ export default (state=initialState, action) => {
         ...state,
         puttingProduct: false,
         editOpen: false,
-        docs: state.docs.map(product => (product._id === action.payload.data._id) ? action.payload.data : product),
-        product: action.payload.data,
+        docs: updateDoc(state.docs, action.payload),
+        product: action.payload,
         putProductSuccessMessage: "Product updated successfully."
       }
     case PUT_PRODUCT_FAIL:
       return {
         ...state,
         puttingProduct: false,
-        putProductErrorMessage: action.payload.data.err.message
+        putProductErrorMessage: action.payload.err.message
       }
     case DELETE_PRODUCT:
       return {
@@ -142,6 +142,7 @@ export default (state=initialState, action) => {
     case DELETE_PRODUCT_SUCCESS:
       return {
         ...state,
+        docs: deleteDoc(state.docs, action.payload),
         deletingProduct: false,
         deleteProductSuccessMessage: "Product deleted successfully."
       }
@@ -149,7 +150,7 @@ export default (state=initialState, action) => {
       return {
         ...state,
         deletingProduct: false,
-        deleteProductErrorMessage: action.payload.data.err.message
+        deleteProductErrorMessage: action.payload.err.message
       }
     case CLEAR_PRODUCT:
       return {
@@ -178,11 +179,11 @@ export default (state=initialState, action) => {
         downloadingProduct: false
       }
     case DOWNLOAD_PRODUCT_FAIL:
-      alert(action.payload.data.message)
+      alert(action.payload.message)
       return {
         ...state,
         downloadingProduct: false,
-        downloadProductErrorMessage: action.payload.data.message
+        downloadProductErrorMessage: action.payload.message
       }
     case CLEAR_POST_PRODUCT:
       return{
@@ -204,19 +205,5 @@ export default (state=initialState, action) => {
       }
     default:
       return state
-  }
-}
-function deleteProductFromDocs(docs, payload){
-  let target_index = -1
-  for(let i = 0; i < docs.length; ++i){
-    if(docs[i]._id == payload._id){
-      target_index = i
-      break
-    }
-  }
-  if(target_index > -1){
-    return ([...docs.slice(0, target_index), ...docs.slice(target_index + 1)])
-  } else {
-    return ([...docs])
   }
 }

@@ -15,7 +15,7 @@
 * Stripe Integration ✅
 * AWS CodeBuild CodeDeploy CodePipeline ✅
 
-### Environment Variables
+## Environment Variables
 The following section outlines the required environment variables that need to be set before the application and all of its features will work correctly.
 
 * `NODE_ENV` - The Node environment level. (production or development).
@@ -24,6 +24,7 @@ The following section outlines the required environment variables that need to b
 * `DISCORD_CALLBACK` - The callback URL for the connected Discord Application. Used for OAuth2.
 * `DISCORD_GUILD_ID` - The Discord Guild ID
 * `DISCORD_WELCOME_CHANNEL_ID` - The Discord channel ID the user is forwarded to when they navigate to the Discord Guild.
+* `STRIPE_PUBLISHABLE_KEY` - Stripe publishable key. Used by stripe-react-elements for tokenizing credit cards and bank accounts. 
 * `RECAPTCHA_SITE_KEY` - Google ReCaptcha V3 site key. Used to protect contact from.
 
 ## Local Environments
