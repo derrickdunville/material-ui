@@ -3,9 +3,6 @@ import { updateDoc, deleteDoc } from './utils/reducerUtils'
 
 const initialState = {
   loaded: false,
-  loading: false,
-  message: false,
-  error: false,
   editOpen: false,
 
   user: false,
@@ -91,12 +88,6 @@ const usersReducer = (state=initialState, action) => {
         postUserSuccessMessage: false,
         postUserErrorMessage: action.payload.err.message
       }
-    case types.CLEAR_POST_USER:
-      return {
-        ...state,
-        postUserSuccessMessage: false,
-        postUserErrorMessage: false
-      }
     case types.TOGGLE_EDITING_USER:
       return {
         ...state,
@@ -122,12 +113,6 @@ const usersReducer = (state=initialState, action) => {
         puttingUser: false,
         putUserErrorMessage: action.payload.err.message
       }
-    case types.CLEAR_PUT_USER:
-      return {
-        ...state,
-        putUserSuccessMessage: false,
-        putUserErrorMessage: false
-      }
     case types.DELETE_USER:
       return {
         ...state,
@@ -148,17 +133,31 @@ const usersReducer = (state=initialState, action) => {
         deleteUserSuccessMessage: false,
         deleteUserErrorMessage: action.payload.err.message
       }
-    case types.CLEAR_DELETE_USER:
-      return {
-        ...state,
-        deleteUserErrorMessage: false,
-        deleteUserSuccessMessage: false
-      }
+
+    /* Clear Reducers */
     case types.CLEAR_USER:
       return {
         ...state,
         user: false,
         getUserErrorMessage: false
+      }
+    case types.CLEAR_POST_USER:
+      return {
+        ...state,
+        postUserSuccessMessage: false,
+        postUserErrorMessage: false
+      }
+    case types.CLEAR_PUT_USER:
+      return {
+        ...state,
+        putUserSuccessMessage: false,
+        putUserErrorMessage: false
+      }
+    case types.CLEAR_DELETE_USER:
+      return {
+        ...state,
+        deleteUserErrorMessage: false,
+        deleteUserSuccessMessage: false
       }
 
     /* SocketIO Event Reducers */
@@ -183,6 +182,7 @@ const usersReducer = (state=initialState, action) => {
         ...state,
         docs: deleteDoc(state.docs, action.payload)
       }
+
     default:
       return state
   }

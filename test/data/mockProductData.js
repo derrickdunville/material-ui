@@ -1,5 +1,6 @@
 import { initialState } from '../../src/reducers/productsReducer'
 
+const testDate = Date.now()
 const mockProductData =
   {
     docs: [
@@ -15,7 +16,7 @@ const mockProductData =
         "allow_renewals": false,
         "access_after_last_cycle": "lifetime access",
         "membership_level": 1,
-        "created_at": Date.now
+        "created_at": testDate
       }
     ]
   }
@@ -40,7 +41,7 @@ const mockNewProduct = {
   "allow_renewals": false,
   "access_after_last_cycle": "lifetime access",
   "membership_level": 1,
-  "created_at": Date.now
+  "created_at": testDate
 }
 
 export {

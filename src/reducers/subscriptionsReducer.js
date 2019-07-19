@@ -1,30 +1,8 @@
-import {
-  GET_SUBSCRIPTION,
-  GET_SUBSCRIPTION_SUCCESS,
-  GET_SUBSCRIPTION_FAIL,
-  GET_SUBSCRIPTIONS,
-  GET_SUBSCRIPTIONS_SUCCESS,
-  GET_SUBSCRIPTIONS_FAIL,
-  POST_SUBSCRIPTION,
-  POST_SUBSCRIPTION_SUCCESS,
-  POST_SUBSCRIPTION_FAIL,
-  PUT_SUBSCRIPTION,
-  PUT_SUBSCRIPTION_SUCCESS,
-  PUT_SUBSCRIPTION_FAIL,
-  DELETE_SUBSCRIPTION,
-  DELETE_SUBSCRIPTION_SUCCESS,
-  DELETE_SUBSCRIPTION_FAIL,
-  CLEAR_SUBSCRIPTION,
-  TOGGLE_CANCEL_SUBSCRIPTION,
-  CLEAR_CANCEL_SUCCESS_MESSAGE,
-  CLEAR_PUT_SUBSCRIPTION
-} from '../constants/subscription-action-types'
+import * as types from '../constants/subscription-action-types'
+import { updateDoc, deleteDoc } from './utils/reducerUtils'
 
 const initialState = {
   loaded: false,
-  loading: false,
-  message: false,
-  error: false,
 
   subscription: false,
   page: 0,
@@ -33,118 +11,131 @@ const initialState = {
   docs: [],
 
   gettingSubscription: false,
-  gettingSubscriptionError: false,
+  getSubscriptionErrorMessage: false,
+
   gettingSubscriptions: false,
-  gettingSubscriptionsError: false,
-  postingSubscription: false,
-  postingSubscriptionError: false,
+  getSubscriptionsErrorMessage: false,
+
   puttingSubscription: false,
-  puttingSubscriptionError: false,
+  putSubscriptionErrorMessage: false,
+  putSubscriptionSuccessMessage: false,
+
   deletingSubscription: false,
-  deletingSubscriptionError: false
+  deleteSubscriptionErrorMessage: false,
+  deleteSubscriptionSuccessMessage: false
 }
-export default (state=initialState, action) => {
+
+const subscriptionsReducer = (state=initialState, action) => {
   switch (action.type) {
-    case GET_SUBSCRIPTION:
+    case types.GET_SUBSCRIPTION:
       return {
         ...state,
         gettingSubscription: true
       }
-    case GET_SUBSCRIPTION_SUCCESS:
+    case types.GET_SUBSCRIPTION_SUCCESS:
       return {
         ...state,
         gettingSubscription: false,
-        subscription: action.payload.data
+        subscription: action.payload
       }
-    case GET_SUBSCRIPTION_FAIL:
+    case types.GET_SUBSCRIPTION_FAIL:
       return {
         ...state,
         gettingSubscription: false,
-        gettingSubscriptionError: action.payload.data.err.message
+        getSubscriptionErrorMessage: action.payload.err.message
       }
-    case GET_SUBSCRIPTIONS:
+    case types.GET_SUBSCRIPTIONS:
       return {
         ...state,
         gettingSubscriptions: true,
       }
-    case GET_SUBSCRIPTIONS_SUCCESS:
+    case types.GET_SUBSCRIPTIONS_SUCCESS:
+      return {
+        ...state,
+        loaded: true,
+        gettingSubscriptions: false,
+        ...action.payload
+      }
+    case types.GET_SUBSCRIPTIONS_FAIL:
       return {
         ...state,
         gettingSubscriptions: false,
-        ...action.payload.data
+        getSubscriptionsErrorMessage: action.payload.err.message
       }
-    case GET_SUBSCRIPTIONS_FAIL:
-      return {
-        ...state,
-        gettingSubscriptions: false,
-        gettingSubscriptionsError: action.payload.data.err.message
-      }
-    case POST_SUBSCRIPTION:
-      return {
-        ...state,
-        postingSubscription: true
-      }
-    case POST_SUBSCRIPTION_SUCCESS:
-      return {
-        ...state,
-        postingSubscription: false,
-        // hmmmm, how should we handle posting success result
-        message: "created successfully"
-      }
-    case POST_SUBSCRIPTION_FAIL:
-      return {
-        ...state,
-        postingSubscription: false,
-        postingSubscriptionError: action.payload.data.err.message
-      }
-    case PUT_SUBSCRIPTION:
+
+    case types.PUT_SUBSCRIPTION:
       return {
         ...state,
         puttingSubscription: true
       }
-    case PUT_SUBSCRIPTION_SUCCESS:
+    case types.PUT_SUBSCRIPTION_SUCCESS:
       return {
         ...state,
         puttingSubscription: false,
-        subscription: action.payload.data.subscription,
-        putSubscriptionSuccessMessage: action.payload.data.message,
-        putSubscriptionError: false
+        subscription: action.payload,
+        putSubscriptionSuccessMessage: "Subscription successfully updated.",
+        putSubscriptionErrorMessage: false
       }
-    case PUT_SUBSCRIPTION_FAIL:
+    case types.PUT_SUBSCRIPTION_FAIL:
       return {
         ...state,
         puttingSubscription: false,
-        putSubscriptionError: action.payload.data.err.message
+        putSubscriptionErrorMessage: action.payload.err.message
       }
-    case CLEAR_PUT_SUBSCRIPTION:
-      return {
-        ...state,
-        putSubscriptionSuccessMessage: false,
-        putSubscriptionError: false
-      }
-    case DELETE_SUBSCRIPTION:
+
+    case types.DELETE_SUBSCRIPTION:
       return {
         ...state,
         deletingSubscription: true
       }
-    case DELETE_SUBSCRIPTION_SUCCESS:
-      return {
-        ...state,
-        deletingSubscription: false
-      }
-    case DELETE_SUBSCRIPTION_FAIL:
+    case types.DELETE_SUBSCRIPTION_SUCCESS:
       return {
         ...state,
         deletingSubscription: false,
-        deletingSubscriptionError: action.payload.data.err.message
+        deleteSubscriptionSuccessMessage: "Subscription successfully deleted.",
+        docs: deleteDoc(state.docs, action.payload)
       }
-    case CLEAR_SUBSCRIPTION:
+    case types.DELETE_SUBSCRIPTION_FAIL:
+      return {
+        ...state,
+        deletingSubscription: false,
+        deleteSubscriptionErrorMessage: action.payload.err.message
+      }
+    case types.CLEAR_SUBSCRIPTION:
       return {
         ...state,
         subscription: false,
-        gettingSubscriptionError: false
+        getSubscriptionErrorMessage: false
+      }
+    case types.CLEAR_PUT_SUBSCRIPTION:
+      return {
+        ...state,
+        putSubscriptionSuccessMessage: false,
+        putSubscriptionErrorMessage: false
+      }
+    case types.CLEAR_DELETE_SUBSCRIPTION:
+      return {
+        ...state,
+        deleteSubscriptionSuccessMessage: false,
+        deleteSubscriptionErrorMessage: false
+      }
+    case types.SUBSCRIPTION_CREATED:
+      return {
+        ...state
+      }
+    case types.SUBSCRIPTION_UPDATED:
+      return {
+        ...state,
+        docs: updateDoc(state.docs, action.payload)
+      }
+    case types.SUBSCRIPTION_DELETED:
+      return {
+        ...state,
+        docs: deleteDoc(state.docs, action.payload)
       }
     default:
       return state
   }
 }
+
+export { initialState, subscriptionsReducer }

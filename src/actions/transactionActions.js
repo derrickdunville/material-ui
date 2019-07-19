@@ -17,12 +17,12 @@ export const getTransactions = (filter=undefined, page=0, limit=10, order="asc",
     const res = await api.get(url)
     dispatch({
       type: types.GET_TRANSACTIONS_SUCCESS,
-      payload: res
+      payload: res.data
     })
   } catch (error) {
     dispatch({
       type: types.GET_TRANSACTIONS_FAIL,
-       payload: error.response
+       payload: error.response.data
      })
   }
 }
@@ -34,12 +34,12 @@ export const getTransaction = (transaction_id) => async (dispatch, getState, api
     const res = await api.get(`/transactions/${transaction_id}`)
     dispatch({
       type: types.GET_TRANSACTION_SUCCESS,
-      payload: res
+      payload: res.data
     })
   } catch (error) {
     dispatch({
       type: types.GET_TRANSACTION_FAIL,
-       payload: error.response
+       payload: error.response.data
      })
   }
 }
@@ -51,12 +51,12 @@ export const postTransaction = (transaction) => async (dispatch, getState, api) 
     const res = await api.post('/transactions', transaction)
     dispatch({
       type: types.POST_TRANSACTION_SUCCESS,
-      payload: res
+      payload: res.data
     })
   } catch (error) {
     dispatch({
       type: types.POST_TRANSACTION_FAIL,
-       payload: error.response
+       payload: error.response.data
      })
   }
 }
@@ -68,29 +68,29 @@ export const putTransaction = (transaction) => async (dispatch, getState, api) =
     const res = await api.put(`/transactions/${transaction._id}`, transaction)
     dispatch({
       type: types.PUT_TRANSACTION_SUCCESS,
-      payload: res
+      payload: res.data
     })
   } catch (error) {
     dispatch({
       type: types.PUT_TRANSACTION_FAIL,
-       payload: error.response
+       payload: error.response.data
      })
   }
 }
-export const deleteTransaction = (transaction_id) => async (dispatch, getState, api) => {
+export const deleteTransaction = (history, transaction_id) => async (dispatch, getState, api) => {
   dispatch({
     type: types.DELETE_TRANSACTION
   })
   try {
-    const res = await api.delete(`/transactions/${transaction._id}`)
+    const res = await api.delete(`/transactions/${transaction_id}`)
     dispatch({
       type: types.DELETE_TRANSACTION_SUCCESS,
-      payload: res
+      payload: res.data
     })
   } catch (error) {
     dispatch({
       type: types.DELETE_TRANSACTION_FAIL,
-       payload: error.response
+       payload: error.response.data
      })
   }
 }
@@ -112,12 +112,11 @@ export const clearUpdateTransaction = () => async (dispatch, getState, api) => {
 }
 
 export const transactionCreated = (transaction) => async (dispatch, getState, api) => {
-  console.log("transaction created event")
   dispatch({ type: types.TRANSACTION_CREATED, payload: transaction})
 }
 export const transactionUpdated = (transaction) => async (dispatch, getState, api) => {
   dispatch({ type: types.TRANSACTION_UPDATED, payload: transaction})
 }
-export const transactionDeleted = () => async (dispatch, getState, api) => {
-  dispatch({ type: types.TRANSACTION_DELETED})
+export const transactionDeleted = (payload) => async (dispatch, getState, api) => {
+  dispatch({ type: types.TRANSACTION_DELETED, payload: payload})
 }

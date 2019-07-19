@@ -119,11 +119,11 @@ export const clearUser = () => async (dispatch, getState, api) => {
 }
 
 export const userCreated = (user) => async (dispatch, getState, api) => {
-  dispatch({ type: types.USER_CREATED})
+  dispatch({ type: types.USER_CREATED, payload: user})
 }
 export const userUpdated = (user) => async (dispatch, getState, api) => {
-  dispatch({ type: types.USER_UPDATED})
+  dispatch({ type: types.USER_UPDATED, payload: user})
 }
-export const userDeleted = (user_id) => async (dispatch, getState, api) => {
-  dispatch({ type: types.USER_DELETED})
+export const userDeleted = (payload) => async (dispatch, getState, api) => {
+  dispatch({ type: types.USER_DELETED, payload: payload})
 }

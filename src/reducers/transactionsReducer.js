@@ -1,34 +1,8 @@
-import {
-  GET_TRANSACTION,
-  GET_TRANSACTION_SUCCESS,
-  GET_TRANSACTION_FAIL,
-  GET_TRANSACTIONS,
-  GET_TRANSACTIONS_SUCCESS,
-  GET_TRANSACTIONS_FAIL,
-  POST_TRANSACTION,
-  POST_TRANSACTION_SUCCESS,
-  POST_TRANSACTION_FAIL,
-  CLEAR_POST_TRANSACTION,
-  PUT_TRANSACTION,
-  PUT_TRANSACTION_SUCCESS,
-  PUT_TRANSACTION_FAIL,
-  CLEAR_PUT_TRANSACTION,
-  DELETE_TRANSACTION,
-  DELETE_TRANSACTION_SUCCESS,
-  DELETE_TRANSACTION_FAIL,
-  CLEAR_DELETE_TRANSACTION,
-  CLEAR_TRANSACTION,
-  CLEAR_UPDATE_TRANSACTION,
-  TRANSACTION_CREATED,
-  TRANSACTION_UPDATED,
-  TRANSACTION_DELETED
-} from '../constants/transaction-action-types'
+import * as types from '../constants/transaction-action-types'
+import { updateDoc, deleteDoc } from './utils/reducerUtils'
 
 const initialState = {
   loaded: false,
-  loading: false,
-  message: false,
-  error: false,
 
   transaction: false,
   page: 0,
@@ -37,10 +11,10 @@ const initialState = {
   docs: [],
 
   gettingTransaction: false,
-  gettingTransactionError: false,
+  getTransactionErrorMessage: false,
 
   gettingTransactions: false,
-  gettingTransactionsError: false,
+  getTransactionsErrorMessage: false,
 
   postingTransaction: false,
   postTransactionErrorMessage: false,
@@ -54,193 +28,152 @@ const initialState = {
   deleteTransactionErrorMessage: false,
   deleteTransactionSuccessMessage: false
 }
-export default (state=initialState, action) => {
+const transactionsReducer = (state=initialState, action) => {
   switch (action.type) {
-    case GET_TRANSACTION:
+    case types.GET_TRANSACTION:
       return {
         ...state,
         gettingTransaction: true
       }
-    case GET_TRANSACTION_SUCCESS:
+    case types.GET_TRANSACTION_SUCCESS:
       return {
         ...state,
         gettingTransaction: false,
-        transaction: action.payload.data
+        transaction: action.payload
       }
-    case GET_TRANSACTION_FAIL:
+    case types.GET_TRANSACTION_FAIL:
       return {
         ...state,
         gettingTransaction: false,
-        gettingTransactionError: action.payload.data.err.message
+        getTransactionErrorMessage: action.payload.err.message
       }
-    case GET_TRANSACTIONS:
+    case types.GET_TRANSACTIONS:
       return {
         ...state,
         gettingTransactions: true,
       }
-    case GET_TRANSACTIONS_SUCCESS:
+    case types.GET_TRANSACTIONS_SUCCESS:
+      return {
+        ...state,
+        loaded: true,
+        gettingTransactions: false,
+        ...action.payload
+      }
+    case types.GET_TRANSACTIONS_FAIL:
       return {
         ...state,
         gettingTransactions: false,
-        ...action.payload.data
+        getTransactionsErrorMessage: action.payload.err.message
       }
-    case GET_TRANSACTIONS_FAIL:
-      return {
-        ...state,
-        gettingTransactions: false,
-        gettingTransactionsError: action.payload.data.err.message
-      }
-    case POST_TRANSACTION:
+    case types.POST_TRANSACTION:
       return {
         ...state,
         postingTransaction: true
       }
-    case POST_TRANSACTION_SUCCESS:
+    case types.POST_TRANSACTION_SUCCESS:
       return {
         ...state,
         postingTransaction: false,
-        // hmmmm, how should we handle posting success result
-        message: "created successfully"
+        total: state.total + 1,
+        docs: [action.payload, ...state.docs],
+        postTransactionSuccessMessage: "Transaction successfully created."
       }
-    case POST_TRANSACTION_FAIL:
+    case types.POST_TRANSACTION_FAIL:
       return {
         ...state,
         postingTransaction: false,
-        postTransactionErrorMessage: action.payload.data.err.message
+        postTransactionErrorMessage: action.payload.err.message
       }
-    case PUT_TRANSACTION:
+    case types.PUT_TRANSACTION:
       return {
         ...state,
         puttingTransaction: true
       }
-    case PUT_TRANSACTION_SUCCESS:
+    case types.PUT_TRANSACTION_SUCCESS:
       return {
         ...state,
         puttingTransaction: false,
-        transaction: action.payload.data.transaction,
-        putTransactionSuccessMessage: action.payload.data.message,
+        transaction: action.payload,
+        docs: updateDoc(state.docs, action.payload),
+        putTransactionSuccessMessage: "Transaction successfully updated.",
         putTransactionErrorMessage: false
       }
-    case PUT_TRANSACTION_FAIL:
+    case types.PUT_TRANSACTION_FAIL:
       return {
         ...state,
         puttingTransaction: false,
         putTransactionSuccessMessage: false,
-        putTransactionErrorMessage: action.payload.data.err.message
+        putTransactionErrorMessage: action.payload.err.message
       }
-    case DELETE_TRANSACTION:
+    case types.DELETE_TRANSACTION:
       return {
         ...state,
         deletingTransaction: true
       }
-    case DELETE_TRANSACTION_SUCCESS:
-      return {
-        ...state,
-        deletingTransaction: false
-      }
-    case DELETE_TRANSACTION_FAIL:
+    case types.DELETE_TRANSACTION_SUCCESS:
       return {
         ...state,
         deletingTransaction: false,
-        deleteTransactionErrorMessage: action.payload.data.err.message
+        docs: deleteDoc(state.docs, action.payload),
+        deleteTransactionSuccessMessage: "Transaction successfully deleted."
       }
-    case CLEAR_TRANSACTION:
+    case types.DELETE_TRANSACTION_FAIL:
+      return {
+        ...state,
+        deletingTransaction: false,
+        deleteTransactionErrorMessage: action.payload.err.message
+      }
+
+    /* Clear Reducers */
+    case types.CLEAR_TRANSACTION:
       return {
         ...state,
         transaction: false,
-        gettingTransactionError: false
+        getTransactionErrorMessage: false
       }
-    case CLEAR_UPDATE_TRANSACTION:
+    case types.CLEAR_UPDATE_TRANSACTION:
       return {
         ...state,
         putTransactionErrorMessage: false,
         putTransactionSuccessMessage: false
       }
-    case CLEAR_POST_TRANSACTION:
+    case types.CLEAR_POST_TRANSACTION:
       return {
         ...state,
         postTransactionErrorMessage: false,
         postTransactionSuccessMessage: false
       }
-    case CLEAR_PUT_TRANSACTION:
+    case types.CLEAR_PUT_TRANSACTION:
       return {
         ...state,
         putTransactionErrorMessage: false,
         putTransactionSuccessMessage: false
       }
-    case CLEAR_DELETE_TRANSACTION:
+    case types.CLEAR_DELETE_TRANSACTION:
       return {
         ...state,
         deleteTransactionErrorMessage: false,
         deleteTransactionSuccessMessage: false
       }
-    case TRANSACTION_CREATED:
-      console.log("TRANSACTION_CREATED")
+
+    /* SocketIO Event Reducers */
+    case types.TRANSACTION_CREATED:
       return {
-        ...state,
-        docs: [action.payload, ...state.docs],
-        total: state.total + 1
+        ...state
       }
-    case TRANSACTION_UPDATED:
-      console.log("TRANSACTION_UPDATED")
+    case types.TRANSACTION_UPDATED:
       return {
         ...state,
-        transaction: updateTransaction(state.transaction, action.payload),
-        docs: updateTransactionInList(state.docs, action.payload)
+        docs: updateDoc(state.docs, action.payload)
       }
-    case TRANSACTION_DELETED:
-      console.log("TRANSACTION_DELETED")
+    case types.TRANSACTION_DELETED:
       return {
         ...state,
-        transaction: updateTransaction(state.transaction, action.payload),
+        docs: deleteDoc(state.docs, action.payload)
       }
     default:
       return state
   }
 }
 
-function updateTransaction(transaction, payload){
-  if(transaction._id == payload._id){
-    return payload
-  }
-  return transaction
-}
-function updateTransactionInList(transactions, payload){
-
-  console.log("transactions: ", transactions.length)
-  return transactions.map( (transaction, index) => {
-    if(transaction._id !== payload._id) {
-      // This isn't the item we care about - keep it as-is
-      return transaction;
-    }
-    // Otherwise, this is the one we want - return an updated value
-    return {
-      ...transaction,
-      ...payload
-    }
-  })
-}
-
-function deleteTransactionInList(transactions, payload){
-  let target_index = -1
-  for(let i = 0; i < transactions.length; ++i){
-    if(transactions[i]._id == payload.json._id){
-      target_index = i
-      break
-    }
-  }
-  if(target_index < -1){
-    return {
-      ...state,
-      data: [
-        ...state.data.slice(0, target_index),
-        ...state.data.slice(target_index + 1)
-      ],
-      total: state.total - 1
-    }
-  } else {
-    return {
-      state
-    }
-  }
-}
+export { initialState, transactionsReducer }

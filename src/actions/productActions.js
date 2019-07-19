@@ -21,12 +21,12 @@ export const getProducts = (filter=undefined, page=0, limit=10, order="asc", ord
     const res = await api.get(url)
     dispatch({
       type: types.GET_PRODUCTS_SUCCESS,
-      payload: res
+      payload: res.data
     })
   } catch (error) {
     dispatch({
       type: types.GET_PRODUCTS_FAIL,
-       payload: error.response
+       payload: error.response.data
      })
   }
 }
@@ -38,12 +38,12 @@ export const getProduct = (product_id) => async (dispatch, getState, api) => {
     const res = await api.get(`/products/${product_id}`)
     dispatch({
       type: types.GET_PRODUCT_SUCCESS,
-      payload: res
+      payload: res.data
     })
   } catch (error) {
     dispatch({
       type: types.GET_PRODUCT_FAIL,
-       payload: error.response
+       payload: error.response.data
      })
   }
 }
@@ -55,36 +55,34 @@ export const postProduct = (history, product) => async (dispatch, getState, api)
     const res = await api.post('/products', product)
     dispatch({
       type: types.POST_PRODUCT_SUCCESS,
-      payload: res
+      payload: res.data
     })
-    console.log(res.data._id)
     try{
       history.push("/admin/products/" + res.data._id)
     } catch(error){
       console.dir(error)
     }
   } catch (error) {
-    console.dir(error)
     dispatch({
       type: types.POST_PRODUCT_FAIL,
-      payload: error.response
+      payload: error.response.data
     })
   }
 }
-export const putProduct = (id, product) => async (dispatch, getState, api) => {
+export const putProduct = (product_id, product) => async (dispatch, getState, api) => {
   dispatch({
     type: types.PUT_PRODUCT
   })
   try {
-    const res = await api.put(`/products/${id}`, product)
+    const res = await api.put(`/products/${product_id}`, product)
     dispatch({
       type: types.PUT_PRODUCT_SUCCESS,
-      payload: res
+      payload: res.data
     })
   } catch (error) {
     dispatch({
       type: types.PUT_PRODUCT_FAIL,
-       payload: error.response
+       payload: error.response.data
      })
   }
 }
@@ -96,14 +94,13 @@ export const deleteProduct = (history, product_id) => async (dispatch, getState,
     const res = await api.delete(`/products/${product_id}`)
     dispatch({
       type: types.DELETE_PRODUCT_SUCCESS,
-      payload: res
+      payload: res.data
     })
     history.replace("/admin/products")
   } catch (error) {
-    console.dir(error)
     dispatch({
       type: types.DELETE_PRODUCT_FAIL,
-       payload: error.response
+       payload: error.response.data
      })
   }
 }
@@ -122,24 +119,19 @@ export const downloadProduct = (product_id) => async (dispatch, getState, api) =
     type: types.DOWNLOAD_PRODUCT
   })
   try {
-    console.log("downloading file")
     const res = await api.get(`/products/${product_id}/download`, { responseTpye: 'blob'})
-    console.dir(res)
     var filename = res.headers['content-disposition'].substring(22, res.headers['content-disposition'].length - 1)
-    console.log(filename)
     const { data } = res
-    console.log("got the data", data)
     var blob = new Blob([data], {type: res.headers['content-type']})
     fileSaver.saveAs(blob, filename)
     dispatch({
       type: types.DOWNLOAD_PRODUCT_SUCCESS,
-      payload: res
+      payload: res.data
     })
   } catch (error) {
-    console.dir(error.response)
     dispatch({
       type: types.DOWNLOAD_PRODUCT_FAIL,
-       payload: error.response
+       payload: error.response.data
      })
   }
 }
@@ -156,12 +148,12 @@ export const clearDeleteProduct = () => async (dispatch, getState, api) => {
 }
 
 // Socket event actions
-export const productCreated = () => async (dispatch, getState, api) => {
-  dispatch({ type: types.PRODUCT_CREATED})
+export const productCreated = (product) => async (dispatch, getState, api) => {
+  dispatch({ type: types.PRODUCT_CREATED, payload: product})
 }
-export const productUpdated = () => async (dispatch, getState, api) => {
-  dispatch({ type: types.PRODUCT_UPDATED})
+export const productUpdated = (product) => async (dispatch, getState, api) => {
+  dispatch({ type: types.PRODUCT_UPDATED, payload: product})
 }
-export const productDeleted = () => async (dispatch, getState, api) => {
-  dispatch({ type: types.PRODUCT_DELETED})
+export const productDeleted = (payload) => async (dispatch, getState, api) => {
+  dispatch({ type: types.PRODUCT_DELETED, payload: payload})
 }

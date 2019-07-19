@@ -12,24 +12,30 @@ const internalServerError = {
   }
 }
 
-const notAuthorizedError = {
-  err: {
-    type: "NotAuthorizedError",
-    message: "you are not authorized to read"
+const notAuthorizedError = (documentName) => {
+  return {
+    err: {
+      type: "NotAuthorizedError",
+      message: `you are not authorized to read ${documentName}'s`
+    }
   }
 }
 
-const alreadyExistsError = {
-  err: {
-    type: "ValidationError",
-    message: "user already exists"
+const alreadyExistsError = (documentName) => {
+  return {
+    err: {
+      type: "ValidationError",
+      message: `${documentName} already exists`
+    }
   }
 }
 
-const notFoundError = {
-  err: {
-    type: "NotFound",
-    message: "user not found"
+const notFoundError = (documentName) => {
+  return {
+    err: {
+      type: "NotFound",
+      message: `${documentName} not found`
+    }
   }
 }
 

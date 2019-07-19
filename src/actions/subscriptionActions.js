@@ -15,12 +15,12 @@ export const getSubscriptions = (filter=undefined, page=0, limit=10, order="asc"
     const res = await api.get(url)
     dispatch({
       type: types.GET_SUBSCRIPTIONS_SUCCESS,
-      payload: res
+      payload: res.data
     })
   } catch (error) {
     dispatch({
       type: types.GET_SUBSCRIPTIONS_FAIL,
-       payload: error.response
+       payload: error.response.data
      })
   }
 }
@@ -32,12 +32,12 @@ export const getSubscription = (subscription_id) => async (dispatch, getState, a
     const res = await api.get(`/subscriptions/${subscription_id}`)
     dispatch({
       type: types.GET_SUBSCRIPTION_SUCCESS,
-      payload: res
+      payload: res.data
     })
   } catch (error) {
     dispatch({
       type: types.GET_SUBSCRIPTION_FAIL,
-       payload: error.response
+       payload: error.response.data
      })
   }
 }
@@ -49,29 +49,29 @@ export const postSubscription = (subscription) => async (dispatch, getState, api
     const res = await api.post('/subscriptions', subscription)
     dispatch({
       type: types.POST_SUBSCRIPTION_SUCCESS,
-      payload: res
+      payload: res.data
     })
   } catch (error) {
     dispatch({
       type: types.POST_SUBSCRIPTION_FAIL,
-       payload: error.response
+       payload: error.response.data
      })
   }
 }
-export const putSubscription = (subscription) => async (dispatch, getState, api) => {
+export const putSubscription = (subscription_id, subscription) => async (dispatch, getState, api) => {
   dispatch({
     type: types.PUT_SUBSCRIPTION
   })
   try {
-    const res = await api.put(`/subscriptions/${subscription._id}`, subscription)
+    const res = await api.put(`/subscriptions/${subscription_id}`, subscription)
     dispatch({
       type: types.PUT_SUBSCRIPTION_SUCCESS,
-      payload: res
+      payload: res.data
     })
   } catch (error) {
     dispatch({
       type: types.PUT_SUBSCRIPTION_FAIL,
-       payload: error.response
+       payload: error.response.data
      })
   }
 }
@@ -80,38 +80,38 @@ export const deleteSubscription = (subscription_id) => async (dispatch, getState
     type: types.DELETE_SUBSCRIPTION
   })
   try {
-    const res = await api.delete(`/subscriptions/${subscription._id}`)
+    const res = await api.delete(`/subscriptions/${subscription_id}`)
     dispatch({
       type: types.DELETE_SUBSCRIPTION_SUCCESS,
-      payload: res
+      payload: res.data
     })
   } catch (error) {
     dispatch({
       type: types.DELETE_SUBSCRIPTION_FAIL,
-       payload: error.response
+       payload: error.response.data
      })
   }
+}
+
+export const toggleCancelSubscriptionOpen = () => async (dispatch, getState, api) => {
+  dispatch({ type: types.TOGGLE_CANCEL_SUBSCRIPTION })
 }
 export const clearSubscription = () => async (dispatch, getState, api) => {
   dispatch({ type: types.CLEAR_SUBSCRIPTION })
 }
-export const toggleCancelSubscriptionOpen = () => async (dispatch, getState, api) => {
-  dispatch({ type: types.TOGGLE_CANCEL_SUBSCRIPTION })
-}
 export const clearCancelSuccessMessage = () => async (dispatch, getState, api) => {
   dispatch({ type: types.CLEAR_CANCEL_SUCCESS_MESSAGE })
 }
-
 export const clearPutSubscription = () => async (dispatch, getState, api) => {
   dispatch({ type: types.CLEAR_PUT_SUBSCRIPTION })
 }
 
-export const subscriptionCreated = () => async (dispatch, getState, api) => {
-  dispatch({ type: types.SUBSCRIPTION_CREATED})
+export const subscriptionCreated = (subscription) => async (dispatch, getState, api) => {
+  dispatch({ type: types.SUBSCRIPTION_CREATED, payload: subscription})
 }
-export const subscriptionUpdated = () => async (dispatch, getState, api) => {
-  dispatch({ type: types.SUBSCRIPTION_UPDATED})
+export const subscriptionUpdated = (subscription) => async (dispatch, getState, api) => {
+  dispatch({ type: types.SUBSCRIPTION_UPDATED, payload: subscription})
 }
-export const subscriptionDeleted = () => async (dispatch, getState, api) => {
-  dispatch({ type: types.SUBSCRIPTION_DELETED})
+export const subscriptionDeleted = (payload) => async (dispatch, getState, api) => {
+  dispatch({ type: types.SUBSCRIPTION_DELETED, payload: payload})
 }

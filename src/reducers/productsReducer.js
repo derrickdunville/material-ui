@@ -1,37 +1,9 @@
-import {
-  GET_PRODUCT,
-  GET_PRODUCT_SUCCESS,
-  GET_PRODUCT_FAIL,
-  GET_PRODUCTS,
-  GET_PRODUCTS_SUCCESS,
-  GET_PRODUCTS_FAIL,
-  POST_PRODUCT,
-  POST_PRODUCT_SUCCESS,
-  POST_PRODUCT_FAIL,
-  PUT_PRODUCT,
-  PUT_PRODUCT_SUCCESS,
-  PUT_PRODUCT_FAIL,
-  DELETE_PRODUCT,
-  DELETE_PRODUCT_SUCCESS,
-  DELETE_PRODUCT_FAIL,
-  CLEAR_PRODUCT,
-  CLEAR_MESSAGE,
-  TOGGLE_EDITING_PRODUCT,
-  DOWNLOAD_PRODUCT,
-  DOWNLOAD_PRODUCT_SUCCESS,
-  DOWNLOAD_PRODUCT_FAIL,
-  CLEAR_POST_PRODUCT,
-  CLEAR_PUT_PRODUCT,
-  CLEAR_DELETE_PRODUCT
-} from '../constants/product-action-types'
+import * as types from '../constants/product-action-types'
 import fileSaver from 'file-saver'
 import { updateDoc, deleteDoc } from './utils/reducerUtils'
 
 const initialState = {
   loaded: false,
-  loading: false,
-  message: false,
-  error: false,
   editOpen: false,
 
   product: false,
@@ -41,10 +13,10 @@ const initialState = {
   docs: [],
 
   gettingProduct: false,
-  gettingProductError: false,
+  getProductErrorMessage: false,
 
   gettingProducts: false,
-  gettingProductsError: false,
+  getProductsErrorMessage: false,
 
   postingProduct: false,
   postProductErrorMessage: false,
@@ -61,149 +33,166 @@ const initialState = {
 
 const productsReducer = (state=initialState, action) => {
   switch (action.type) {
-    case GET_PRODUCT:
+    case types.GET_PRODUCT:
       return {
         ...state,
         gettingProduct: true
       }
-    case GET_PRODUCT_SUCCESS:
+    case types.GET_PRODUCT_SUCCESS:
       return {
         ...state,
         gettingProduct: false,
         product: action.payload
       }
-    case GET_PRODUCT_FAIL:
+    case types.GET_PRODUCT_FAIL:
       return {
         ...state,
         gettingProduct: false,
-        gettingProductError: action.payload.err.message
+        getProductErrorMessage: action.payload.err.message
       }
-    case GET_PRODUCTS:
+    case types.GET_PRODUCTS:
       return {
         ...state,
         gettingProducts: true,
       }
-    case GET_PRODUCTS_SUCCESS:
+    case types.GET_PRODUCTS_SUCCESS:
       return {
         ...state,
         loaded: true,
         gettingProducts: false,
         ...action.payload
       }
-    case GET_PRODUCTS_FAIL:
+    case types.GET_PRODUCTS_FAIL:
       return {
         ...state,
         gettingProducts: false,
-        gettingProductsError: action.payload.err.message
+        getProductsErrorMessage: action.payload.err.message
       }
-    case POST_PRODUCT:
+    case types.POST_PRODUCT:
       return {
         ...state,
         postingProduct: true
       }
-    case POST_PRODUCT_SUCCESS:
+    case types.POST_PRODUCT_SUCCESS:
       return {
         ...state,
         postingProduct: false,
+        total: state.total + 1,
         docs: [action.payload, ...state.docs],
-        postProductSuccessMessage: "Product created successfully"
+        postProductSuccessMessage: "Product successfully created."
       }
-    case POST_PRODUCT_FAIL:
+    case types.POST_PRODUCT_FAIL:
       return {
         ...state,
         postingProduct: false,
         postProductErrorMessage: action.payload.err.message
       }
-    case PUT_PRODUCT:
+    case types.PUT_PRODUCT:
       return {
         ...state,
         puttingProduct: true
       }
-    case PUT_PRODUCT_SUCCESS:
+    case types.PUT_PRODUCT_SUCCESS:
       return {
         ...state,
         puttingProduct: false,
         editOpen: false,
         docs: updateDoc(state.docs, action.payload),
         product: action.payload,
-        putProductSuccessMessage: "Product updated successfully."
+        putProductSuccessMessage: "Product successfully updated."
       }
-    case PUT_PRODUCT_FAIL:
+    case types.PUT_PRODUCT_FAIL:
       return {
         ...state,
         puttingProduct: false,
         putProductErrorMessage: action.payload.err.message
       }
-    case DELETE_PRODUCT:
+    case types.DELETE_PRODUCT:
       return {
         ...state,
         deletingProduct: true
       }
-    case DELETE_PRODUCT_SUCCESS:
+    case types.DELETE_PRODUCT_SUCCESS:
       return {
         ...state,
         docs: deleteDoc(state.docs, action.payload),
         deletingProduct: false,
-        deleteProductSuccessMessage: "Product deleted successfully."
+        deleteProductSuccessMessage: "Product successfully deleted."
       }
-    case DELETE_PRODUCT_FAIL:
+    case types.DELETE_PRODUCT_FAIL:
       return {
         ...state,
         deletingProduct: false,
         deleteProductErrorMessage: action.payload.err.message
       }
-    case CLEAR_PRODUCT:
-      return {
-        ...state,
-        product: false,
-        gettingProductError: false
-      }
-    case CLEAR_MESSAGE:
-      return {
-        ...state,
-        message: false
-      }
-    case TOGGLE_EDITING_PRODUCT:
+    case types.TOGGLE_EDITING_PRODUCT:
       return {
         ...state,
         editOpen: !state.editOpen
       }
-    case DOWNLOAD_PRODUCT:
+    case types.DOWNLOAD_PRODUCT:
       return {
         ...state,
         downloadingProduct: true
       }
-    case DOWNLOAD_PRODUCT_SUCCESS:
+    case types.DOWNLOAD_PRODUCT_SUCCESS:
       return {
         ...state,
         downloadingProduct: false
       }
-    case DOWNLOAD_PRODUCT_FAIL:
+    case types.DOWNLOAD_PRODUCT_FAIL:
       alert(action.payload.message)
       return {
         ...state,
         downloadingProduct: false,
         downloadProductErrorMessage: action.payload.message
       }
-    case CLEAR_POST_PRODUCT:
+
+    /* Clear Reducers */
+    case types.CLEAR_PRODUCT:
+      return {
+        ...state,
+        product: false,
+        getProductErrorMessage: false
+      }
+    case types.CLEAR_POST_PRODUCT:
       return{
         ...state,
         postProductErrorMessage: false,
         postProductSuccessMessage: false
       }
-    case CLEAR_PUT_PRODUCT:
+    case types.CLEAR_PUT_PRODUCT:
       return {
         ...state,
         putProductErrorMessage: false,
         putProductSuccessMessage: false
       }
-    case CLEAR_DELETE_PRODUCT:
+    case types.CLEAR_DELETE_PRODUCT:
       return {
         ...state,
         deleteProductErrorMessage: false,
         deleteProductSuccessMessage: false
       }
+
+    /* SocketIO Event Reducers */
+    case types.PRODUCT_CREATED:
+      return {
+        ...state
+      }
+    case types.PRODUCT_UPDATED:
+      return {
+        ...state,
+        docs: updateDoc(state.docs, action.payload)
+      }
+    case types.PRODUCT_DELETED:
+      return {
+        ...state,
+        docs: deleteDoc(state.docs, action.payload)
+      }
+
     default:
       return state
   }
 }
+
+export { initialState, productsReducer }

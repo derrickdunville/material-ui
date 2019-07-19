@@ -8,7 +8,7 @@ import mockHistory from '../utils/mockHistory'
 import * as actions from '../../src/actions/userActions'
 import * as types from '../../src/constants/user-action-types'
 import { initialState } from '../../src/reducers/usersReducer'
-import { mockUserData } from '../data/mockUserData'
+import { mockUserData, mockNewUser } from '../data/mockUserData'
 import {
   internalServerError,
   notFoundError,
@@ -63,10 +63,10 @@ describe('userActions', () => {
         })
     })
     it('getUser(username) 404-error', () => {
-      nock.get("/users/testUser").reply(404, notFoundError)
+      nock.get("/users/testUser").reply(404, notFoundError("user"))
       const expectedActions = [
         { type: types.GET_USER },
-        { type: types.GET_USER_FAIL, payload: notFoundError }
+        { type: types.GET_USER_FAIL, payload: notFoundError("user") }
       ]
       return store
         .dispatch(actions.getUser(mockUserData.docs[0].username))
@@ -75,10 +75,10 @@ describe('userActions', () => {
         })
     })
     it('getUser(username) 403-error', () => {
-      nock.get("/users/testUser").reply(403, notAuthorizedError)
+      nock.get("/users/testUser").reply(403, notAuthorizedError("user"))
       const expectedActions = [
         { type: types.GET_USER },
-        { type: types.GET_USER_FAIL, payload: notAuthorizedError }
+        { type: types.GET_USER_FAIL, payload: notAuthorizedError("user") }
       ]
       return store
         .dispatch(actions.getUser(mockUserData.docs[0].username))
@@ -100,13 +100,13 @@ describe('userActions', () => {
         })
     })
     it('postUser(history, user) 401-error', () => {
-      nock.post("/users").reply(401, alreadyExistsError)
+      nock.post("/users").reply(401, alreadyExistsError("user"))
       const expectedActions = [
         { type: types.POST_USER },
-        { type: types.POST_USER_FAIL, payload: alreadyExistsError }
+        { type: types.POST_USER_FAIL, payload: alreadyExistsError("user") }
       ]
       return store
-        .dispatch(actions.postUser(mockHistory, alreadyExistsError))
+        .dispatch(actions.postUser(mockHistory, mockUserData.docs[0]))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions)
         })
@@ -129,13 +129,13 @@ describe('userActions', () => {
     it('putUser(id, user) 401-error', () => {
       let username = mockUserData.docs[0].username
       mockUserData.docs[0].username = "updatedTestUser"
-      nock.put("/users/"+mockUserData.docs[0]._id).reply(401, alreadyExistsError)
+      nock.put("/users/"+mockUserData.docs[0]._id).reply(401, alreadyExistsError("user"))
       const expectedActions = [
         { type: types.PUT_USER },
-        { type: types.PUT_USER_FAIL, payload: alreadyExistsError }
+        { type: types.PUT_USER_FAIL, payload: alreadyExistsError("user") }
       ]
       return store
-        .dispatch(actions.putUser(mockUserData.docs[0]._id, alreadyExistsError))
+        .dispatch(actions.putUser(mockUserData.docs[0]._id, mockUserData.docs[0]))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions)
         })
@@ -154,10 +154,10 @@ describe('userActions', () => {
         })
     })
     it('deleteUser(history, user_id) 403-error', () => {
-      nock.delete("/users/"+mockUserData.docs[0]._id).reply(403, notAuthorizedError)
+      nock.delete("/users/"+mockUserData.docs[0]._id).reply(403, notAuthorizedError("user"))
       const expectedActions = [
         { type: types.DELETE_USER },
-        { type: types.DELETE_USER_FAIL, payload: notAuthorizedError }
+        { type: types.DELETE_USER_FAIL, payload: notAuthorizedError("user") }
       ]
       return store
         .dispatch(actions.deleteUser(mockHistory, mockUserData.docs[0]._id))
@@ -213,32 +213,34 @@ describe('userActions', () => {
   describe("socket", () => {
     it('userCreated()', () => {
       const expectedActions = [
-        { type: types.USER_CREATED }
+        { type: types.USER_CREATED, payload: mockNewUser }
       ]
       return store
-        .dispatch(actions.userCreated())
+        .dispatch(actions.userCreated(mockNewUser))
         .then(() => {
-          expect(store.getActions(mockUserData.docs[0])).toEqual(expectedActions)
+          expect(store.getActions()).toEqual(expectedActions)
         })
     })
     it('userUpdated()', () => {
+      let updatedUser = mockUserData.docs[0]
+      updatedUser.email = "updatedEmail@test.com"
       const expectedActions = [
-        { type: types.USER_UPDATED }
+        { type: types.USER_UPDATED, payload: updatedUser }
       ]
       return store
-        .dispatch(actions.userUpdated())
+        .dispatch(actions.userUpdated(updatedUser))
         .then(() => {
-          expect(store.getActions(mockUserData.docs[0])).toEqual(expectedActions)
+          expect(store.getActions()).toEqual(expectedActions)
         })
     })
     it('userDeleted()', () => {
       const expectedActions = [
-        { type: types.USER_DELETED }
+        { type: types.USER_DELETED, payload: { _id: mockUserData.docs[0]._id }}
       ]
       return store
-        .dispatch(actions.userDeleted())
+        .dispatch(actions.userDeleted({ _id: mockUserData.docs[0]._id }))
         .then(() => {
-          expect(store.getActions(mockUserData.docs[0])).toEqual(expectedActions)
+          expect(store.getActions()).toEqual(expectedActions)
         })
     })
   })

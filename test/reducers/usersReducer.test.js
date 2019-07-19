@@ -44,12 +44,12 @@ describe('users reducer', () => {
       expect(
         usersReducer(initialState, {
           type: types.POST_USER_FAIL,
-          payload: alreadyExistsError
+          payload: alreadyExistsError("user")
         })
       ).toEqual({
         ...initialState,
         postingUser: false,
-        postUserErrorMessage: alreadyExistsError.err.message
+        postUserErrorMessage: alreadyExistsError("user").err.message
       })
     })
   })
@@ -117,12 +117,12 @@ describe('users reducer', () => {
       expect(
         usersReducer(initialState, {
           type: types.GET_USER_FAIL,
-          payload: notFoundError
+          payload: notFoundError("user")
         })
       ).toEqual({
         ...initialState,
         gettingUser: false,
-        getUserErrorMessage: notFoundError.err.message
+        getUserErrorMessage: notFoundError("user").err.message
       })
     })
   })
@@ -165,12 +165,12 @@ describe('users reducer', () => {
       expect(
         usersReducer(loadedState, {
           type: types.PUT_USER_FAIL,
-          payload: alreadyExistsError
+          payload: alreadyExistsError("user")
         })
       ).toEqual({
         ...loadedState,
         puttingUser: false,
-        putUserErrorMessage: alreadyExistsError.err.message
+        putUserErrorMessage: alreadyExistsError("user").err.message
       })
     })
   })
@@ -205,12 +205,12 @@ describe('users reducer', () => {
       expect(
         usersReducer(loadedState, {
           type: types.DELETE_USER_FAIL,
-          payload: notFoundError
+          payload: notFoundError("user")
         })
       ).toEqual({
         ...loadedState,
         deletingUser: false,
-        deleteUserErrorMessage: notFoundError.err.message
+        deleteUserErrorMessage: notFoundError("user").err.message
       })
     })
   })
