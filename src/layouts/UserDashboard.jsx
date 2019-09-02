@@ -172,13 +172,11 @@ class UserDashboard extends React.Component {
             <NavLink to={"/account"}
               onClick={this.handleCloseNav}
               key={2}
-              className={classes.logoLink}
               activeClassName="active"
               style={{width: "100%"}}>
               <Avatar />
             </NavLink>
             <NavLink to={'/account/'}
-              className={classes.logoLink}
               style={{alignItems: "center", display: "flex", color: "#FFFFFF"}}>
               <SettingsIcon style={{float: 'right', padding: '10px'}}/>
             </NavLink>

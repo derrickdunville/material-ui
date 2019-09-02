@@ -63,6 +63,10 @@ class TransactionReduxForm extends Component {
   }
   closeRefund = () => {
     this.setState({refundOpen: false})
+    let this2 = this
+    setTimeout(function () {
+      this2.props.clearPutTransaction()
+    }, 200);
   }
   handleRefund = () => {
     console.log("handle refund")
@@ -106,6 +110,24 @@ class TransactionReduxForm extends Component {
     event.persist()
     event.preventDefault()
     console.log("submitting transaction")
+
+    let transaction = {
+      trans_num: this.props.trans_num,
+      user: this.props.user.value,
+      product: this.props.product.value,
+      amount: this.props.amount,
+      status: this.props.status,
+      gateway: this.props.gateway,
+      subscription: this.props.subscription || null,
+      created_at: this.props.created_at,
+      expires_at: this.props.expires_at || null
+    }
+    if(this.props.editing){
+      transaction._id = this.props.transaction._id
+      this.props.putTransaction(transaction)
+    } else {
+      this.props.postTransaction(this.props.history, transaction)
+    }
   }
 
   render(){

@@ -136,6 +136,9 @@ const appStyle = theme => ({
   navLink : {
     width: '100%'
   },
+  logoLink: {
+    backgroundColor: "transparent !important"
+  },
   activeNavLink: {
     backgroundColor: "#565656"
   },

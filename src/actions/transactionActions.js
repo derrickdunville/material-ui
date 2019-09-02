@@ -43,7 +43,7 @@ export const getTransaction = (transaction_id) => async (dispatch, getState, api
      })
   }
 }
-export const postTransaction = (transaction) => async (dispatch, getState, api) => {
+export const postTransaction = (history, transaction) => async (dispatch, getState, api) => {
   dispatch({
     type: types.POST_TRANSACTION
   })
@@ -53,6 +53,11 @@ export const postTransaction = (transaction) => async (dispatch, getState, api) 
       type: types.POST_TRANSACTION_SUCCESS,
       payload: res.data
     })
+    try{
+      history.push("/admin/transactions/" + res.data._id)
+    } catch(error){
+      console.dir(error)
+    }
   } catch (error) {
     dispatch({
       type: types.POST_TRANSACTION_FAIL,

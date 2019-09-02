@@ -145,7 +145,7 @@ class Subscriptions extends Component {
           <TableBody>
             {this.props.subscriptions.docs.map(subscription => (
               <TableRow key={subscription._id}>
-                <CustomTableCell>
+                <CustomTableCell style={{width: "48px"}}>
                   <NavLink
                     to={`/admin/subscriptions/${subscription._id}`}
                     key={subscription._id}
@@ -171,7 +171,7 @@ class Subscriptions extends Component {
               </TableRow>
             )}
           </TableBody>
-          <TableFooter>
+          <TableFooter style={{float: "left"}}>
             <TableRow>
               <TablePagination
                 rowsPerPageOptions={[10, 25, 50, 100]}

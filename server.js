@@ -7,7 +7,11 @@ import Routes from './src/routes/app'
 import { matchRoutes } from 'react-router-config'
 import compression from 'compression'
 
-global.window = {innerWidth: 1000, innerHeight: 1080}
+// import jsdom from 'jsdom'
+//
+// const { JSDOM } = jsdom
+// global.window = new JSDOM('', { url: 'http://localhost' });
+// global.document = global.window.document;
 
 console.log("NODE_ENV: ", process.env.NODE_ENV)
 console.log("API_URL: ", process.env.API_URL)

@@ -4,6 +4,7 @@ import PropTypes from "prop-types"
 import { renderRoutes } from 'react-router-config'
 import { loadMemberships } from 'actions'
 import { fetchCurrentUser, getPaymentMethod, getMyDiscordGuildMember } from 'actions/authActions'
+import { getTerms } from 'actions/termsActions'
 import dashboardStyle from 'assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx'
 import withStyles from '@material-ui/core/styles/withStyles'
 import Socket from 'utils/Socket.jsx'
@@ -52,13 +53,14 @@ App.propTypes = {
 };
 
 function loadData(store){
-  return store.dispatch(fetchCurrentUser())
-  .then(() => store.dispatch(getPaymentMethod()))
-  .then(() => store.dispatch(getMyDiscordGuildMember()))
+  return store.dispatch(getTerms())
   .then(() => store.dispatch(loadMemberships()))
+  .then(() => store.dispatch(getMyDiscordGuildMember()))
+  .then(() => store.dispatch(getPaymentMethod()))
+  .then(() => store.dispatch(fetchCurrentUser()))
 }
 
 export default {
-  component: connect(mapStateToProps, { fetchCurrentUser, getPaymentMethod, getMyDiscordGuildMember, loadMemberships })(withStyles(dashboardStyle)(App)),
+  component: connect(mapStateToProps, { fetchCurrentUser, getPaymentMethod, getMyDiscordGuildMember, loadMemberships, getTerms })(withStyles(dashboardStyle)(App)),
   loadData
 }

@@ -1,0 +1,7 @@
+export const POST_TERMS = "POST_TERMS"
+export const POST_TERMS_SUCCESS = "POST_TERMS_SUCCESS"
+export const POST_TERMS_FAIL = "POST_TERMS_FAIL"
+
+export const GET_TERMS = "GET_TERMS"
+export const GET_TERMS_SUCCESS = "GET_TERMS_SUCCESS"
+export const GET_TERMS_FAIL = "GET_TERMS_FAIL"

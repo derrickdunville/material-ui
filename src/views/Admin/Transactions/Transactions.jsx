@@ -37,7 +37,7 @@ import CustomMenuItem from "components/MenuItem/CustomMenuItem.jsx"
 import CustomSelect from "components/Select/CustomSelect.jsx"
 import CustomOutlinedInput from 'components/OutlinedInput/CustomOutlinedInput.jsx'
 
-
+import { toTitleCase } from 'utils/StringUtils'
 import { parseDate } from 'utils/DateUtils'
 
 class Transactions extends Component {
@@ -163,7 +163,7 @@ class Transactions extends Component {
           <TableBody>
             {this.props.transactions.docs.map(transaction => (
               <TableRow key={transaction._id}>
-                <CustomTableCell>
+                <CustomTableCell style={{width: "48px"}}>
                   <NavLink
                     to={`/admin/transactions/${transaction._id}`}
                     key={transaction._id}
@@ -172,7 +172,7 @@ class Transactions extends Component {
                   </NavLink>
                 </CustomTableCell>
                 <CustomTableCell>{transaction.trans_num}</CustomTableCell>
-                <CustomTableCell>{transaction.status}</CustomTableCell>
+                <CustomTableCell>{toTitleCase(transaction.status)}</CustomTableCell>
                 <CustomTableCell>{transaction.product.name}</CustomTableCell>
                 <CustomTableCell align={"right"}>${(transaction.total/100).toFixed(2)}</CustomTableCell>
                 <CustomTableCell>{transaction.user.username}</CustomTableCell>
@@ -186,7 +186,7 @@ class Transactions extends Component {
               </TableRow>
             )}
           </TableBody>
-          <TableFooter>
+          <TableFooter style={{float: "left"}}>
             <TableRow>
               <TablePagination
                 rowsPerPageOptions={[10, 25, 50, 100]}

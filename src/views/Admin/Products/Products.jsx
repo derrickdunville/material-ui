@@ -39,6 +39,8 @@ import CustomSelect from "components/Select/CustomSelect.jsx"
 import CustomOutlinedInput from 'components/OutlinedInput/CustomOutlinedInput.jsx'
 import CustomSnackbar from "components/Snackbar/CustomSnackbar.jsx"
 
+import { toTitleCase } from 'utils/StringUtils'
+
 class Products extends Component {
   constructor(props) {
     super(props);
@@ -146,7 +148,7 @@ class Products extends Component {
           <TableBody>
             {this.props.products.docs.map(product => (
               <TableRow key={product._id}>
-                <CustomTableCell component="th" scope="row">
+                <CustomTableCell style={{width: "48px"}} component="th" scope="row">
                   <NavLink
                     to={`/admin/products/${product._id}`}
                     key={product._id}
@@ -155,8 +157,8 @@ class Products extends Component {
                   </NavLink>
                 </CustomTableCell>
                 <CustomTableCell>{product.name}</CustomTableCell>
-                <CustomTableCell>{product.amount}</CustomTableCell>
-                <CustomTableCell>{product.interval}</CustomTableCell>
+                <CustomTableCell style={{width: "48px"}}>${(product.amount/100).toFixed(2)}</CustomTableCell>
+                <CustomTableCell style={{width: "48px"}}>{toTitleCase(product.interval)}</CustomTableCell>
               </TableRow>
             ))}
             {emptyRows > 0 && (
@@ -165,7 +167,7 @@ class Products extends Component {
               </TableRow>
             )}
           </TableBody>
-          <TableFooter>
+          <TableFooter style={{float: "left"}}>
             <TableRow>
               <TablePagination
                 rowsPerPageOptions={[10, 25, 50, 100]}

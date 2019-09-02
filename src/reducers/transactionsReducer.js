@@ -93,8 +93,8 @@ const transactionsReducer = (state=initialState, action) => {
       return {
         ...state,
         puttingTransaction: false,
-        transaction: action.payload,
-        docs: updateDoc(state.docs, action.payload),
+        transaction: action.payload.transaction,
+        docs: updateDoc(state.docs, action.payload.transaction),
         putTransactionSuccessMessage: "Transaction successfully updated.",
         putTransactionErrorMessage: false
       }
@@ -103,7 +103,7 @@ const transactionsReducer = (state=initialState, action) => {
         ...state,
         puttingTransaction: false,
         putTransactionSuccessMessage: false,
-        putTransactionErrorMessage: action.payload.err.message
+        putTransactionErrorMessage: action.payload.err
       }
     case types.DELETE_TRANSACTION:
       return {

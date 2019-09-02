@@ -9,6 +9,7 @@ import { transactionsReducer } from './transactionsReducer'
 import { subscriptionsReducer } from './subscriptionsReducer'
 import autocompleteReducer from './autocompleteReducer'
 import contactReducer from './contactReducer'
+import { termsReducer } from './termsReducer'
 
 //Redux Form Reducers
 import contactReduxFormReducer from './forms/contactReduxFormReducer'
@@ -24,6 +25,7 @@ export default combineReducers({
   subscriptions: subscriptionsReducer,
   autocomplete: autocompleteReducer,
   contact: contactReducer,
+  terms: termsReducer,
   form: formReducer.plugin({
     contact: contactReduxFormReducer,
     userForm: userReduxFormReducer

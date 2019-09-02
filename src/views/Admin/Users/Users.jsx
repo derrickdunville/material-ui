@@ -152,7 +152,7 @@ class Users extends Component {
           <TableBody>
             {this.props.users.docs.map(user => (
               <TableRow key={user._id}>
-                <CustomTableCell>{user._id}</CustomTableCell>
+                <CustomTableCell style={{width: "48px"}}>{user._id}</CustomTableCell>
                 <CustomTableCell>
                   <NavLink
                     to={`/admin/users/${user.username}`}
@@ -162,7 +162,7 @@ class Users extends Component {
                   </NavLink>
                 </CustomTableCell>
                 <CustomTableCell>{user.email}</CustomTableCell>
-                <CustomTableCell>{parseDate(user.created_at)}</CustomTableCell>
+                <CustomTableCell style={{width: "48px"}}>{parseDate(user.created_at)}</CustomTableCell>
               </TableRow>
             ))}
             {emptyRows > 0 && (
@@ -171,7 +171,7 @@ class Users extends Component {
               </TableRow>
             )}
           </TableBody>
-          <TableFooter>
+          <TableFooter style={{float: "left"}}>
             <TableRow>
               <TablePagination
                 rowsPerPageOptions={[10, 25, 50, 100]}

@@ -29,6 +29,7 @@ class Transaction extends Component {
     }
   }
   componentWillUnmount(){
+    console.log("Transaction componentWillUnmount")
     this.props.clearTransaction();
   }
 
